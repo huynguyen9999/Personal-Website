@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getPublishedSection } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Story",
@@ -24,16 +25,17 @@ const moments = [
   },
 ] as const;
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const opening = await getPublishedSection("about-opening");
   return (
     <article className="story-page">
       <header className="story-header ruled-section">
-        <p className="eyebrow">STORY / FIRST PASS</p>
-        <h1>Some distances are measured in language, routines, and what you miss.</h1>
-        <p>This is an outline built only from details already shared. It is intentionally incomplete.</p>
+        <p className="eyebrow">{opening.eyebrow}</p>
+        <h1>{opening.title}</h1>
+        <p>{opening.body}</p>
       </header>
 
-      <div className="trajectory" aria-label="Personal trajectory">
+      <div className="trajectory" id="trajectory" aria-label="Personal trajectory">
         <div className="trajectory-line" aria-hidden="true" />
         {moments.map((moment, index) => (
           <section className="moment" key={moment.place}>

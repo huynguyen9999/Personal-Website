@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getPublishedSection } from "@/lib/content";
 
 const threads = [
   ["01", "Origin", "Ho Chi Minh City, Vietnam", "A childhood shaped by neighborhood bike rides, long school days, family, and time around tennis courts."],
@@ -7,27 +8,33 @@ const threads = [
   ["04", "Public work", "Writing and creating", "A place for ideas and social-media work to become a durable archive, with context instead of metrics."],
 ] as const;
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [opening, manifesto] = await Promise.all([
+    getPublishedSection("home-opening"),
+    getPublishedSection("home-manifesto"),
+  ]);
+  const [openingLine, openingAccent] = opening.title.split("|");
+
   return (
     <>
       <section className="opening ruled-section" aria-labelledby="opening-title">
-        <p className="eyebrow">HO CHI MINH CITY <span aria-hidden="true">→</span> CALIFORNIA</p>
+        <p className="eyebrow">{opening.eyebrow}</p>
         <h1 id="opening-title">
-          A life in progress,
-          <span>measured in circuits and baselines.</span>
+          {openingLine}
+          {openingAccent && <span>{openingAccent}</span>}
         </h1>
         <div className="opening-meta">
-          <p>Electrical engineering at UC Santa Barbara. Collegiate tennis. Writing, making, and sharing what I learn.</p>
+          <p>{opening.summary}</p>
           <p className="coordinate">34.4140° N<br />119.8489° W</p>
         </div>
         <div className="court-line" aria-hidden="true"><span /></div>
       </section>
 
       <section className="manifesto ruled-section" aria-labelledby="manifesto-title">
-        <p className="section-index">FIELD NOTE / 01</p>
+        <p className="section-index">{manifesto.eyebrow}</p>
         <div>
-          <h2 id="manifesto-title">I’ve always wanted to see what happens behind the scenes.</h2>
-          <p>As a child, that meant cars, multiplayer games, the internet, and the impulse to break—or “hack”—a system just to understand it. Electrical engineering gave that curiosity a place to become practice.</p>
+          <h2 id="manifesto-title">{manifesto.title}</h2>
+          <p>{manifesto.body}</p>
         </div>
       </section>
 

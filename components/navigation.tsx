@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { ThemeControls } from "@/components/theme-controls";
 
 const links = [
-  { href: "/", label: "Index", note: "The present" },
-  { href: "/about", label: "Story", note: "Vietnam to California" },
-  { href: "/writing", label: "Writing", note: "Notes and questions" },
-  { href: "/admin", label: "Edit", note: "Owner control room" },
+  { href: "/", label: "Index", note: "The present", items: [{ href: "/#opening-title", label: "Opening" }, { href: "/#threads-title", label: "Four threads" }] },
+  { href: "/about", label: "Story", note: "Vietnam to California", items: [{ href: "/about", label: "The route" }, { href: "/about#trajectory", label: "Three moments" }] },
+  { href: "/writing", label: "Writing", note: "Notes and questions", items: [{ href: "/writing", label: "Archive" }, { href: "/writing#first-note", label: "First note" }] },
+  { href: "/admin", label: "Edit", note: "Owner control room", items: [{ href: "/admin", label: "Sign in" }, { href: "/admin#page-editor", label: "Page editor" }] },
 ];
 
 export function Navigation() {
@@ -22,6 +23,8 @@ export function Navigation() {
         <span aria-hidden="true">01</span>
         <span>PERSONAL ARCHIVE</span>
       </Link>
+
+      <ThemeControls />
 
       <button
         className="nav-toggle"
@@ -39,29 +42,51 @@ export function Navigation() {
         data-open={open}
         aria-label="Primary navigation"
         onMouseLeave={() => setFocused(null)}
+        onKeyDown={(event) => {
+          if (event.key === "Escape") {
+            setFocused(null);
+            (event.target as HTMLElement).blur();
+          }
+        }}
       >
         {links.map((link, index) => {
           const active = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
           return (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="nav-item"
-              aria-current={active ? "page" : undefined}
-              data-focused={focused === link.href}
-              data-muted={focused && focused !== link.href ? "true" : "false"}
+            <div
+              className="nav-cell"
+              key={link.label}
               onMouseEnter={() => setFocused(link.href)}
-              onFocus={() => setFocused(link.href)}
-              onBlur={() => setFocused(null)}
-              onClick={() => setOpen(false)}
+              onFocusCapture={() => setFocused(link.href)}
+              onBlurCapture={(event) => {
+                if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setFocused(null);
+              }}
             >
-              <span className="nav-number">0{index + 1}</span>
-              <span>{link.label}</span>
-              <span className="nav-note">{link.note}</span>
-            </Link>
+              <Link
+                href={link.href}
+                className="nav-item"
+                aria-current={active ? "page" : undefined}
+                aria-expanded={focused === link.href}
+                data-focused={focused === link.href}
+                data-muted={focused && focused !== link.href ? "true" : "false"}
+                onClick={() => setOpen(false)}
+              >
+                <span className="nav-number">0{index + 1}</span>
+                <span>{link.label}</span>
+                <span className="nav-note">{link.note}</span>
+              </Link>
+              <div className="nav-dropdown" aria-label={`${link.label} menu`}>
+                <p>{link.note}</p>
+                {link.items.map((item) => (
+                  <Link key={item.label} href={item.href} onClick={() => { setOpen(false); setFocused(null); }}>
+                    {item.label}<span aria-hidden="true">↗</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
           );
         })}
       </nav>
+      <div className="nav-veil" aria-hidden="true" />
     </header>
   );
 }

@@ -9,6 +9,9 @@ create table public.content_items (
   title text not null,
   summary text,
   body jsonb not null default '{}'::jsonb,
+  draft_title text,
+  draft_summary text,
+  draft_body jsonb,
   status public.content_status not null default 'draft',
   featured boolean not null default false,
   sort_order integer not null default 0,
@@ -20,10 +23,16 @@ create table public.content_items (
 
 alter table public.content_items enable row level security;
 revoke all on table public.content_items from anon, authenticated;
+grant select on table public.content_items to anon;
 grant select, insert, update, delete on table public.content_items to authenticated;
 
 create index content_items_owner_id_idx on public.content_items (owner_id);
 create index content_items_public_idx on public.content_items (status, kind, sort_order);
+
+create policy "Anyone reads published content"
+on public.content_items for select
+to anon, authenticated
+using (status = 'published');
 
 create policy "Owner reads content"
 on public.content_items for select
@@ -46,4 +55,4 @@ on public.content_items for delete
 to authenticated
 using ((select auth.uid()) = owner_id);
 
-comment on table public.content_items is 'Owner-authored content. Public delivery will use a reviewed server-side publishing query in the next slice.';
+comment on table public.content_items is 'Owner-authored website content. RLS keeps drafts owner-only and exposes only published records.';

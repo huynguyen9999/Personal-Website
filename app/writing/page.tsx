@@ -12,7 +12,7 @@ export default function WritingPage() {
       <p className="eyebrow">WRITING / ARCHIVE</p>
       <h1>The shelf is ready.<br />The writing is not invented.</h1>
       <p className="quiet-intro">This page will hold essays, technical explanations, observations, and honest changes of mind. It remains empty until there is real work in the owner’s voice.</p>
-      <div className="empty-ledger" role="status">
+      <div className="empty-ledger" id="first-note" role="status">
         <span>000</span>
         <p>Published pieces</p>
         <small>Drafts will appear here only after the editorial system is connected.</small>
