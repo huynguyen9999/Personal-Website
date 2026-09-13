@@ -6,10 +6,11 @@ import { useState } from "react";
 import { ThemeControls } from "@/components/theme-controls";
 
 const links = [
-  { href: "/", label: "Index", note: "The present", items: [{ href: "/#opening-title", label: "Opening" }, { href: "/#threads-title", label: "Four threads" }] },
+  { href: "/", label: "Index", note: "The present", items: [{ href: "/#opening-title", label: "Opening" }, { href: "/#present-title", label: "Now" }, { href: "/#threads-title", label: "Trajectory" }] },
   { href: "/about", label: "Story", note: "Vietnam to California", items: [{ href: "/about", label: "The route" }, { href: "/about#trajectory", label: "Three moments" }] },
   { href: "/writing", label: "Writing", note: "Notes and questions", items: [{ href: "/writing", label: "Archive" }, { href: "/writing#first-note", label: "First note" }] },
-  { href: "/admin", label: "Edit", note: "Owner control room", items: [{ href: "/admin", label: "Sign in" }, { href: "/admin#page-editor", label: "Page editor" }] },
+  { href: "/now", label: "Now", note: "Present tense", items: [{ href: "/now", label: "Currently" }] },
+  { href: "/admin", label: "Edit", note: "Sign in to edit", items: [{ href: "/admin", label: "Owner login" }] },
 ];
 
 export function Navigation() {
@@ -19,9 +20,9 @@ export function Navigation() {
 
   return (
     <header className="site-header" data-nav-active={focused ? "true" : "false"}>
-      <Link className="site-mark" href="/" aria-label="Personal archive, home">
+      <Link className="site-mark" href="/" aria-label="Huy Nguyen, home">
         <span aria-hidden="true">01</span>
-        <span>PERSONAL ARCHIVE</span>
+        <span>Huy Nguyen</span>
       </Link>
 
       <ThemeControls />
@@ -44,13 +45,18 @@ export function Navigation() {
         onMouseLeave={() => setFocused(null)}
         onKeyDown={(event) => {
           if (event.key === "Escape") {
+            event.preventDefault();
+            const trigger = (event.target as HTMLElement)
+              .closest(".nav-cell")
+              ?.querySelector<HTMLElement>(".nav-item");
+            trigger?.focus({ preventScroll: true });
             setFocused(null);
-            (event.target as HTMLElement).blur();
           }
         }}
       >
         {links.map((link, index) => {
           const active = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
+          const menuId = `nav-${link.label.toLowerCase()}-menu`;
           return (
             <div
               className="nav-cell"
@@ -66,6 +72,7 @@ export function Navigation() {
                 className="nav-item"
                 aria-current={active ? "page" : undefined}
                 aria-expanded={focused === link.href}
+                aria-controls={menuId}
                 data-focused={focused === link.href}
                 data-muted={focused && focused !== link.href ? "true" : "false"}
                 onClick={() => setOpen(false)}
@@ -74,7 +81,7 @@ export function Navigation() {
                 <span>{link.label}</span>
                 <span className="nav-note">{link.note}</span>
               </Link>
-              <div className="nav-dropdown" aria-label={`${link.label} menu`}>
+              <div id={menuId} className="nav-dropdown" aria-label={`${link.label} menu`}>
                 <p>{link.note}</p>
                 {link.items.map((item) => (
                   <Link key={item.label} href={item.href} onClick={() => { setOpen(false); setFocused(null); }}>

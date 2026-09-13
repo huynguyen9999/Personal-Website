@@ -22,12 +22,27 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://thehobbiest.vercel.
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Personal archive",
-    template: "%s — Personal archive",
+    default: "Huy Nguyen",
+    template: "%s — Huy Nguyen",
   },
   description:
     "An evolving archive of engineering, writing, tennis, and a life shaped between Vietnam and California.",
   alternates: { canonical: "/" },
+  openGraph: {
+    title: "Huy Nguyen",
+    description:
+      "An evolving archive of engineering, writing, tennis, and a life shaped between Vietnam and California.",
+    url: siteUrl,
+    siteName: "Huy Nguyen",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Huy Nguyen",
+    description:
+      "An evolving archive of engineering, writing, tennis, and a life shaped between Vietnam and California.",
+  },
 };
 
 export const viewport: Viewport = {

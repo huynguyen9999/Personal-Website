@@ -1,30 +1,10 @@
-create type public.content_status as enum ('draft', 'published');
-create type public.content_kind as enum ('page', 'project', 'writing', 'now', 'life', 'social');
-
-create table public.content_items (
-  id uuid primary key default gen_random_uuid(),
-  owner_id uuid not null references auth.users(id) on delete cascade,
-  kind public.content_kind not null,
-  slug text not null,
-  title text not null,
-  summary text,
-  body jsonb not null default '{}'::jsonb,
-  status public.content_status not null default 'draft',
-  featured boolean not null default false,
-  sort_order integer not null default 0,
-  published_at timestamptz,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now(),
-  unique (kind, slug)
-);
-
-alter table public.content_items enable row level security;
-revoke all on table public.content_items from anon, authenticated;
-grant select on table public.content_items to anon;
-grant select, insert, update, delete on table public.content_items to authenticated;
-
-create index content_items_owner_id_idx on public.content_items (owner_id);
-create index content_items_public_idx on public.content_items (status, kind, sort_order);
+drop policy if exists "Anyone reads published content" on public.content_items;
+drop policy if exists "Owner reads content" on public.content_items;
+drop policy if exists "Public reads published content" on public.content_items;
+drop policy if exists "Authenticated reads allowed content" on public.content_items;
+drop policy if exists "Owner creates content" on public.content_items;
+drop policy if exists "Owner updates content" on public.content_items;
+drop policy if exists "Owner deletes content" on public.content_items;
 
 create policy "Public reads published content"
 on public.content_items for select
@@ -70,25 +50,10 @@ using (
   and (select lower(coalesce(auth.jwt() ->> 'email', ''))) = 'dominichuyn@gmail.com'
 );
 
-comment on table public.content_items is 'Owner-authored website content. RLS keeps drafts owner-only and exposes only published records.';
-
-create table public.content_drafts (
-  id uuid primary key default gen_random_uuid(),
-  owner_id uuid not null references auth.users(id) on delete cascade,
-  kind public.content_kind not null,
-  slug text not null,
-  title text not null,
-  summary text,
-  body jsonb not null default '{}'::jsonb,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now(),
-  unique (kind, slug)
-);
-
-alter table public.content_drafts enable row level security;
-revoke all on table public.content_drafts from anon, authenticated;
-grant select, insert, update, delete on table public.content_drafts to authenticated;
-create index content_drafts_owner_id_idx on public.content_drafts (owner_id);
+drop policy if exists "Owner reads drafts" on public.content_drafts;
+drop policy if exists "Owner creates drafts" on public.content_drafts;
+drop policy if exists "Owner updates drafts" on public.content_drafts;
+drop policy if exists "Owner deletes drafts" on public.content_drafts;
 
 create policy "Owner reads drafts"
 on public.content_drafts for select
@@ -126,28 +91,10 @@ using (
   and (select lower(coalesce(auth.jwt() ->> 'email', ''))) = 'dominichuyn@gmail.com'
 );
 
-comment on table public.content_drafts is 'Private owner-only working copies, physically separated from publicly readable content.';
-
-insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-values (
-  'site-media',
-  'site-media',
-  true,
-  8388608,
-  array[
-    'image/jpeg',
-    'image/png',
-    'image/webp',
-    'image/gif',
-    'image/avif',
-    'image/heic',
-    'image/heif'
-  ]
-)
-on conflict (id) do update set
-  public = excluded.public,
-  file_size_limit = excluded.file_size_limit,
-  allowed_mime_types = excluded.allowed_mime_types;
+drop policy if exists "Owner lists site media" on storage.objects;
+drop policy if exists "Owner uploads site media" on storage.objects;
+drop policy if exists "Owner updates site media" on storage.objects;
+drop policy if exists "Owner deletes site media" on storage.objects;
 
 create policy "Owner lists site media"
 on storage.objects for select
@@ -185,8 +132,6 @@ with check (
   and (select lower(coalesce(auth.jwt() ->> 'email', ''))) = 'dominichuyn@gmail.com'
 );
 
-revoke execute on function public.rls_auto_enable() from public, anon, authenticated;
-
 create policy "Owner deletes site media"
 on storage.objects for delete
 to authenticated
@@ -194,5 +139,9 @@ using (
   bucket_id = 'site-media'
   and owner_id = (select auth.uid()::text)
   and (storage.foldername(name))[1] = (select auth.uid())::text
-  and lower(coalesce((select auth.jwt() ->> 'email'), '')) = 'dominichuyn@gmail.com'
+  and (select lower(coalesce(auth.jwt() ->> 'email', ''))) = 'dominichuyn@gmail.com'
 );
+
+create index if not exists content_drafts_owner_id_idx on public.content_drafts (owner_id);
+
+revoke execute on function public.rls_auto_enable() from public, anon, authenticated;

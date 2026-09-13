@@ -1,33 +1,51 @@
 import Link from "next/link";
-import { getPublishedSection } from "@/lib/content";
+import { getPublishedSections } from "@/lib/content";
+import { getPlacedPhotos, photosForSlot } from "@/lib/media";
+import { PlacedPhotos } from "@/components/placed-photos";
+import { SiteFooter } from "@/components/site-footer";
 
 const threads = [
-  ["01", "Origin", "Ho Chi Minh City, Vietnam", "A childhood shaped by neighborhood bike rides, long school days, family, and time around tennis courts."],
-  ["02", "Study", "Electrical engineering · UCSB", "An interest in what happens behind the interface: systems, signals, hardware, software, and the internet."],
-  ["03", "Practice", "Collegiate tennis", "Competition and engineering share a rhythm: observe, adjust, repeat."],
-  ["04", "Public work", "Writing and creating", "A place for ideas and social-media work to become a durable archive, with context instead of metrics."],
+  ["01", "Ho Chi Minh City, Vietnam", "Neighborhood bike rides. Long school days and after-school lessons. Family. Significant time on tennis courts."],
+  ["02", "Electrical engineering · UCSB", "An interest in what happens behind the interface: systems, signals, hardware, software, and the internet."],
+  ["03", "Collegiate tennis", "Competition and engineering share a rhythm: observe, adjust, repeat."],
+  ["04", "Writing and creating", "A place for ideas and social-media work to become a durable archive, with context instead of metrics."],
 ] as const;
 
+const threadSlots = ["thread-origin", "thread-study", "thread-practice", "thread-public"] as const;
+
 export default async function HomePage() {
-  const [opening, manifesto] = await Promise.all([
-    getPublishedSection("home-opening"),
-    getPublishedSection("home-manifesto"),
-  ]);
-  const [openingLine, openingAccent] = opening.title.split("|");
+  const [opening, manifesto, now] = await getPublishedSections(["home-opening", "home-manifesto", "now-current"]);
+  const photos = await getPlacedPhotos("home");
+  const openingPhotos = photosForSlot(photos, "opening");
 
   return (
     <>
       <section className="opening ruled-section" aria-labelledby="opening-title">
         <p className="eyebrow">{opening.eyebrow}</p>
         <h1 id="opening-title">
-          {openingLine}
-          {openingAccent && <span>{openingAccent}</span>}
+          {opening.title}
+          {opening.accentTitle && <span>{opening.accentTitle}</span>}
         </h1>
         <div className="opening-meta">
           <p>{opening.summary}</p>
           <p className="coordinate">34.4140° N<br />119.8489° W</p>
         </div>
-        <div className="court-line" aria-hidden="true"><span /></div>
+        {openingPhotos.length > 0 ? (
+          <div className="opening-media">
+            <PlacedPhotos photos={openingPhotos} layout="hero" />
+          </div>
+        ) : (
+          <div className="court-line" aria-hidden="true"><span /></div>
+        )}
+      </section>
+
+      <section className="present-section ruled-section" aria-labelledby="present-title">
+        <p className="section-index">{now.eyebrow}</p>
+        <div>
+          <h2 id="present-title">{now.title}</h2>
+          <p>{now.body}</p>
+          <Link className="text-link" href="/now">The present tense <span aria-hidden="true">↗</span></Link>
+        </div>
       </section>
 
       <section className="manifesto ruled-section" aria-labelledby="manifesto-title">
@@ -35,39 +53,42 @@ export default async function HomePage() {
         <div>
           <h2 id="manifesto-title">{manifesto.title}</h2>
           <p>{manifesto.body}</p>
+          <PlacedPhotos photos={photosForSlot(photos, "manifesto")} layout="strip" />
         </div>
       </section>
 
       <section className="threads" aria-labelledby="threads-title">
         <header className="section-heading">
-          <p className="eyebrow">FOUR THREADS / ONE TRAJECTORY</p>
+          <p className="eyebrow">ONE TRAJECTORY</p>
           <h2 id="threads-title">Not separate identities.<br />One evolving system.</h2>
         </header>
         <div className="thread-list">
-          {threads.map(([number, label, title, copy]) => (
+          {threads.map(([number, title, copy], index) => (
             <article className="thread" key={number}>
               <p className="thread-number">{number}</p>
-              <p className="thread-label">{label}</p>
               <h3>{title}</h3>
               <p>{copy}</p>
+              <PlacedPhotos photos={photosForSlot(photos, threadSlots[index])} layout="figure" />
             </article>
           ))}
         </div>
       </section>
 
       <section className="route-section ruled-section" aria-labelledby="route-title">
-        <p className="section-index">NEXT / STORY</p>
+        <p className="section-index">CONTINUE</p>
         <div>
           <h2 id="route-title">Two places, without reducing either to a chapter heading.</h2>
-          <p>The first story pass stays close to the details already shared: language, family, routines, adaptation, and the distance between remembered places.</p>
-          <Link className="text-link" href="/about">Follow the route <span aria-hidden="true">↗</span></Link>
+          <p>Story stays close to the details already shared. Writing waits for a real piece. Contact is email and GitHub.</p>
+          <div className="continue-links">
+            <Link className="text-link" href="/about">Story <span aria-hidden="true">↗</span></Link>
+            <Link className="text-link" href="/writing">Writing <span aria-hidden="true">↗</span></Link>
+            <Link className="text-link" href="/contact">Contact <span aria-hidden="true">↗</span></Link>
+          </div>
+          <PlacedPhotos photos={photosForSlot(photos, "route")} layout="strip" />
         </div>
       </section>
 
-      <footer className="site-footer">
-        <p>This archive is being assembled.</p>
-        <a href="https://github.com/huynguyen9999" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-      </footer>
+      <SiteFooter />
     </>
   );
 }

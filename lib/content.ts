@@ -1,13 +1,15 @@
 import { hasSupabaseConfig } from "@/lib/supabase/config";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 
 export type EditableSection = {
-  slug: "home-opening" | "home-manifesto" | "about-opening";
+  slug: "home-opening" | "home-manifesto" | "about-opening" | "now-current" | "contact-opening";
   label: string;
   eyebrow: string;
   title: string;
+  accentTitle?: string;
   summary: string;
   body: string;
+  updatedAt?: string;
 };
 
 export const editableSections: EditableSection[] = [
@@ -15,7 +17,8 @@ export const editableSections: EditableSection[] = [
     slug: "home-opening",
     label: "Homepage opening",
     eyebrow: "HO CHI MINH CITY → CALIFORNIA",
-    title: "A life in progress,|measured in circuits and baselines.",
+    title: "A life in progress,",
+    accentTitle: "measured in circuits and baselines.",
     summary: "Electrical engineering at UC Santa Barbara. Collegiate tennis. Writing, making, and sharing what I learn.",
     body: "",
   },
@@ -35,6 +38,22 @@ export const editableSections: EditableSection[] = [
     summary: "",
     body: "This is an outline built only from details already shared. It is intentionally incomplete.",
   },
+  {
+    slug: "now-current",
+    label: "Now page",
+    eyebrow: "NOW / PRESENT TENSE",
+    title: "In motion, not a summary.",
+    summary: "",
+    body: "Electrical engineering at UC Santa Barbara. Collegiate tennis. Making and sharing work in public. This archive is being assembled.",
+  },
+  {
+    slug: "contact-opening",
+    label: "Contact page",
+    eyebrow: "CONTACT",
+    title: "Direct, when you want to reach me.",
+    summary: "",
+    body: "GitHub is public. Email is the direct line; other channels will appear here when they are meant to be public.",
+  },
 ];
 
 export function getFallbackSection(slug: EditableSection["slug"]) {
@@ -42,26 +61,40 @@ export function getFallbackSection(slug: EditableSection["slug"]) {
 }
 
 export async function getPublishedSection(slug: EditableSection["slug"]) {
-  const fallback = getFallbackSection(slug);
-  if (!hasSupabaseConfig()) return fallback;
+  const [section] = await getPublishedSections([slug]);
+  return section;
+}
 
-  const supabase = await createClient();
+export async function getPublishedSections(slugs: EditableSection["slug"][]) {
+  const fallbacks = slugs.map(getFallbackSection);
+  if (!hasSupabaseConfig()) return fallbacks;
+
+  const supabase = createPublicClient();
   const { data, error } = await supabase
     .from("content_items")
-    .select("slug,title,summary,body")
+    .select("slug,title,summary,body,updated_at")
     .eq("kind", "page")
-    .eq("slug", slug)
     .eq("status", "published")
-    .maybeSingle();
+    .in("slug", slugs);
 
-  if (error || !data) return fallback;
-  const body = data.body && typeof data.body === "object" ? data.body as Record<string, unknown> : {};
+  if (error || !data) {
+    console.error("Published content query failed", error?.message);
+    return fallbacks;
+  }
 
-  return {
-    ...fallback,
-    eyebrow: typeof body.eyebrow === "string" ? body.eyebrow : fallback.eyebrow,
-    title: data.title || fallback.title,
-    summary: data.summary || "",
-    body: typeof body.copy === "string" ? body.copy : "",
-  };
+  return fallbacks.map((fallback) => {
+    const record = data.find((item) => item.slug === fallback.slug);
+    if (!record) return fallback;
+    const body = record.body && typeof record.body === "object" ? record.body as Record<string, unknown> : {};
+
+    return {
+      ...fallback,
+      eyebrow: typeof body.eyebrow === "string" ? body.eyebrow : fallback.eyebrow,
+      title: record.title || fallback.title,
+      accentTitle: typeof body.accentTitle === "string" ? body.accentTitle : fallback.accentTitle,
+      summary: record.summary || "",
+      body: typeof body.copy === "string" ? body.copy : "",
+      updatedAt: typeof record.updated_at === "string" ? record.updated_at : fallback.updatedAt,
+    };
+  });
 }
