@@ -15,7 +15,7 @@ test.describe("public archive smoke", () => {
 
     await page.locator("a.nav-item[href='/about']").click();
     await expect(page).toHaveURL(/\/about$/);
-    await expect(page.getByText("STORY / FIRST PASS")).toBeVisible();
+    await expect(page.getByText("STORY / TWO COORDINATES")).toBeVisible();
 
     await page.locator("a.nav-item[href='/reading']").click();
     await expect(page).toHaveURL(/\/reading$/);
@@ -83,11 +83,10 @@ test.describe("public archive smoke", () => {
     await expect(header).toHaveAttribute("data-collapsed", "false");
   });
 
-  test("admin is a quiet footer line and shows a simple sign-in gate", async ({ page }) => {
+  test("admin stays off the public chrome and remains available by direct route", async ({ page }) => {
     await page.goto("/");
-    const admin = page.locator("footer.site-footer").getByRole("link", { name: "admin" });
-    await expect(admin).toBeAttached();
-    await admin.click();
+    await expect(page.locator("footer.site-footer").getByRole("link", { name: "admin" })).toHaveCount(0);
+    await page.goto("/admin");
     await expect(page).toHaveURL(/\/admin$/);
 
     const setup = page.getByText("SETUP REQUIRED");

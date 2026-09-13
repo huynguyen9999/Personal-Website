@@ -35,10 +35,10 @@ describe("content fallbacks", () => {
     expect(opening.summary).toMatch(/Collegiate tennis/);
 
     const about = getFallbackSection("about-opening");
-    expect(about.body).toMatch(/intentionally incomplete/);
+    expect(about.body).toMatch(/Ho Chi Minh City/);
 
     const now = getFallbackSection("now-current");
-    expect(now.body).toMatch(/This archive is being assembled/);
+    expect(now.body).toMatch(/Electrical engineering at UC Santa Barbara/);
 
     const contact = getFallbackSection("contact-opening");
     expect(contact.body).toMatch(/GitHub is public/);

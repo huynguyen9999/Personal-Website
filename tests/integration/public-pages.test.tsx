@@ -21,30 +21,27 @@ describe("public App Router pages", () => {
     expect(screen.getByRole("heading", { level: 1, name: /A life in progress/ })).toBeInTheDocument();
     expect(screen.getByText("HO CHI MINH CITY → CALIFORNIA")).toBeInTheDocument();
     expect(screen.getByText("measured in circuits and baselines.")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /A short signal from the present/ })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /I’ve always wanted to see what happens behind the scenes/ })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /Four practices/ })).toBeInTheDocument();
-    expect(screen.getByText("Engineering")).toBeInTheDocument();
-    expect(screen.getByText("Tennis")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { level: 3, name: "Reading" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /Two places, without reducing either/ })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /The present tense/ })).toHaveAttribute("href", "/now");
-    expect(screen.getByRole("link", { name: /Story/ })).toHaveAttribute("href", "/about");
-    expect(screen.getByText("This archive is being assembled.")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "admin" })).toHaveAttribute("href", "/admin");
+    expect(screen.getByRole("heading", { name: /The move changed the language/ })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /One life, seen through its connections/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Engineering" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Tennis" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /A personal site that can keep changing/ })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /ordinary sequence/ })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Open the reading shelf/ })).toHaveAttribute("href", "/reading");
+    expect(screen.queryByRole("link", { name: "admin" })).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "Edit" })).not.toBeInTheDocument();
   });
 
-  it("renders Story as an incomplete outline", async () => {
+  it("renders Story as a factual trajectory", async () => {
     render(await AboutPage());
 
-    expect(screen.getByText("STORY / FIRST PASS")).toBeInTheDocument();
+    expect(screen.getByText("STORY / TWO COORDINATES")).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Some distances are measured");
-    expect(screen.getByText(/intentionally incomplete/)).toBeInTheDocument();
+    expect(screen.getByText(/route begins in Ho Chi Minh City/)).toBeInTheDocument();
     expect(screen.getByText("Ho Chi Minh City")).toBeInTheDocument();
     expect(screen.getByText("United States")).toBeInTheDocument();
     expect(screen.getByText("UC Santa Barbara")).toBeInTheDocument();
-    expect(screen.getByText(/No dramatic arc has been invented/)).toBeInTheDocument();
+    expect(screen.getByText(/Curiosity, repetition/)).toBeInTheDocument();
   });
 
   it("renders the reading shelf and permanently redirects the old writing route", async () => {

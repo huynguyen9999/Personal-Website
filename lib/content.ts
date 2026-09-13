@@ -41,10 +41,10 @@ export const editableSections: EditableSection[] = [
   {
     slug: "about-opening",
     label: "Story opening",
-    eyebrow: "STORY / FIRST PASS",
+    eyebrow: "STORY / TWO COORDINATES",
     title: "Some distances are measured in language, routines, and what you miss.",
     summary: "",
-    body: "This is an outline built only from details already shared. It is intentionally incomplete.",
+    body: "The route begins in Ho Chi Minh City and continues in California. Tennis, engineering, and curiosity run through both places.",
   },
   {
     slug: "now-current",
@@ -52,7 +52,7 @@ export const editableSections: EditableSection[] = [
     eyebrow: "NOW / PRESENT TENSE",
     title: "In motion, not a summary.",
     summary: "",
-    body: "Electrical engineering at UC Santa Barbara. Collegiate tennis. Making and sharing work in public. This archive is being assembled.",
+    body: "Electrical engineering at UC Santa Barbara. Collegiate tennis. Making, reading, and sharing work in public.",
   },
   {
     slug: "contact-opening",

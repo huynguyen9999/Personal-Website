@@ -16,7 +16,7 @@ afterEach(() => {
 });
 
 describe("Navigation", () => {
-  it("renders the archive destinations and hides Work/Life", () => {
+  it("renders the six-part archive and hides owner access", () => {
     vi.spyOn(window, "scrollY", "get").mockImplementation(() => scrollY);
     installMatchMedia();
     render(<Navigation />);
@@ -31,10 +31,11 @@ describe("Navigation", () => {
     expect(document.querySelector("a.nav-item[href='/about']")).not.toBeNull();
     expect(document.querySelector("a.nav-item[href='/reading']")).not.toBeNull();
     expect(document.querySelector("a.nav-item[href='/now']")).not.toBeNull();
+    expect(document.querySelector("a.nav-item[href='/#making']")).not.toBeNull();
+    expect(document.querySelector("a.nav-item[href='/#life']")).not.toBeNull();
     expect(document.querySelector("a.nav-item[href='/admin']")).toBeNull();
     expect(screen.queryByRole("link", { name: /^admin$/i })).not.toBeInTheDocument();
-    expect(screen.queryByRole("link", { name: /Work/ })).not.toBeInTheDocument();
-    expect(screen.queryByRole("link", { name: /Life/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /^Work$/ })).not.toBeInTheDocument();
   });
 
   it("collapses on scroll down and returns on scroll up", () => {

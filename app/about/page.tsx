@@ -7,7 +7,7 @@ import { SiteFooter } from "@/components/site-footer";
 
 export const metadata: Metadata = {
   title: "Story",
-  description: "A first, factual outline of a story from Ho Chi Minh City to California.",
+  description: "Huy Nguyen’s route from Ho Chi Minh City to California.",
   alternates: { canonical: "/about" },
 };
 
@@ -27,7 +27,7 @@ const moments = [
   {
     place: "UC Santa Barbara",
     title: "The present coordinate",
-    body: "Today, I study electrical engineering and compete in collegiate tennis. The fuller story—specific projects, matches, failures, and ambitions—will be written from real source material as this archive grows.",
+    body: "Today, I study electrical engineering and compete in collegiate tennis. Both ask for close observation, repetition, and adjustment.",
     slot: "moment-ucsb",
   },
 ] as const;
@@ -65,8 +65,8 @@ export default async function AboutPage() {
 
         <Reveal>
           <aside className="story-note">
-            <p className="section-index">EDITORIAL NOTE</p>
-            <p>The next version needs the owner’s own stories and language. No dramatic arc has been invented to fill the gaps.</p>
+            <p className="section-index">WHAT STAYED CONSTANT</p>
+            <p>Curiosity, repetition, and the habit of learning by looking closely—at a system, a match, or a new environment.</p>
           </aside>
         </Reveal>
       </article>

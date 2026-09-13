@@ -6,10 +6,12 @@ import { useEffect, useState } from "react";
 import { ThemeControls } from "@/components/theme-controls";
 
 export const primaryNavLinks = [
-  { href: "/", label: "Home", note: "The present", items: [{ href: "/#opening-title", label: "Opening" }, { href: "/#present-title", label: "At a glance" }, { href: "/#threads-title", label: "Trajectory" }] },
-  { href: "/about", label: "Story", note: "Vietnam to California", items: [{ href: "/about", label: "The route" }, { href: "/about#trajectory", label: "Three moments" }] },
-  { href: "/reading", label: "Reading", note: "Books and margins", items: [{ href: "/reading?shelf=currently-reading", label: "Currently reading" }, { href: "/reading?shelf=read", label: "Read" }, { href: "/reading?shelf=reading-next", label: "Reading next" }] },
-  { href: "/now", label: "Now", note: "Present tense", items: [{ href: "/now", label: "Currently" }] },
+  { href: "/", label: "Home", note: "Start here", items: [{ href: "/#opening-title", label: "Introduction" }, { href: "/#identity-map", label: "Identity map" }] },
+  { href: "/about", label: "Story", note: "Vietnam to California", items: [{ href: "/about", label: "Biography" }, { href: "/about#trajectory", label: "Timeline" }] },
+  { href: "/#making", label: "Making", note: "Projects and experiments", items: [{ href: "/#making", label: "Selected work" }, { href: "https://github.com/huynguyen9999", label: "GitHub" }] },
+  { href: "/reading", label: "Notes", note: "Ideas and reading", items: [{ href: "/reading", label: "Reading shelf" }, { href: "/reading?shelf=currently-reading", label: "Currently reading" }] },
+  { href: "/#life", label: "Life", note: "Beyond the desk", items: [{ href: "/#life", label: "A remembered routine" }, { href: "/about#trajectory", label: "Personal trajectory" }] },
+  { href: "/now", label: "Now", note: "Present tense", items: [{ href: "/#now", label: "Homepage snapshot" }, { href: "/now", label: "Now page" }] },
 ] as const;
 
 export function Navigation() {
