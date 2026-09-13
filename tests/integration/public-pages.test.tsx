@@ -22,6 +22,13 @@ describe("public App Router pages", () => {
     expect(screen.getByText("HO CHI MINH CITY → CALIFORNIA")).toBeInTheDocument();
     expect(screen.getByText("measured in circuits and baselines.")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /A short signal from the present/ })).toBeInTheDocument();
+    expect(screen.getByText(/Q3 2026/)).toBeInTheDocument();
+    expect(screen.getByRole("time")).toHaveTextContent(/PDT|PST/);
+    expect(screen.getByRole("button", { name: /Building\. Personal website admin\/editor/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Learning\. Electrical Engineering/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Reading\. .*Steve Jobs/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Tennis\. Collegiate tennis/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Thinking about/ })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /One life, seen through its connections/ })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Engineering" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Cars & bikes" })).toBeInTheDocument();
@@ -70,6 +77,9 @@ describe("public App Router pages", () => {
     expect(screen.getByRole("heading", { level: 1, name: "In motion, not a summary." })).toBeInTheDocument();
     expect(screen.getByText("Last updated when this page is published from the editor.")).toBeInTheDocument();
     expect(screen.getByText(/Electrical engineering at UC Santa Barbara/)).toBeInTheDocument();
+    expect(screen.getByText(/Q3 2026/)).toBeInTheDocument();
+    expect(screen.getByRole("time")).toHaveTextContent(/PDT|PST/);
+    expect(screen.getByRole("button", { name: /Building\. Personal website admin\/editor/ })).toBeInTheDocument();
   });
 
   it("renders Contact with the public email and GitHub", async () => {

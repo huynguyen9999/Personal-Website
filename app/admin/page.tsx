@@ -8,6 +8,8 @@ import { libraryBookSelect, toLibraryBook } from "@/lib/books";
 import { AdminSubmit } from "@/components/admin-submit";
 import { MediaUploader } from "@/components/media-uploader";
 import { BookLibraryAdmin } from "@/components/book-library-admin";
+import { QuarterLogAdmin } from "@/components/quarter-log-admin";
+import { fallbackQuarters, mergeQuarterLogs, QUARTER_KIND, toQuarterLog, unionQuarters, type QuarterLog } from "@/lib/quarters";
 import { saveSection, signIn, signOut, signUp } from "./actions";
 
 export const metadata: Metadata = {
@@ -32,6 +34,7 @@ export default async function AdminPage({
           {editableSections.map((item) => (
             <div className="admin-module" key={item.slug}><span>{item.label}</span><small>Editor installed</small></div>
           ))}
+          <div className="admin-module"><span>Quarter memory log</span><small>Editor installed</small></div>
         </div>
       </section>
     );
@@ -82,15 +85,27 @@ export default async function AdminPage({
     );
   }
 
-  const [publishedResult, draftResult, mediaResult, booksResult] = await Promise.all([
+  const [publishedResult, draftResult, quarterResult, quarterDraftResult, mediaResult, booksResult] = await Promise.all([
     supabase.from("content_items").select("slug,title,summary,body,status,updated_at").eq("kind", "page"),
     supabase.from("content_drafts").select("slug,title,summary,body,updated_at").eq("kind", "page"),
+    supabase.from("content_items").select("slug,title,body,status,updated_at").eq("kind", QUARTER_KIND),
+    supabase.from("content_drafts").select("slug,title,body,updated_at").eq("kind", QUARTER_KIND),
     supabase.from("media_assets").select(mediaSelect).order("created_at", { ascending: false }),
     supabase.from("library_books").select(libraryBookSelect).order("sort_order", { ascending: true }),
   ]);
 
   const existingMedia = (mediaResult.data || []).map(toPlacedPhoto);
   const existingBooks = (booksResult.data || []).map(toLibraryBook);
+  const publishedQuarters = (quarterResult.data || [])
+    .map(toQuarterLog)
+    .filter((quarter): quarter is QuarterLog => Boolean(quarter));
+  const draftQuarters = (quarterDraftResult.data || [])
+    .map((item) => toQuarterLog({ ...item, status: "draft" }))
+    .filter((quarter): quarter is QuarterLog => Boolean(quarter));
+  const editorQuarters = unionQuarters(
+    fallbackQuarters(),
+    mergeQuarterLogs(publishedQuarters, draftQuarters),
+  );
 
   const sections = editableSections.map((fallback) => {
     const stored = publishedResult.data?.find((item) => item.slug === fallback.slug);
@@ -118,6 +133,10 @@ export default async function AdminPage({
     "book-published": "Book published to Reading.",
     "book-imported": "Verified book metadata imported and cached.",
     "book-removed": "Book removed from the reading library.",
+    "quarter-draft": "Quarter saved as a draft.",
+    "quarter-published": "Quarter published to the memory log.",
+    "quarter-added": "Quarter opened. Fill it in, then publish when it should be public.",
+    "quarter-removed": "Quarter removed from the memory log.",
   };
   const savedCopy = saved ? savedMessages[saved] : undefined;
 
@@ -131,7 +150,12 @@ export default async function AdminPage({
       {booksResult.error && <p className="form-error">Reading library is not connected yet. Run the library_books migration in Supabase, then refresh.</p>}
       {error === "media" && <p className="form-error">The photo change could not be saved. Check the page and location, then try again.</p>}
       {error?.startsWith("book-") && <p className="form-error">The book change could not be completed. Check the ISBN, Goodreads URL, and provider availability.</p>}
-      {error && error !== "media" && !error.startsWith("book-") && <p className="form-error">The change could not be saved. Check the required fields and try again.</p>}
+      {error === "quarter-exists" && <p className="form-error">That quarter is already in the log.</p>}
+      {error === "quarter-invalid" && <p className="form-error">Choose a year and a quarter from Q1 to Q4.</p>}
+      {error?.startsWith("quarter-") && error !== "quarter-exists" && error !== "quarter-invalid" && (
+        <p className="form-error">The quarter change could not be saved.</p>
+      )}
+      {error && error !== "media" && !error.startsWith("book-") && !error.startsWith("quarter-") && <p className="form-error">The change could not be saved. Check the required fields and try again.</p>}
       <div className="editor-list" id="page-editor">
         {sections.map((section) => (
           <form className="editor-card" id={section.slug} action={saveSection} key={section.slug}>
@@ -152,6 +176,7 @@ export default async function AdminPage({
           </form>
         ))}
       </div>
+      <QuarterLogAdmin quarters={editorQuarters} />
       <BookLibraryAdmin books={existingBooks} />
       <MediaUploader initialMedia={existingMedia} />
       <form action={signOut}><button className="text-button" type="submit">Sign out</button></form>

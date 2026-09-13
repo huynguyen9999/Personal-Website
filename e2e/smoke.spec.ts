@@ -4,7 +4,11 @@ test.describe("public archive smoke", () => {
   test("home keeps the original archive and adds the identity map", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1 })).toContainText("A life in progress");
-    await expect(page.getByRole("heading", { name: /One life, seen through its connections/ })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /A short signal from the present/ })).toBeVisible();
+    await expect(page.getByRole("button", { name: /Building\. Personal website admin\/editor/ })).toBeVisible();
+    await expect(page.getByRole("button", { name: /Reading\. .*Steve Jobs/ })).toBeVisible();
+    await expect(page.getByText(/Q3 2026/)).toBeVisible();
+    await expect(page.locator(".present-clock")).toContainText(/PDT|PST/);
     await expect(page.getByText("ORIGIN / ADAPTATION")).toHaveCount(0);
     await expect(page.getByRole("button", { name: "Cars & bikes" })).toBeVisible();
     await expect(page.getByText("Huy Nguyen · Ho Chi Minh City → California")).toBeVisible();

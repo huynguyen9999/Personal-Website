@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { getPublishedSection } from "@/lib/content";
+import { getPresentState } from "@/lib/quarters";
 import { getPlacedPhotos, photosForSlot } from "@/lib/media";
 import { PlacedPhotos } from "@/components/placed-photos";
+import { PresentSnapshot } from "@/components/present-snapshot";
 import { SiteFooter } from "@/components/site-footer";
 
 export const metadata: Metadata = {
@@ -18,7 +20,10 @@ function formatUpdated(value?: string) {
 }
 
 export default async function NowPage() {
-  const opening = await getPublishedSection("now-current");
+  const [opening, present] = await Promise.all([
+    getPublishedSection("now-current"),
+    getPresentState(),
+  ]);
   const photos = photosForSlot(await getPlacedPhotos("now"), "now-present");
   const updated = formatUpdated(opening.updatedAt);
 
@@ -33,6 +38,12 @@ export default async function NowPage() {
           <p className="now-updated">Last updated when this page is published from the editor.</p>
         )}
         <p className="quiet-intro">{opening.body}</p>
+        <PresentSnapshot
+          quarters={present.quarters}
+          currentSlug={present.currentSlug}
+          serverNow={present.serverNow}
+          embedded
+        />
         <PlacedPhotos photos={photos} layout="stack" />
       </article>
       <SiteFooter />

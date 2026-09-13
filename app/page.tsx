@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { getPublishedSections } from "@/lib/content";
+import { getPresentState } from "@/lib/quarters";
 import { getPlacedPhotos, photosForSlot } from "@/lib/media";
 import { IdentityMap } from "@/components/identity-map";
 import { PlacedPhotos } from "@/components/placed-photos";
+import { PresentSnapshot } from "@/components/present-snapshot";
 import { Reveal } from "@/components/reveal";
 import { SiteFooter } from "@/components/site-footer";
 
@@ -16,8 +18,15 @@ const threads = [
 const threadSlots = ["thread-origin", "thread-study", "thread-practice", "thread-public"] as const;
 
 export default async function HomePage() {
-  const [opening, manifesto, now] = await getPublishedSections(["home-opening", "home-manifesto", "home-now-teaser"]);
-  const photos = await getPlacedPhotos("home");
+  const [opening, manifesto, now] = await getPublishedSections([
+    "home-opening",
+    "home-manifesto",
+    "home-now-teaser",
+  ]);
+  const [photos, present] = await Promise.all([
+    getPlacedPhotos("home"),
+    getPresentState(),
+  ]);
   const openingPhotos = photosForSlot(photos, "opening");
 
   return (
@@ -42,16 +51,13 @@ export default async function HomePage() {
       </section>
 
       <Reveal>
-        <section className="present-section ruled-section" aria-labelledby="present-title">
-          <p className="section-index">{now.eyebrow}</p>
-          <div>
-            <h2 id="present-title">{now.title}</h2>
-            <p>{now.body}</p>
-            <Link className="text-link" href="/now">
-              The present tense <span aria-hidden="true">↗</span>
-            </Link>
-          </div>
-        </section>
+        <PresentSnapshot
+          eyebrow={now.eyebrow}
+          title={now.title}
+          quarters={present.quarters}
+          currentSlug={present.currentSlug}
+          serverNow={present.serverNow}
+        />
       </Reveal>
 
       <Reveal>
