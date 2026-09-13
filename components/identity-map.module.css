@@ -1,6 +1,6 @@
 .section {
-  padding: clamp(5rem, 10vw, 9rem) var(--gutter);
-  border-bottom: 1px solid var(--rule);
+  min-height: calc(100svh - 4.5rem);
+  padding: clamp(3.5rem, 7vw, 6.5rem) var(--gutter) clamp(2.5rem, 5vw, 4.5rem);
   overflow: hidden;
 }
 
