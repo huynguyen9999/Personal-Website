@@ -33,7 +33,7 @@ Unique claim a neighbor could not copy: Ho Chi Minh City → California, electri
 
 ## Operating Context
 
-Owner updates copy and photos from `/admin` without a code change. The route is intentionally unlinked from public chrome. Public pages fall back to local factual copy when Supabase is unset.
+Owner updates copy and photos from `/admin` without a code change. Sign-in is a quiet footer `admin` line, not a header tab. Public pages fall back to local factual copy when Supabase is unset.
 
 ## Capabilities and Constraints
 

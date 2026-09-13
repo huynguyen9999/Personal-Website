@@ -320,6 +320,19 @@ body:has(.site-header[data-nav-active="true"]) main { filter: blur(7px); opacity
 .site-footer nav { display: flex; flex-wrap: wrap; gap: 1.25rem; }
 .footer-origin { display: grid; gap: .45rem; justify-items: start; }
 .footer-origin p { margin: 0; }
+.admin-whisper {
+  color: var(--muted);
+  opacity: .32;
+  letter-spacing: .06em;
+  text-decoration: none;
+  transition: opacity 180ms ease, color 180ms ease;
+}
+.admin-whisper:hover,
+.admin-whisper:focus-visible {
+  opacity: .7;
+  color: var(--ink);
+  outline: 0;
+}
 .story-header { padding: clamp(5rem, 9vw, 9rem) var(--gutter); }
 .story-header h1 { max-width: 15ch; margin-top: 4rem; }
 .story-header > p:last-of-type { max-width: 34rem; margin: 3rem 0 0 auto; color: var(--muted); font-size: 1.15rem; }

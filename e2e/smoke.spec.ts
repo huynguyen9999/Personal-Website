@@ -83,10 +83,10 @@ test.describe("public archive smoke", () => {
     await expect(header).toHaveAttribute("data-collapsed", "false");
   });
 
-  test("admin stays off the public chrome and remains available by direct route", async ({ page }) => {
+  test("admin stays off the header and remains available from the footer", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator("footer.site-footer").getByRole("link", { name: "admin" })).toHaveCount(0);
-    await page.goto("/admin");
+    await expect(page.locator("a.nav-item[href='/admin']")).toHaveCount(0);
+    await page.locator("footer.site-footer").getByRole("link", { name: "admin" }).click();
     await expect(page).toHaveURL(/\/admin$/);
 
     const setup = page.getByText("SETUP REQUIRED");

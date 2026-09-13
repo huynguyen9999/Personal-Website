@@ -15,9 +15,12 @@ describe("SiteFooter", () => {
     );
   });
 
-  it("keeps owner access off the public footer", () => {
+  it("keeps a quiet admin link on the bottom left", () => {
     render(<SiteFooter />);
 
-    expect(screen.queryByRole("link", { name: "admin" })).not.toBeInTheDocument();
+    const admin = screen.getByRole("link", { name: "admin" });
+    expect(admin).toHaveAttribute("href", "/admin");
+    expect(admin).toHaveClass("admin-whisper");
+    expect(document.querySelector(".footer-origin a.admin-whisper")).toBe(admin);
   });
 });

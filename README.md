@@ -11,7 +11,7 @@ Repository: [github.com/huynguyen9999/Personal-Website](https://github.com/huyng
 - Read the original homepage archive and explore the interactive identity map.
 - Switch appearance between light, dark, and system (follows the OS, including live changes).
 - Move the cursor on a desktop pointer and see a colored trail (honors Reduce Motion).
-- Open `/admin` directly if you are the owner. Owner access is absent from the public navigation and footer.
+- Sign in at the quiet **admin** line in the footer if you are the owner. Everyone else sees a simple sign-in panel.
 
 After sign-in the owner can:
 

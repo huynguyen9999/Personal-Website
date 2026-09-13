@@ -5,6 +5,7 @@ export function SiteFooter() {
     <footer className="site-footer">
       <div className="footer-origin">
         <p>Huy Nguyen · Ho Chi Minh City → California</p>
+        <Link className="admin-whisper" href="/admin">admin</Link>
       </div>
       <nav aria-label="Footer">
         <Link href="/now">Now</Link>
