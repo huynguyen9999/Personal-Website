@@ -21,7 +21,7 @@
   text-transform: uppercase;
 }
 
-.header h2 {
+.header h1 {
   max-width: 11ch;
   margin: 0;
   font-family: var(--font-serif), serif;

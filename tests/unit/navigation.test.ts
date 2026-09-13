@@ -6,14 +6,17 @@ describe("primary navigation helpers", () => {
     expect(primaryNavLinks.map((link) => [link.href, link.label])).toEqual([
       ["/", "Home"],
       ["/about", "My Story"],
-      ["/#making", "My Projects"],
-      ["/#life", "Life"],
+      ["https://github.com/huynguyen9999", "My Projects"],
+      ["/reading", "Life"],
     ]);
 
     const hrefs = primaryNavLinks.flatMap((link) => [link.href, ...link.items.map((item) => item.href)]) as string[];
     expect(hrefs).not.toContain("/admin");
     expect(hrefs).not.toContain("/work");
     expect(hrefs).not.toContain("/now");
+    expect(hrefs).not.toContain("/#now");
+    expect(hrefs).not.toContain("/#making");
+    expect(hrefs).not.toContain("/#life");
     expect(hrefs).toContain("/reading?shelf=currently-reading");
     expect(hrefs).toContain("/reading?shelf=read");
     expect(hrefs).toContain("/reading?shelf=reading-next");

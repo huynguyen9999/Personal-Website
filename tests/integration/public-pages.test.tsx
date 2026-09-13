@@ -15,24 +15,19 @@ describe("public App Router pages", () => {
     delete process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
   });
 
-  it("renders the homepage sequence from local fallbacks", async () => {
-    render(await HomePage());
+  it("renders only the identity map on the homepage", () => {
+    render(<HomePage />);
 
-    expect(screen.getByRole("heading", { level: 1, name: /A life in progress/ })).toBeInTheDocument();
-    expect(screen.getByText("HO CHI MINH CITY → CALIFORNIA")).toBeInTheDocument();
-    expect(screen.getByText("measured in circuits and baselines.")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /three disciplines are moving at once/ })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /The move changed the language/ })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /One life, seen through its connections/ })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: /One life, seen through its connections/ })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Engineering" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Tennis" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Reading" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Cars & bikes" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Content creation" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Travels" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /A personal site that can keep changing/ })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /ordinary sequence/ })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /Open the reading shelf/ })).toHaveAttribute("href", "/reading");
+    expect(screen.queryByText(/ORIGIN \/ ADAPTATION/)).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: /A life in progress/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("contentinfo")).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "admin" })).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "Edit" })).not.toBeInTheDocument();
   });
@@ -83,7 +78,7 @@ describe("public App Router pages", () => {
   });
 
   it("does not invent biography on the public fallbacks", async () => {
-    render(await HomePage());
+    render(<HomePage />);
     const text = document.body.textContent || "";
     for (const pattern of inventedCopyPatterns) {
       expect(text).not.toMatch(pattern);

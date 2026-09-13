@@ -1,10 +1,11 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("public archive smoke", () => {
-  test("home loads the opening sequence", async ({ page }) => {
+  test("home contains only the identity map", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("A life in progress");
-    await expect(page.getByText("HO CHI MINH CITY → CALIFORNIA")).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("One life, seen through its connections");
+    await expect(page.getByText("ORIGIN / ADAPTATION")).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Cars & bikes" })).toBeVisible();
     await expect(page.locator("header.site-header")).toHaveAttribute("data-collapsed", "false");
   });
 
@@ -17,7 +18,7 @@ test.describe("public archive smoke", () => {
     await expect(page).toHaveURL(/\/about$/);
     await expect(page.getByText("STORY / TWO COORDINATES")).toBeVisible();
 
-    await page.locator("a.nav-item[href='/#life']").hover();
+    await page.locator("a.nav-item[href='/reading']").hover();
     await page.locator(".nav-dropdown a[href='/reading?shelf=currently-reading']").click();
     await expect(page).toHaveURL(/\/reading$/);
     await expect(page.getByRole("heading", { level: 1 })).toContainText("My Shelf");

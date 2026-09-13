@@ -29,8 +29,8 @@ describe("Navigation", () => {
     expect(screen.getByRole("navigation", { name: "Primary navigation" })).toBeInTheDocument();
     expect(document.querySelector("a.nav-item[href='/']")).not.toBeNull();
     expect(document.querySelector("a.nav-item[href='/about']")).not.toBeNull();
-    expect(document.querySelector("a.nav-item[href='/#making']")).not.toBeNull();
-    expect(document.querySelector("a.nav-item[href='/#life']")).not.toBeNull();
+    expect(document.querySelector("a.nav-item[href='https://github.com/huynguyen9999']")).not.toBeNull();
+    expect(document.querySelector("a.nav-item[href='/reading']")).not.toBeNull();
     expect(document.querySelectorAll("a.nav-item")).toHaveLength(4);
     expect(document.querySelector("a.nav-item[href='/admin']")).toBeNull();
     expect(screen.queryByRole("link", { name: /^admin$/i })).not.toBeInTheDocument();
