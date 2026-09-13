@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getPublishedSection } from "@/lib/content";
 import { getPlacedPhotos, photosForSlot } from "@/lib/media";
 import { PlacedPhotos } from "@/components/placed-photos";
+import { Reveal } from "@/components/reveal";
 import { SiteFooter } from "@/components/site-footer";
 
 export const metadata: Metadata = {
@@ -48,22 +49,26 @@ export default async function AboutPage() {
         <div className="trajectory" id="trajectory" aria-label="Personal trajectory">
           <div className="trajectory-line" aria-hidden="true" />
           {moments.map((moment, index) => (
-            <section className="moment" key={moment.place}>
-              <div className="moment-marker" aria-hidden="true"><span>{index + 1}</span></div>
-              <p className="moment-place">{moment.place}</p>
-              <div>
-                <h2>{moment.title}</h2>
-                <p>{moment.body}</p>
-                <PlacedPhotos photos={photosForSlot(photos, moment.slot)} layout="figure" />
-              </div>
-            </section>
+            <Reveal key={moment.place} delayMs={index * 60}>
+              <section className="moment">
+                <div className="moment-marker" aria-hidden="true"><span>{index + 1}</span></div>
+                <p className="moment-place">{moment.place}</p>
+                <div>
+                  <h2>{moment.title}</h2>
+                  <p>{moment.body}</p>
+                  <PlacedPhotos photos={photosForSlot(photos, moment.slot)} layout="figure" />
+                </div>
+              </section>
+            </Reveal>
           ))}
         </div>
 
-        <aside className="story-note">
-          <p className="section-index">EDITORIAL NOTE</p>
-          <p>The next version needs the owner’s own stories and language. No dramatic arc has been invented to fill the gaps.</p>
-        </aside>
+        <Reveal>
+          <aside className="story-note">
+            <p className="section-index">EDITORIAL NOTE</p>
+            <p>The next version needs the owner’s own stories and language. No dramatic arc has been invented to fill the gaps.</p>
+          </aside>
+        </Reveal>
       </article>
       <SiteFooter />
     </>

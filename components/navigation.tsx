@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ThemeControls } from "@/components/theme-controls";
 
 const links = [
@@ -17,9 +17,49 @@ export function Navigation() {
   const pathname = usePathname();
   const [focused, setFocused] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+
+  useEffect(() => {
+    setCollapsed(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    let lastY = window.scrollY;
+
+    const onScroll = () => {
+      const y = window.scrollY;
+      const goingDown = y > lastY + 2;
+      const goingUp = y < lastY - 2;
+      lastY = y;
+
+      if (open || y < 24) {
+        setCollapsed(false);
+        return;
+      }
+
+      if (goingUp) {
+        setCollapsed(false);
+        return;
+      }
+
+      if (goingDown && y > 56) setCollapsed(true);
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [open]);
+
+  useEffect(() => {
+    if (focused) setCollapsed(false);
+  }, [focused]);
 
   return (
-    <header className="site-header" data-nav-active={focused ? "true" : "false"}>
+    <header
+      className="site-header"
+      data-nav-active={focused ? "true" : "false"}
+      data-collapsed={collapsed ? "true" : "false"}
+    >
       <Link className="site-mark" href="/" aria-label="Huy Nguyen, home">
         <span aria-hidden="true">01</span>
         <span>Huy Nguyen</span>
@@ -32,7 +72,10 @@ export function Navigation() {
         type="button"
         aria-expanded={open}
         aria-controls="primary-navigation"
-        onClick={() => setOpen((value) => !value)}
+        onClick={() => {
+          setOpen((value) => !value);
+          setCollapsed(false);
+        }}
       >
         {open ? "Close" : "Explore"}
       </button>
@@ -84,7 +127,11 @@ export function Navigation() {
               <div id={menuId} className="nav-dropdown" aria-label={`${link.label} menu`}>
                 <p>{link.note}</p>
                 {link.items.map((item) => (
-                  <Link key={item.label} href={item.href} onClick={() => { setOpen(false); setFocused(null); }}>
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    onClick={() => { setOpen(false); setFocused(null); }}
+                  >
                     {item.label}<span aria-hidden="true">↗</span>
                   </Link>
                 ))}

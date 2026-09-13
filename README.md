@@ -30,7 +30,9 @@ Unplaced photos stay in the admin library only.
 | --- | --- |
 | App | Next.js 16 App Router, React 19 |
 | Language | TypeScript |
-| Styles | One global CSS file, CSS custom properties, no Tailwind |
+| Styles | Editorial CSS tokens in `globals.css`; Tailwind v4 utilities on those tokens (no Preflight) |
+| Motion | CSS page enter, scroll reveal, hiding header, nav veil, cursor trail |
+| Design system | Impeccable (`PRODUCT.md`, `DESIGN.md`) plus `personal-website-blueprint.md` |
 | Fonts | Instrument Serif (headlines), Inter (body), IBM Plex Mono (meta) via `next/font` |
 | Data / auth / files | Supabase (Postgres, Auth, Storage) |
 | Hosting | Vercel |
@@ -52,7 +54,8 @@ Unplaced photos stay in the admin library only.
 ```
 app/
   layout.tsx              Site chrome, fonts, theme bootstrap, cursor trail
-  globals.css             All visual design
+  globals.css             Tokens, editorial layout, motion
+  template.tsx            Page-enter animation wrapper
   page.tsx                Homepage
   about/page.tsx          Story
   writing/page.tsx        Writing
@@ -66,6 +69,7 @@ components/
   site-footer.tsx         Shared footer
   theme-controls.tsx      Light / dark / system
   cursor-trail.tsx        Pointer trail
+  reveal.tsx              Scroll-triggered section reveal
   placed-photos.tsx       Public photo renderer
   media-uploader.tsx      Admin upload + placement
   admin-submit.tsx        Draft / publish buttons
@@ -76,6 +80,7 @@ lib/
 proxy.ts                  Refreshes the auth session on /admin
 supabase/migrations/      Postgres tables, RLS, storage bucket
 personal-website-blueprint.md   Product source of truth
+PRODUCT.md / DESIGN.md          Impeccable product + visual records
 ```
 
 ## Local setup
@@ -188,3 +193,5 @@ Standard Next.js on Vercel (project `personal-website`). Local `pnpm dev` never 
 ## Design notes
 
 Editorial personal archive: serif headlines, four-to-five column header, Shield-like nav focus (active item, muted neighbors, page blur), sticky navigation, quiet writing shelf. Copy that has not been written is left empty. Theme preference is `site-theme` in `localStorage`.
+
+Route changes fade and rise the page content. The header tucks away on scroll down and returns on scroll up. Homepage and Story sections reveal once on scroll. A colored cursor trail follows a mouse or trackpad. Tailwind is available for new utilities; it does not reset the editorial CSS. Impeccable skills live under `.cursor/skills/`.

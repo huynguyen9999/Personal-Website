@@ -1,0 +1,23 @@
+{
+  "hook": {
+    "enabled": true
+  },
+  "detector": {
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "createdAt": "2026-09-13T01:47:59.790Z",
+        "reason": "Owner brief: Inter is the body face in DESIGN.md"
+      },
+      {
+        "rule": "overused-font",
+        "value": "instrument serif",
+        "createdAt": "2026-09-13T01:47:59.805Z",
+        "reason": "Owner brief: Instrument Serif is the display face in DESIGN.md"
+      }
+    ],
+    "ignoreRules": [],
+    "ignoreFiles": []
+  }
+}

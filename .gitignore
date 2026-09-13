@@ -6,3 +6,7 @@ node_modules/
 .DS_Store
 *.tsbuildinfo
 supabase/.temp/
+.impeccable/config.local.json
+.impeccable/hook.cache.json
+.cursor/skills/impeccable/scripts/bin/
+

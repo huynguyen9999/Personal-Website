@@ -1,0 +1,15 @@
+---
+description: Visual system for Huy Nguyen's personal archive
+alwaysApply: true
+---
+
+# Design authority
+
+Read `personal-website-blueprint.md` first, then `PRODUCT.md` and `DESIGN.md`. For design work, load the Impeccable skill at `.cursor/skills/impeccable/SKILL.md` and run `.cursor/skills/impeccable/scripts/impeccable context` once per session.
+
+- Do not invent biography.
+- Keep the editorial CSS tokens in `app/globals.css` as the source of truth.
+- Tailwind utilities may be used; never enable Tailwind Preflight; never restyle the site as a card dashboard.
+- Motion families: CSS page enter, hiding header, nav veil, scroll reveal, quiet cursor trail. Respect `prefers-reduced-motion`.
+- Radius stays 0. No skill pills, logo clouds, or “Hi I’m X” heroes.
+- Public pages are Experience / Read. `/admin` is Operate. Do not run Impeccable `overdrive`, `bolder`, or native iOS/Android playbooks on this site unless the owner asks.

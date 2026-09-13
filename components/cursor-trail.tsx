@@ -6,30 +6,37 @@ type Point = { x: number; y: number };
 
 export function CursorTrail() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const cometRef = useRef<HTMLDivElement>(null);
+  const pointerRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const comet = cometRef.current;
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (!canvas || !comet || reducedMotion.matches) return;
+    const pointer = pointerRef.current;
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (!canvas || !pointer) return;
+
+    const stopIfReduced = () => {
+      if (!motion.matches) return false;
+      canvas.width = 0;
+      canvas.height = 0;
+      pointer.style.opacity = "0";
+      return true;
+    };
+
+    if (stopIfReduced()) return;
 
     const context = canvas.getContext("2d");
     if (!context) return;
 
-    let colors = ["#c9a8ff", "#ffb067", "#ff5656"];
-    const points: Point[] = Array.from({ length: 28 }, () => ({ x: -80, y: -80 }));
-    let target: Point = { x: -80, y: -80 };
-    let frame: number | null = null;
-    let visible = false;
-    let intensity = 0;
+    const points: Point[] = Array.from({ length: 10 }, () => ({ x: -120, y: -120 }));
+    let target: Point = { x: -120, y: -120 };
+    let frame = 0;
+    let running = false;
     let lastMove = 0;
+    let color = "#c9a8ff";
 
-    const readColors = () => {
-      const styles = window.getComputedStyle(document.documentElement);
-      colors = ["--lavender", "--orange", "--signal"].map(
-        (property, index) => styles.getPropertyValue(property).trim() || colors[index],
-      );
+    const readColor = () => {
+      const styles = getComputedStyle(document.documentElement);
+      color = styles.getPropertyValue("--lavender").trim() || "#c9a8ff";
     };
 
     const resize = () => {
@@ -41,98 +48,90 @@ export function CursorTrail() {
       context.setTransform(scale, 0, 0, scale, 0, 0);
     };
 
-    const move = (event: PointerEvent) => {
-      if (event.pointerType === "touch") return;
-      target = { x: event.clientX, y: event.clientY };
-      comet.style.opacity = "1";
-      comet.style.transform = `translate3d(${target.x}px, ${target.y}px, 0)`;
-      if (!visible) {
-        points.forEach((point) => Object.assign(point, target));
-        visible = true;
-      }
-      lastMove = window.performance.now();
-      intensity = 1;
-      if (frame === null) frame = window.requestAnimationFrame(draw);
-    };
-
-    const hide = () => {
-      visible = false;
-      comet.style.opacity = "0";
-    };
-
-    const leaveViewport = (event: PointerEvent) => {
-      if (!event.relatedTarget) hide();
-    };
-
     const draw = (time: number) => {
-      frame = null;
-      if (time - lastMove > 900) visible = false;
+      if (motion.matches) {
+        running = false;
+        context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        pointer.style.opacity = "0";
+        return;
+      }
+
+      const fading = time - lastMove > 90;
       context.clearRect(0, 0, window.innerWidth, window.innerHeight);
-      intensity = visible ? Math.min(1, intensity + 0.2) : Math.max(0, intensity - 0.04);
 
       let leader = target;
       points.forEach((point, index) => {
-        const easing = Math.max(0.14, 0.42 - index * 0.008);
+        const easing = fading ? 0.2 : Math.max(0.28, 0.62 - index * 0.03);
         point.x += (leader.x - point.x) * easing;
         point.y += (leader.y - point.y) * easing;
         leader = point;
       });
 
-      if (intensity > 0.02) {
-        context.save();
-        context.lineCap = "round";
-        context.lineJoin = "round";
+      context.lineCap = "round";
+      context.lineJoin = "round";
+      context.strokeStyle = color;
+      context.shadowColor = "transparent";
 
-        for (let index = points.length - 1; index > 0; index -= 1) {
-          const progress = 1 - index / points.length;
-          const color = colors[index % colors.length];
-          context.beginPath();
-          context.moveTo(points[index].x, points[index].y);
-          context.lineTo(points[index - 1].x, points[index - 1].y);
-          context.lineWidth = 3 + progress * 16;
-          context.globalAlpha = (0.22 + progress * 0.7) * intensity;
-          context.strokeStyle = color;
-          context.shadowColor = color;
-          context.shadowBlur = 18 + progress * 16;
-          context.stroke();
-        }
-
-        context.globalAlpha = intensity;
-        context.fillStyle = colors[0];
-        context.shadowColor = colors[2];
-        context.shadowBlur = 28;
+      for (let index = points.length - 1; index > 0; index -= 1) {
+        const progress = 1 - index / points.length;
         context.beginPath();
-        context.arc(points[0].x, points[0].y, 9, 0, Math.PI * 2);
-        context.fill();
-        context.restore();
+        context.moveTo(points[index].x, points[index].y);
+        context.lineTo(points[index - 1].x, points[index - 1].y);
+        context.lineWidth = 0.8 + progress * 1.6;
+        context.globalAlpha = (0.08 + progress * 0.16) * (fading ? 0.45 : 1);
+        context.stroke();
       }
 
-      if (intensity > 0.02) frame = window.requestAnimationFrame(draw);
+      pointer.style.opacity = fading ? "0.18" : "0.42";
+      pointer.style.transform = `translate3d(${target.x}px, ${target.y}px, 0)`;
+
+      const stillMoving = Math.hypot(points[0].x - target.x, points[0].y - target.y) > 0.4 || time - lastMove < 500;
+      if (stillMoving) frame = window.requestAnimationFrame(draw);
+      else running = false;
+    };
+
+    const move = (event: PointerEvent) => {
+      if (event.pointerType === "touch" || motion.matches) return;
+      target = { x: event.clientX, y: event.clientY };
+      lastMove = window.performance.now();
+      if (!running) {
+        running = true;
+        points.forEach((point) => Object.assign(point, target));
+        frame = window.requestAnimationFrame(draw);
+      }
+    };
+
+    const onMotionChange = () => {
+      if (stopIfReduced()) {
+        running = false;
+        window.cancelAnimationFrame(frame);
+      }
     };
 
     resize();
-    readColors();
+    readColor();
     window.addEventListener("resize", resize);
     window.addEventListener("pointermove", move, { passive: true });
-    window.addEventListener("pointerout", leaveViewport);
-    window.addEventListener("blur", hide);
-    const themeWatcher = new MutationObserver(readColors);
+    motion.addEventListener("change", onMotionChange);
+    const themeWatcher = new MutationObserver(readColor);
     themeWatcher.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
     return () => {
-      if (frame !== null) window.cancelAnimationFrame(frame);
+      running = false;
+      window.cancelAnimationFrame(frame);
       themeWatcher.disconnect();
+      motion.removeEventListener("change", onMotionChange);
       window.removeEventListener("resize", resize);
       window.removeEventListener("pointermove", move);
-      window.removeEventListener("pointerout", leaveViewport);
-      window.removeEventListener("blur", hide);
     };
   }, []);
 
   return (
     <div className="cursor-layer" aria-hidden="true">
       <canvas ref={canvasRef} className="cursor-trail" />
-      <div ref={cometRef} className="cursor-comet" />
+      <svg ref={pointerRef} className="cursor-pointer" viewBox="0 0 12 20" width="12" height="20">
+        <path d="M1.2 1.2 1.2 14.8 4.1 11.9 6.7 18.2 8.6 17.4 6 11.1 10.6 11.1Z" />
+      </svg>
     </div>
   );
 }
