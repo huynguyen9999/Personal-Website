@@ -3,7 +3,10 @@ import Link from "next/link";
 export function SiteFooter() {
   return (
     <footer className="site-footer">
-      <p>This archive is being assembled.</p>
+      <div className="footer-origin">
+        <p>This archive is being assembled.</p>
+        <Link className="admin-whisper" href="/admin">admin</Link>
+      </div>
       <nav aria-label="Footer">
         <Link href="/now">Now</Link>
         <Link href="/contact">Contact</Link>

@@ -58,6 +58,28 @@ export function isMediaSlot(value: string): value is MediaSlotId {
   return slotIds.has(value);
 }
 
+export function isValidMediaPlacement(page: string | null, slot: string | null) {
+  return Boolean(page && slot && mediaSlots.some((item) => item.page === page && item.id === slot));
+}
+
+export function parseMediaPlacement(formData: FormData) {
+  const pageRaw = String(formData.get("page") || "").trim();
+  const slotRaw = String(formData.get("slot") || "").trim();
+  const alt = String(formData.get("alt") || "").trim().slice(0, 200);
+  const caption = String(formData.get("caption") || "").trim().slice(0, 240);
+  const slotMatch = mediaSlots.find((item) => item.id === slotRaw);
+  const page = isMediaPage(pageRaw) ? pageRaw : slotMatch?.page ?? null;
+  const slot = isMediaSlot(slotRaw) ? slotRaw : null;
+  const valid = isValidMediaPlacement(page, slot);
+
+  return {
+    page: valid ? page : null,
+    slot: valid ? slot : null,
+    alt,
+    caption,
+  };
+}
+
 export function photosForSlot(photos: PlacedPhoto[], slot: MediaSlotId) {
   return photos.filter((photo) => photo.slot === slot);
 }

@@ -1,31 +1,41 @@
 "use server";
 
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { isOwnerEmail, normalizeAdminEmail } from "@/lib/admin";
+import {
+  authAttemptLimiter,
+  clientIpFromHeaders,
+  hashClientKey,
+  inspectAuthForm,
+  isWeakSignUpPassword,
+} from "@/lib/auth-guard";
 import { createClient } from "@/lib/supabase/server";
 import { editableSections, type EditableSection } from "@/lib/content";
-import {
-  MEDIA_BUCKET,
-  isMediaPage,
-  isMediaSlot,
-  mediaSlots,
-} from "@/lib/media";
+import { MEDIA_BUCKET, parseMediaPlacement } from "@/lib/media";
 
 const allowedSlugs = new Set(editableSections.map((section) => section.slug));
 
-function isOwnerEmail(email: string) {
-  return Boolean(process.env.ADMIN_EMAIL && email === process.env.ADMIN_EMAIL.toLowerCase());
+async function clientKeyFromRequest() {
+  return hashClientKey(clientIpFromHeaders(await headers()));
+}
+
+async function beginAuthAttempt() {
+  const clientKey = await clientKeyFromRequest();
+  const decision = authAttemptLimiter.consume(clientKey);
+  if (!decision.ok) redirect("/admin?error=limited");
+  return clientKey;
 }
 
 async function getOwner() {
   const supabase = await createClient();
   const { data } = await supabase.auth.getClaims();
   const claims = data?.claims;
-  const email = typeof claims?.email === "string" ? claims.email.toLowerCase() : null;
-  const ownerEmail = process.env.ADMIN_EMAIL?.toLowerCase();
+  const email = typeof claims?.email === "string" ? normalizeAdminEmail(claims.email) : null;
   const ownerId = typeof claims?.sub === "string" ? claims.sub : null;
 
-  if (!email || !ownerEmail || email !== ownerEmail || !ownerId) return { error: "unauthorized" as const };
+  if (!email || !isOwnerEmail(email) || !ownerId) return { error: "unauthorized" as const };
   return { supabase, ownerId };
 }
 
@@ -33,24 +43,6 @@ async function requireOwner() {
   const owner = await getOwner();
   if ("error" in owner) redirect("/admin?error=unauthorized");
   return owner;
-}
-
-function parsePlacement(formData: FormData) {
-  const pageRaw = String(formData.get("page") || "").trim();
-  const slotRaw = String(formData.get("slot") || "").trim();
-  const alt = String(formData.get("alt") || "").trim().slice(0, 200);
-  const caption = String(formData.get("caption") || "").trim().slice(0, 240);
-  const slotMatch = mediaSlots.find((item) => item.id === slotRaw);
-  const page = isMediaPage(pageRaw) ? pageRaw : slotMatch?.page ?? null;
-  const slot = isMediaSlot(slotRaw) ? slotRaw : null;
-  const valid = Boolean(page && slot && mediaSlots.some((item) => item.page === page && item.id === slot));
-
-  return {
-    page: valid ? page : null,
-    slot: valid ? slot : null,
-    alt,
-    caption,
-  };
 }
 
 function revalidatePublic() {
@@ -63,31 +55,40 @@ function revalidatePublic() {
 }
 
 export async function signIn(formData: FormData) {
-  const email = String(formData.get("email") || "").trim().toLowerCase();
-  const password = String(formData.get("password") || "");
-  if (!isOwnerEmail(email)) redirect("/admin?error=unauthorized");
-  const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const clientKey = await beginAuthAttempt();
+  const form = inspectAuthForm(formData);
+  if (!form.ok) redirect("/admin?error=failed");
 
-  if (error) redirect("/admin?error=signin");
+  const email = normalizeAdminEmail(form.email);
+  if (!isOwnerEmail(email)) redirect("/admin?error=failed");
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signInWithPassword({ email, password: form.password });
+  if (error) redirect("/admin?error=failed");
+
+  authAttemptLimiter.clear(clientKey);
   redirect("/admin");
 }
 
 export async function signUp(formData: FormData) {
-  const email = String(formData.get("email") || "").trim().toLowerCase();
-  const password = String(formData.get("password") || "");
-  if (!isOwnerEmail(email)) redirect("/admin?error=unauthorized");
-  if (password.length < 8) redirect("/admin?error=password");
+  const clientKey = await beginAuthAttempt();
+  const form = inspectAuthForm(formData);
+  if (!form.ok) redirect("/admin?error=failed");
+
+  const email = normalizeAdminEmail(form.email);
+  if (!isOwnerEmail(email)) redirect("/admin?error=failed");
+  if (isWeakSignUpPassword(form.password)) redirect("/admin?error=password");
 
   const supabase = await createClient();
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://thehobbiest.vercel.app";
   const { data, error } = await supabase.auth.signUp({
     email,
-    password,
+    password: form.password,
     options: { emailRedirectTo: `${siteUrl}/admin` },
   });
 
-  if (error) redirect("/admin?error=signup");
+  if (error) redirect("/admin?error=failed");
+  authAttemptLimiter.clear(clientKey);
   redirect(data.session ? "/admin" : "/admin?notice=check-email");
 }
 
@@ -158,7 +159,7 @@ export async function registerMedia(formData: FormData) {
     return { error: "That file path is not allowed." };
   }
 
-  const placement = parsePlacement(formData);
+  const placement = parseMediaPlacement(formData);
   const { error } = await owner.supabase.from("media_assets").insert({
     owner_id: owner.ownerId,
     storage_path: storagePath,
@@ -178,7 +179,7 @@ export async function placeMedia(formData: FormData) {
   if (!id) redirect("/admin?error=media#media-uploader-title");
 
   const { supabase, ownerId } = await requireOwner();
-  const placement = parsePlacement(formData);
+  const placement = parseMediaPlacement(formData);
   const { error } = await supabase
     .from("media_assets")
     .update({

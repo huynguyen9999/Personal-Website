@@ -5,13 +5,12 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ThemeControls } from "@/components/theme-controls";
 
-const links = [
+export const primaryNavLinks = [
   { href: "/", label: "Index", note: "The present", items: [{ href: "/#opening-title", label: "Opening" }, { href: "/#present-title", label: "Now" }, { href: "/#threads-title", label: "Trajectory" }] },
   { href: "/about", label: "Story", note: "Vietnam to California", items: [{ href: "/about", label: "The route" }, { href: "/about#trajectory", label: "Three moments" }] },
   { href: "/writing", label: "Writing", note: "Notes and questions", items: [{ href: "/writing", label: "Archive" }, { href: "/writing#first-note", label: "First note" }] },
   { href: "/now", label: "Now", note: "Present tense", items: [{ href: "/now", label: "Currently" }] },
-  { href: "/admin", label: "Edit", note: "Sign in to edit", items: [{ href: "/admin", label: "Owner login" }] },
-];
+] as const;
 
 export function Navigation() {
   const pathname = usePathname();
@@ -97,7 +96,7 @@ export function Navigation() {
           }
         }}
       >
-        {links.map((link, index) => {
+        {primaryNavLinks.map((link, index) => {
           const active = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
           const menuId = `nav-${link.label.toLowerCase()}-menu`;
           return (

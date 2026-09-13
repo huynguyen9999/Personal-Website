@@ -33,7 +33,7 @@ Unique claim a neighbor could not copy: Ho Chi Minh City → California, electri
 
 ## Operating Context
 
-Owner updates copy and photos from `/admin` without a code change. Public pages fall back to local factual copy when Supabase is unset. Empty sections stay empty until real material exists.
+Owner updates copy and photos from `/admin` without a code change. Sign-in is a quiet footer `admin` line, not a header tab. Public pages fall back to local factual copy when Supabase is unset. Empty sections stay empty until real material exists.
 
 ## Capabilities and Constraints
 

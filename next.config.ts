@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { ADMIN_SECURITY_HEADERS, SITE_SECURITY_HEADERS } from "./lib/security-headers";
 
 const supabaseHostname = (() => {
   try {
@@ -11,7 +12,24 @@ const supabaseHostname = (() => {
 })();
 
 const nextConfig: NextConfig = {
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   poweredByHeader: false,
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: SITE_SECURITY_HEADERS.map(([key, value]) => ({ key, value })),
+      },
+      {
+        source: "/admin",
+        headers: ADMIN_SECURITY_HEADERS.map(([key, value]) => ({ key, value })),
+      },
+      {
+        source: "/admin/:path*",
+        headers: ADMIN_SECURITY_HEADERS.map(([key, value]) => ({ key, value })),
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {

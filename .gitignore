@@ -1,4 +1,5 @@
 .next/
+.next-e2e/
 node_modules/
 .env*
 !.env.example
@@ -9,4 +10,9 @@ supabase/.temp/
 .impeccable/config.local.json
 .impeccable/hook.cache.json
 .cursor/skills/impeccable/scripts/bin/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+coverage/
 

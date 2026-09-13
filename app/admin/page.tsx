@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { hasSupabaseConfig } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
+import { isOwnerEmail, normalizeAdminEmail } from "@/lib/admin";
 import { editableSections } from "@/lib/content";
 import { mediaSelect, toPlacedPhoto } from "@/lib/media";
 import { AdminSubmit } from "@/components/admin-submit";
@@ -8,8 +9,8 @@ import { MediaUploader } from "@/components/media-uploader";
 import { saveSection, signIn, signOut, signUp } from "./actions";
 
 export const metadata: Metadata = {
-  title: "Editor",
-  robots: { index: false, follow: false },
+  title: "Admin",
+  robots: { index: false, follow: false, nocache: true },
 };
 
 export default async function AdminPage({
@@ -37,33 +38,42 @@ export default async function AdminPage({
   const supabase = await createClient();
   const { data } = await supabase.auth.getClaims();
   const signedInEmail = typeof data?.claims?.email === "string" ? data.claims.email : null;
-  const allowedEmail = process.env.ADMIN_EMAIL;
-  const isOwner = Boolean(signedInEmail && allowedEmail && signedInEmail.toLowerCase() === allowedEmail.toLowerCase());
+  const isOwner = Boolean(signedInEmail && isOwnerEmail(normalizeAdminEmail(signedInEmail)));
 
   if (!isOwner) {
     return (
       <section className="admin-page admin-login">
         <div className="login-overlay">
           <div className="login-panel" role="dialog" aria-modal="true" aria-labelledby="login-title">
-            <p className="eyebrow">OWNER ACCESS</p>
-            <h1 id="login-title">Sign in to edit.</h1>
-            <p>Only the owner account can change copy or place photos. Everyone else stays on the public site.</p>
-            {signedInEmail && <p className="form-error">This account is not authorized as the site owner.</p>}
-            {notice === "check-email" && <p className="form-success">Check your email to confirm the owner account, then return here to sign in.</p>}
-            {error === "signin" && <p className="form-error">That email and password did not match.</p>}
-            {error === "unauthorized" && <p className="form-error">Use the authorized owner email for this website.</p>}
-            {error === "password" && <p className="form-error">Choose a password with at least eight characters.</p>}
-            {error === "signup" && <p className="form-error">The owner account could not be created. It may already exist; try signing in.</p>}
+            <h1 id="login-title">Sign in</h1>
+            {notice === "check-email" && <p className="form-success">Check your email, then return here to sign in.</p>}
+            {error === "limited" && <p className="form-error">Try again later.</p>}
+            {error === "password" && <p className="form-error">Use at least eight characters.</p>}
+            {error && error !== "limited" && error !== "password" && (
+              <p className="form-error">Sign in failed.</p>
+            )}
             <form action={signIn}>
-              <label>Email<input name="email" type="email" autoComplete="email" required /></label>
-              <label>Password<input name="password" type="password" autoComplete="current-password" required /></label>
+              <div className="hp-field" aria-hidden="true" inert>
+                <label>
+                  Website
+                  <input
+                    name="website"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    defaultValue=""
+                  />
+                </label>
+              </div>
+              <label>Email<input name="email" type="email" autoComplete="username" required maxLength={254} /></label>
+              <label>Password<input name="password" type="password" autoComplete="current-password" required maxLength={256} /></label>
               <div className="login-actions">
                 <button type="submit">Sign in</button>
-                <button className="text-button" type="submit" formAction={signUp}>Create owner account</button>
+                <button className="text-button" type="submit" formAction={signUp}>Create account</button>
               </div>
             </form>
-            {signedInEmail && <form action={signOut}><button className="text-button" type="submit">Sign out of this account</button></form>}
-            <a className="text-button" href="/">Back to the site</a>
+            {signedInEmail && <form action={signOut}><button className="text-button" type="submit">Sign out</button></form>}
+            <a className="text-button" href="/">Back</a>
           </div>
         </div>
       </section>

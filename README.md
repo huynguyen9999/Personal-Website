@@ -11,7 +11,7 @@ Repository: [github.com/huynguyen9999/Personal-Website](https://github.com/huyng
 - Read Index, Story, Writing, Now, and Contact.
 - Switch appearance between light, dark, and system (follows the OS, including live changes).
 - Move the cursor on a desktop pointer and see a colored trail (honors Reduce Motion).
-- Sign in at **Edit** if you are the owner. Everyone else sees a login panel.
+- Sign in at the quiet **admin** line in the footer if you are the owner. Everyone else sees a simple sign-in panel.
 
 After sign-in the owner can:
 
@@ -47,7 +47,7 @@ Unplaced photos stay in the admin library only.
 | `/writing` | Writing shelf; empty until there is writing |
 | `/now` | Present tense; last-updated when published from admin |
 | `/contact` | Email (`dominichuyn@gmail.com`) and GitHub |
-| `/admin` | Owner login, then the editor. Not indexed |
+| `/admin` | Quiet owner sign-in, then the editor. Not indexed, not in the header |
 
 ## Project layout
 
@@ -65,8 +65,8 @@ app/
   admin/actions.ts        Sign-in, drafts, publish, photo placement
   sitemap.ts / robots.ts
 components/
-  navigation.tsx          Header, menus, Edit link
-  site-footer.tsx         Shared footer
+  navigation.tsx          Header, menus (Index, Story, Writing, Now)
+  site-footer.tsx         Shared footer plus quiet admin link
   theme-controls.tsx      Light / dark / system
   cursor-trail.tsx        Pointer trail
   reveal.tsx              Scroll-triggered section reveal
@@ -75,13 +75,43 @@ components/
   admin-submit.tsx        Draft / publish buttons
 lib/
   content.ts              Fallback copy + published text from Supabase
+  admin.ts                Timing-safe owner email check
+  auth-guard.ts            Auth rate limit, honeypot, payload caps
+  security-headers.ts     Site + admin HTTP headers
   media.ts                Photo slots and public photo queries
   supabase/               Browser, server, public, and proxy clients
-proxy.ts                  Refreshes the auth session on /admin
+proxy.ts                  Refreshes the auth session on /admin and adds no-store headers
 supabase/migrations/      Postgres tables, RLS, storage bucket
 personal-website-blueprint.md   Product source of truth
 PRODUCT.md / DESIGN.md          Impeccable product + visual records
+tests/                          Vitest unit, component, and integration tests
+e2e/                            Playwright smoke tests
 ```
+
+## Tests
+
+Stack: **Vitest** + **React Testing Library** for unit, component, and App Router integration tests; **Playwright** for localhost smoke tests. Supabase is mocked. Tests do not load `.env.local`, do not use the service-role key, and do not need the owner password.
+
+```bash
+pnpm test              # everything
+pnpm test:unit         # lib/ helpers + UI components
+pnpm test:integration  # public pages + admin login/setup gates
+pnpm test:e2e          # Chromium smoke against http://127.0.0.1:3100
+```
+
+First-time Playwright setup:
+
+```bash
+pnpm exec playwright install chromium
+```
+
+If `node` is not on `PATH` (common in Cursor), put the Cursor helper directory first:
+
+```bash
+export PATH="/Applications/Cursor.app/Contents/Resources/app/resources/helpers:$PATH"
+```
+
+`playwright.config.ts` starts a dedicated Next dev server on **port 3100** (`next dev --port 3100 --hostname 127.0.0.1`) with `NEXT_DIST_DIR=.next-e2e` so it does not collide with a process already using `.next` on 3000. The Cursor Node helper directory and `node_modules/.bin` are prepended to `PATH`. Override the port with `PLAYWRIGHT_PORT` if 3100 is taken.
 
 ## Local setup
 
@@ -113,6 +143,10 @@ pnpm dev          # local preview server
 pnpm build        # production build
 pnpm start        # serve the production build
 pnpm typecheck    # TypeScript, no emit
+pnpm test         # unit + component + integration + e2e
+pnpm test:unit    # Vitest: lib helpers and UI components
+pnpm test:integration  # Vitest: App Router pages with mocked Supabase
+pnpm test:e2e     # Playwright smoke against localhost:3100
 ```
 
 ## Environment variables
@@ -137,12 +171,25 @@ Set the same keys in Vercel for production. Never commit `.env.local`. Never put
 
 ## Owner login
 
-1. Open `/admin` (or click **Edit**).
-2. A login panel asks for email and password.
+1. Scroll to the footer and click **admin**, or open `/admin`.
+2. A sign-in panel asks for email and password.
 3. The email must match `ADMIN_EMAIL`.
-4. First time: **Create owner account**, confirm the email if Supabase asks, then sign in.
+4. First time: **Create account**, confirm the email if Supabase asks, then sign in.
 
-Row Level Security also checks the owner email.
+Row Level Security also checks the owner email. Failed sign-in is generic on purpose: the page does not say whether the email or password was wrong.
+
+## Admin security
+
+This is a single-owner archive, not a product with public accounts. `/admin` is kept off the header, out of the sitemap, and out of robots. Auth mutations then apply:
+
+- Per-address burst limit (8 tries / 15 minutes) and hourly cap (20 / hour), plus a global hourly ceiling. A 500-try hour is stopped at the gate and never reaches Supabase.
+- A hidden honeypot field. Bots that fill it get the same generic failure as a bad password.
+- Payload caps on email and password length.
+- Timing-safe owner-email comparison. Non-owner emails never call Supabase Auth.
+- Generic error copy (`Sign in failed.` / `Try again later.`).
+- `X-Frame-Options: DENY`, `nosniff`, `no-store` on `/admin`, and `poweredByHeader` disabled.
+
+Supabase Auth still owns password hashing and session cookies. There is no service-role key in this app; public pages cannot write content. Rate limits are in-memory per server isolate, so they are strongest on a warm instance and still block noisy bots. Vercel’s platform DDoS controls sit in front.
 
 ## Apply the photo-library SQL in Supabase
 
@@ -192,6 +239,6 @@ Standard Next.js on Vercel (project `personal-website`). Local `pnpm dev` never 
 
 ## Design notes
 
-Editorial personal archive: serif headlines, four-to-five column header, Shield-like nav focus (active item, muted neighbors, page blur), sticky navigation, quiet writing shelf. Copy that has not been written is left empty. Theme preference is `site-theme` in `localStorage`.
+Editorial personal archive: serif headlines, four-column header, Shield-like nav focus (active item, muted neighbors, page blur), sticky navigation, quiet writing shelf. Copy that has not been written is left empty. Theme preference is `site-theme` in `localStorage`.
 
 Route changes fade and rise the page content. The header tucks away on scroll down and returns on scroll up. Homepage and Story sections reveal once on scroll. A colored cursor trail follows a mouse or trackpad. Tailwind is available for new utilities; it does not reset the editorial CSS. Impeccable skills live under `.cursor/skills/`.
