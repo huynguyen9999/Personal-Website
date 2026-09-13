@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { ThemeControls } from "@/components/theme-controls";
 
 export const primaryNavLinks = [
-  { href: "/", label: "Home", note: "Identity map", items: [{ href: "/#identity-map", label: "Explore the identity map" }] },
+  { href: "/", label: "Home", note: "Start here", items: [{ href: "/#opening-title", label: "Opening" }, { href: "/#identity-map", label: "Explore the identity map" }, { href: "/#present-title", label: "At a glance" }, { href: "/#threads-title", label: "Trajectory" }] },
   { href: "/about", label: "My Story", note: "Vietnam to California", items: [{ href: "/about", label: "The full story" }, { href: "/about#trajectory", label: "Personal timeline" }] },
   { href: "https://github.com/huynguyen9999", label: "My Projects", note: "Portfolio · planned", items: [{ href: "https://github.com/huynguyen9999", label: "GitHub projects" }] },
   { href: "/reading", label: "Life", note: "Reading and interests", items: [{ href: "/reading", label: "Reading shelf" }, { href: "/reading?shelf=currently-reading", label: "Currently reading" }, { href: "/reading?shelf=read", label: "Finished reads" }, { href: "/reading?shelf=reading-next", label: "Future reads" }] },

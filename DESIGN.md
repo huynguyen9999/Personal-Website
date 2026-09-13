@@ -58,7 +58,7 @@ Do not introduce a fourth family. Do not use Inter as a display face.
 
 - Max conceptual width `--max: 1440px`. Gutter `--gutter`.
 - Sticky header with hairline rule. Theme controls sit under the header, top-right, not inside the nav cells.
-- Homepage: one focused identity-map experience beneath the compact, right-aligned header; no additional narrative sections or footer.
+- Homepage: original archive sections plus the interactive identity map beneath the compact, right-aligned header; no ORIGIN / ADAPTATION or other V1-only narrative bands.
 - Writing / Now / Contact are quiet pages: large title, intro aligned toward the trailing edge on wide screens.
 - Hairline rules, not cards, are the primary grouping device.
 

@@ -95,7 +95,7 @@ export function IdentityMap() {
       <header className={styles.header}>
         <p className={styles.eyebrow}>IDENTITY MAP / 11 SIGNALS</p>
         <div>
-          <h1 id={headingId}>One life, seen through its connections.</h1>
+          <h2 id={headingId}>One life, seen through its connections.</h2>
           <p>Choose a thread, then hover, focus, or tap a point to trace what it touches.</p>
         </div>
       </header>

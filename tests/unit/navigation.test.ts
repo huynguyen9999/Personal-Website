@@ -17,6 +17,9 @@ describe("primary navigation helpers", () => {
     expect(hrefs).not.toContain("/#now");
     expect(hrefs).not.toContain("/#making");
     expect(hrefs).not.toContain("/#life");
+    expect(hrefs).toContain("/#opening-title");
+    expect(hrefs).toContain("/#identity-map");
+    expect(hrefs).toContain("/#present-title");
     expect(hrefs).toContain("/reading?shelf=currently-reading");
     expect(hrefs).toContain("/reading?shelf=read");
     expect(hrefs).toContain("/reading?shelf=reading-next");

@@ -1,11 +1,13 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("public archive smoke", () => {
-  test("home contains only the identity map", async ({ page }) => {
+  test("home keeps the original archive and adds the identity map", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("One life, seen through its connections");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("A life in progress");
+    await expect(page.getByRole("heading", { name: /One life, seen through its connections/ })).toBeVisible();
     await expect(page.getByText("ORIGIN / ADAPTATION")).toHaveCount(0);
     await expect(page.getByRole("button", { name: "Cars & bikes" })).toBeVisible();
+    await expect(page.getByText("Huy Nguyen · Ho Chi Minh City → California")).toBeVisible();
     await expect(page.locator("header.site-header")).toHaveAttribute("data-collapsed", "false");
   });
 

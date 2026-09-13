@@ -15,20 +15,24 @@ describe("public App Router pages", () => {
     delete process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
   });
 
-  it("renders only the identity map on the homepage", () => {
-    render(<HomePage />);
+  it("renders the original homepage sequence plus the identity map", async () => {
+    render(await HomePage());
 
-    expect(screen.getByRole("heading", { level: 1, name: /One life, seen through its connections/ })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: /A life in progress/ })).toBeInTheDocument();
+    expect(screen.getByText("HO CHI MINH CITY → CALIFORNIA")).toBeInTheDocument();
+    expect(screen.getByText("measured in circuits and baselines.")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /A short signal from the present/ })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /One life, seen through its connections/ })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Engineering" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Tennis" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Reading" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Cars & bikes" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Content creation" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Travels" })).toBeInTheDocument();
-    expect(screen.queryByText(/ORIGIN \/ ADAPTATION/)).not.toBeInTheDocument();
-    expect(screen.queryByRole("heading", { name: /A life in progress/ })).not.toBeInTheDocument();
-    expect(screen.queryByRole("contentinfo")).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /I’ve always wanted to see what happens behind the scenes/ })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Four practices/ })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Two places, without reducing either/ })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /The present tense/ })).toHaveAttribute("href", "/now");
+    expect(screen.getByRole("link", { name: /Story/ })).toHaveAttribute("href", "/about");
+    expect(screen.getByText("Huy Nguyen · Ho Chi Minh City → California")).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "admin" })).not.toBeInTheDocument();
+    expect(screen.queryByText(/ORIGIN \/ ADAPTATION/)).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "Edit" })).not.toBeInTheDocument();
   });
 
@@ -78,7 +82,7 @@ describe("public App Router pages", () => {
   });
 
   it("does not invent biography on the public fallbacks", async () => {
-    render(<HomePage />);
+    render(await HomePage());
     const text = document.body.textContent || "";
     for (const pattern of inventedCopyPatterns) {
       expect(text).not.toMatch(pattern);

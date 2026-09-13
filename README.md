@@ -8,7 +8,7 @@ Repository: [github.com/huynguyen9999/Personal-Website](https://github.com/huyng
 
 ## What you can do here
 
-- Explore an interactive identity map as the homepage's only content experience.
+- Read the original homepage archive and explore the interactive identity map.
 - Switch appearance between light, dark, and system (follows the OS, including live changes).
 - Move the cursor on a desktop pointer and see a colored trail (honors Reduce Motion).
 - Open `/admin` directly if you are the owner. Owner access is absent from the public navigation and footer.
@@ -42,7 +42,7 @@ Making and Life begin as evidence-backed homepage chapters rather than generic p
 
 | URL | Purpose |
 | --- | --- |
-| `/` | Home — interactive identity map only |
+| `/` | Home — original archive plus interactive identity map |
 | `/about` | Story — Vietnam to California |
 | `/reading` | Notes — current, finished, and next reading shelves |
 | `/writing` | Permanent redirect to `/reading` |
@@ -242,6 +242,6 @@ Standard Next.js on Vercel (project `personal-website`). Local `pnpm dev` never 
 
 ## Design notes
 
-Editorial personal archive: serif headlines, compact right-aligned four-part header, Shield-like nav focus (active item, muted neighbors, page blur), and an interactive identity-map-only homepage. The Life menu provides direct access to current, finished, and future reading shelves. Theme preference is `site-theme` in `localStorage`.
+Editorial personal archive: serif headlines, compact right-aligned four-part header, Shield-like nav focus (active item, muted neighbors, page blur), and an interactive identity map added to the original homepage. The Life menu provides direct access to current, finished, and future reading shelves. Theme preference is `site-theme` in `localStorage`.
 
 Route changes fade and rise the page content. The header tucks away on scroll down and returns on scroll up. Homepage and Story sections reveal once on scroll. A colored cursor trail follows a mouse or trackpad. Tailwind is available for new utilities; it does not reset the editorial CSS. Impeccable skills live under `.cursor/skills/`.
