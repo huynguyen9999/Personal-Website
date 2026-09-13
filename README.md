@@ -44,7 +44,7 @@ Unplaced photos stay in the admin library only.
 | --- | --- |
 | `/` | Index — present tense, field note, trajectory, invitation |
 | `/about` | Story — Vietnam to California; labeled incomplete |
-| `/writing` | Writing shelf; empty until there is real writing |
+| `/writing` | Writing shelf; empty until there is writing |
 | `/now` | Present tense; last-updated when published from admin |
 | `/contact` | Email (`dominichuyn@gmail.com`) and GitHub |
 | `/admin` | Owner login, then the editor. Not indexed |
