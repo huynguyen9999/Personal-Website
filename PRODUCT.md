@@ -37,8 +37,8 @@ Owner updates copy and photos from `/admin` without a code change. The route is 
 
 ## Capabilities and Constraints
 
-- Public navigation: Home, Story, Making, Notes, Life, Now. Making and Life are evidence-backed homepage chapters; Notes routes to the reading shelf.
-- Homepage sequence: opening → origin/adaptation → interactive identity map → five worlds → Making → Life → Now → closing.
+- Public navigation: Home, My Story, My Projects, Life. The compact menu gives each destination a dropdown; Life links directly to current, finished, and future reading shelves. My Projects remains an evidence-backed homepage chapter until a separate portfolio is ready.
+- Homepage sequence: opening → interactive Now snapshot → origin/adaptation → interactive identity map → five worlds → Making → Life → closing.
 - Owner: email/password gate, drafts, publish, Mac photo upload with page/slot placement.
 - Do not invent jobs, internships, tennis records, awards, quotes, metrics, or childhood scenes beyond the blueprint.
 - Motion must respect `prefers-reduced-motion`, remain keyboard-usable, and never hide information.

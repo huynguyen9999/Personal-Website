@@ -8,7 +8,7 @@ Repository: [github.com/huynguyen9999/Personal-Website](https://github.com/huyng
 
 ## What you can do here
 
-- Follow a long-form homepage through Story, an interactive identity map, Making, Notes, Life, and Now.
+- Follow a long-form homepage through Now, Story, an interactive identity map, Making, and Life.
 - Switch appearance between light, dark, and system (follows the OS, including live changes).
 - Move the cursor on a desktop pointer and see a colored trail (honors Reduce Motion).
 - Open `/admin` directly if you are the owner. Owner access is absent from the public navigation and footer.
@@ -42,7 +42,7 @@ Making and Life begin as evidence-backed homepage chapters rather than generic p
 
 | URL | Purpose |
 | --- | --- |
-| `/` | Home — opening, trajectory, identity map, five worlds, Making, Life, Now |
+| `/` | Home — opening, Now, trajectory, identity map, five worlds, Making, Life |
 | `/about` | Story — Vietnam to California |
 | `/reading` | Notes — current, finished, and next reading shelves |
 | `/writing` | Permanent redirect to `/reading` |
@@ -67,7 +67,7 @@ app/
   admin/actions.ts        Sign-in, drafts, publish, photo placement
   sitemap.ts / robots.ts
 components/
-  navigation.tsx          Header menus (Home, Story, Making, Notes, Life, Now)
+  navigation.tsx          Compact header menus (Home, My Story, My Projects, Life)
   home-narrative.tsx      Long-form homepage acts
   identity-map.tsx        Interactive, keyboard-accessible relationship map
   site-footer.tsx         Shared public footer
@@ -243,6 +243,6 @@ Standard Next.js on Vercel (project `personal-website`). Local `pnpm dev` never 
 
 ## Design notes
 
-Editorial personal archive: serif headlines, six-part header, Shield-like nav focus (active item, muted neighbors, page blur), sticky navigation, interactive identity map, and a quiet reading shelf. Theme preference is `site-theme` in `localStorage`.
+Editorial personal archive: serif headlines, compact four-part header, Shield-like nav focus (active item, muted neighbors, page blur), sticky navigation, interactive identity map, and a quiet reading shelf. The Life menu provides direct access to current, finished, and future reading shelves. Theme preference is `site-theme` in `localStorage`.
 
 Route changes fade and rise the page content. The header tucks away on scroll down and returns on scroll up. Homepage and Story sections reveal once on scroll. A colored cursor trail follows a mouse or trackpad. Tailwind is available for new utilities; it does not reset the editorial CSS. Impeccable skills live under `.cursor/skills/`.

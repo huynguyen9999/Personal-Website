@@ -58,7 +58,7 @@ Do not introduce a fourth family. Do not use Inter as a display face.
 
 - Max conceptual width `--max: 1440px`. Gutter `--gutter`.
 - Sticky header with hairline rule. Theme controls sit under the header, top-right, not inside the nav cells.
-- Homepage sequence: opening → origin/adaptation → identity map → five worlds → Making → Life → Now → closing.
+- Homepage sequence: opening → interactive Now snapshot → origin/adaptation → identity map → five worlds → Making → Life → closing.
 - Writing / Now / Contact are quiet pages: large title, intro aligned toward the trailing edge on wide screens.
 - Hairline rules, not cards, are the primary grouping device.
 

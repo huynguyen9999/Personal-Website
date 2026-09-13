@@ -40,9 +40,33 @@ const worlds = [
 export function HomeNarrative() {
   return (
     <div className={styles.narrative}>
+      <section id="now" className={styles.now} aria-labelledby="now-title">
+        <div className={styles.nowStamp}>
+          <span>NOW</span>
+          <div className={styles.nowOrbit} aria-hidden="true">
+            <i /><i /><i />
+            <b>EE</b><b>TN</b><b>CC</b>
+          </div>
+          <time dateTime="2026-09">SEPTEMBER 2026</time>
+        </div>
+        <div className={styles.nowBody}>
+          <p className={styles.kicker}>Three rhythms / one present</p>
+          <h2 id="now-title">Right now, three disciplines are moving at once.</h2>
+          <ul>
+            <li><span>Studying</span> Electrical Engineering at UC Santa Barbara</li>
+            <li><span>Competing</span> Collegiate tennis at UCSB</li>
+            <li><span>Creating</span> Social-media content and this living archive</li>
+          </ul>
+          <p>
+            Move across the three signals: each runs on a different clock, but
+            each rewards attention, repetition, and the willingness to adjust.
+          </p>
+        </div>
+      </section>
+
       <section id="story" className={styles.trajectory} aria-labelledby="trajectory-title">
         <div className={styles.actLabel}>
-          <span>ACT I</span>
+          <span>ACT II</span>
           <span>ORIGIN / ADAPTATION</span>
         </div>
         <div className={styles.trajectoryLead}>
@@ -90,7 +114,7 @@ export function HomeNarrative() {
       <section className={styles.worlds} aria-labelledby="worlds-title">
         <header className={styles.worldsHeader}>
           <div className={styles.actLabel}>
-            <span>ACT II</span>
+            <span>ACT III</span>
             <span>FIVE WORLDS</span>
           </div>
           <div>
@@ -134,7 +158,7 @@ export function HomeNarrative() {
 
       <section id="making" className={styles.making} aria-labelledby="making-title">
         <div className={styles.actLabel}>
-          <span>ACT III</span>
+          <span>ACT IV</span>
           <span>MAKING</span>
         </div>
         <div className={styles.makingIntro}>
@@ -170,7 +194,7 @@ export function HomeNarrative() {
       <section id="life" className={styles.life} aria-labelledby="life-title">
         <header>
           <div className={styles.actLabel}>
-            <span>ACT IV</span>
+            <span>ACT V</span>
             <span>LIFE / ONE ROUTINE</span>
           </div>
           <h2 id="life-title">The ordinary sequence that became worth missing.</h2>
@@ -197,25 +221,6 @@ export function HomeNarrative() {
             <p>Not a grand scene—just a precise shape of home that remains.</p>
           </li>
         </ol>
-      </section>
-
-      <section id="now" className={styles.now} aria-labelledby="now-title">
-        <div className={styles.nowStamp}>
-          <span>NOW</span>
-          <time dateTime="2026-09">SEPTEMBER 2026</time>
-        </div>
-        <div className={styles.nowBody}>
-          <h2 id="now-title">The present, without pretending to know every detail.</h2>
-          <ul>
-            <li><span>Studying</span> Electrical Engineering at UC Santa Barbara</li>
-            <li><span>Competing</span> Collegiate tennis at UCSB</li>
-            <li><span>Creating</span> Social-media content</li>
-          </ul>
-          <p>
-            These three practices run on different clocks, but each rewards the
-            same habits: attention, repetition, and the willingness to adjust.
-          </p>
-        </div>
       </section>
 
       <section className={styles.closing} aria-labelledby="closing-title">

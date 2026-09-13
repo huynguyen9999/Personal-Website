@@ -8,7 +8,7 @@ test.describe("public archive smoke", () => {
     await expect(page.locator("header.site-header")).toHaveAttribute("data-collapsed", "false");
   });
 
-  test("primary nav reaches Story, Reading, Now, and Contact", async ({ page }) => {
+  test("compact nav reaches Story, the reading shelf, and Contact", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("a.nav-item[href='/admin']")).toHaveCount(0);
     await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: /^admin$/i })).toHaveCount(0);
@@ -17,14 +17,11 @@ test.describe("public archive smoke", () => {
     await expect(page).toHaveURL(/\/about$/);
     await expect(page.getByText("STORY / TWO COORDINATES")).toBeVisible();
 
-    await page.locator("a.nav-item[href='/reading']").click();
+    await page.locator("a.nav-item[href='/#life']").hover();
+    await page.locator(".nav-dropdown a[href='/reading?shelf=currently-reading']").click();
     await expect(page).toHaveURL(/\/reading$/);
     await expect(page.getByRole("heading", { level: 1 })).toContainText("My Shelf");
     await expect(page.getByRole("heading", { name: "The Richest Man in Babylon" })).toBeVisible();
-
-    await page.locator("a.nav-item[href='/now']").click();
-    await expect(page).toHaveURL(/\/now$/);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("In motion, not a summary");
 
     await page.getByRole("navigation", { name: "Footer" }).getByRole("link", { name: "Contact" }).click();
     await expect(page).toHaveURL(/\/contact$/);

@@ -410,20 +410,68 @@
 }
 
 .nowStamp {
+  position: relative;
   display: grid;
   align-content: space-between;
   min-height: 30rem;
+  overflow: hidden;
   color: #1d1511;
   background: var(--signal);
 }
 
-.nowStamp span {
+.nowStamp > span {
+  position: relative;
+  z-index: 2;
   font: 400 clamp(5rem, 12vw, 12rem)/0.7 var(--font-serif), serif;
   letter-spacing: -0.08em;
 }
 
 .nowStamp time {
+  position: relative;
+  z-index: 2;
   font-size: 0.7rem;
+}
+
+.nowOrbit {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  width: min(72%, 22rem);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+}
+
+.nowOrbit i {
+  position: absolute;
+  inset: 9%;
+  border: 1px solid color-mix(in srgb, #1d1511 42%, transparent);
+  border-radius: 50%;
+  animation: signal-breathe 4s ease-in-out infinite alternate;
+}
+
+.nowOrbit i:nth-child(2) { inset: 25%; animation-delay: -1.3s; }
+.nowOrbit i:nth-child(3) { inset: 40%; animation-delay: -2.6s; }
+
+.nowOrbit b {
+  position: absolute;
+  display: grid;
+  width: 2.4rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid #1d1511;
+  border-radius: 50%;
+  background: var(--orange);
+  font: 600 .58rem var(--font-mono), monospace;
+  letter-spacing: .05em;
+}
+
+.nowOrbit b:nth-of-type(1) { top: 4%; left: 47%; }
+.nowOrbit b:nth-of-type(2) { right: 5%; bottom: 22%; background: var(--lavender); }
+.nowOrbit b:nth-of-type(3) { bottom: 10%; left: 10%; background: var(--paper); }
+
+@keyframes signal-breathe {
+  from { opacity: .35; transform: scale(.94); }
+  to { opacity: .9; transform: scale(1.04); }
 }
 
 .nowBody h2 {
@@ -439,11 +487,34 @@
 }
 
 .nowBody li {
+  position: relative;
   display: grid;
   grid-template-columns: 8rem 1fr;
   gap: 1rem;
   padding: 1rem 0;
   border-bottom: 1px solid var(--narrative-rule);
+  transition: padding 180ms ease, background 180ms ease;
+}
+
+.nowBody li::after {
+  position: absolute;
+  top: 50%;
+  right: .4rem;
+  width: .55rem;
+  height: .55rem;
+  content: "";
+  border-radius: 50%;
+  background: var(--lavender);
+  transform: translateY(-50%);
+}
+
+.nowBody li:nth-child(2)::after { background: var(--orange); }
+.nowBody li:nth-child(3)::after { background: var(--signal); }
+
+.nowBody li:hover {
+  padding-right: 2rem;
+  padding-left: 1rem;
+  background: color-mix(in srgb, var(--lavender) 10%, transparent);
 }
 
 .nowBody li span {

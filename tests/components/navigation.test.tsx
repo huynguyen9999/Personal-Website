@@ -16,7 +16,7 @@ afterEach(() => {
 });
 
 describe("Navigation", () => {
-  it("renders the six-part archive and hides owner access", () => {
+  it("renders the compact four-part archive and hides owner access", () => {
     vi.spyOn(window, "scrollY", "get").mockImplementation(() => scrollY);
     installMatchMedia();
     render(<Navigation />);
@@ -29,13 +29,14 @@ describe("Navigation", () => {
     expect(screen.getByRole("navigation", { name: "Primary navigation" })).toBeInTheDocument();
     expect(document.querySelector("a.nav-item[href='/']")).not.toBeNull();
     expect(document.querySelector("a.nav-item[href='/about']")).not.toBeNull();
-    expect(document.querySelector("a.nav-item[href='/reading']")).not.toBeNull();
-    expect(document.querySelector("a.nav-item[href='/now']")).not.toBeNull();
     expect(document.querySelector("a.nav-item[href='/#making']")).not.toBeNull();
     expect(document.querySelector("a.nav-item[href='/#life']")).not.toBeNull();
+    expect(document.querySelectorAll("a.nav-item")).toHaveLength(4);
     expect(document.querySelector("a.nav-item[href='/admin']")).toBeNull();
     expect(screen.queryByRole("link", { name: /^admin$/i })).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: /^Work$/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /^Now$/ })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Currently reading/ })).toHaveAttribute("href", "/reading?shelf=currently-reading");
   });
 
   it("collapses on scroll down and returns on scroll up", () => {
