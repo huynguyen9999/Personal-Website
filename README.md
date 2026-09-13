@@ -8,10 +8,10 @@ Repository: [github.com/huynguyen9999/Personal-Website](https://github.com/huyng
 
 ## What you can do here
 
-- Read Index, Story, Writing, Now, and Contact.
+- Follow a long-form homepage through Story, an interactive identity map, Making, Notes, Life, and Now.
 - Switch appearance between light, dark, and system (follows the OS, including live changes).
 - Move the cursor on a desktop pointer and see a colored trail (honors Reduce Motion).
-- Sign in at the quiet **admin** line in the footer if you are the owner. Everyone else sees a simple sign-in panel.
+- Open `/admin` directly if you are the owner. Owner access is absent from the public navigation and footer.
 
 After sign-in the owner can:
 
@@ -22,7 +22,7 @@ After sign-in the owner can:
 
 Unplaced photos stay in the admin library only.
 
-`/work` and `/life` are intentionally absent until there is real material for them. Writing stays empty until there is writing in the owner's voice. No biographical facts were invented to fill gaps.
+Making and Life begin as evidence-backed homepage chapters rather than generic portfolio pages. No biographical facts were invented to fill gaps.
 
 ## Stack
 
@@ -42,12 +42,13 @@ Unplaced photos stay in the admin library only.
 
 | URL | Purpose |
 | --- | --- |
-| `/` | Index — present tense, field note, trajectory, invitation |
-| `/about` | Story — Vietnam to California; labeled incomplete |
-| `/writing` | Writing shelf; empty until there is writing |
+| `/` | Home — opening, trajectory, identity map, five worlds, Making, Life, Now |
+| `/about` | Story — Vietnam to California |
+| `/reading` | Notes — current, finished, and next reading shelves |
+| `/writing` | Permanent redirect to `/reading` |
 | `/now` | Present tense; last-updated when published from admin |
 | `/contact` | Email (`dominichuyn@gmail.com`) and GitHub |
-| `/admin` | Quiet owner sign-in, then the editor. Not indexed, not in the header |
+| `/admin` | Direct owner sign-in, then the editor. Not indexed or linked in public chrome |
 
 ## Project layout
 
@@ -58,15 +59,18 @@ app/
   template.tsx            Page-enter animation wrapper
   page.tsx                Homepage
   about/page.tsx          Story
-  writing/page.tsx        Writing
+  reading/page.tsx        Reading shelf / Notes destination
+  writing/page.tsx        Legacy redirect to Reading
   now/page.tsx            Now
   contact/page.tsx        Contact
   admin/page.tsx          Login + editor
   admin/actions.ts        Sign-in, drafts, publish, photo placement
   sitemap.ts / robots.ts
 components/
-  navigation.tsx          Header, menus (Index, Story, Writing, Now)
-  site-footer.tsx         Shared footer plus quiet admin link
+  navigation.tsx          Header menus (Home, Story, Making, Notes, Life, Now)
+  home-narrative.tsx      Long-form homepage acts
+  identity-map.tsx        Interactive, keyboard-accessible relationship map
+  site-footer.tsx         Shared public footer
   theme-controls.tsx      Light / dark / system
   cursor-trail.tsx        Pointer trail
   reveal.tsx              Scroll-triggered section reveal
@@ -171,7 +175,7 @@ Set the same keys in Vercel for production. Never commit `.env.local`. Never put
 
 ## Owner login
 
-1. Scroll to the footer and click **admin**, or open `/admin`.
+1. Open `/admin` directly.
 2. A sign-in panel asks for email and password.
 3. The email must match `ADMIN_EMAIL`.
 4. First time: **Create account**, confirm the email if Supabase asks, then sign in.
@@ -239,6 +243,6 @@ Standard Next.js on Vercel (project `personal-website`). Local `pnpm dev` never 
 
 ## Design notes
 
-Editorial personal archive: serif headlines, four-column header, Shield-like nav focus (active item, muted neighbors, page blur), sticky navigation, quiet writing shelf. Copy that has not been written is left empty. Theme preference is `site-theme` in `localStorage`.
+Editorial personal archive: serif headlines, six-part header, Shield-like nav focus (active item, muted neighbors, page blur), sticky navigation, interactive identity map, and a quiet reading shelf. Theme preference is `site-theme` in `localStorage`.
 
 Route changes fade and rise the page content. The header tucks away on scroll down and returns on scroll up. Homepage and Story sections reveal once on scroll. A colored cursor trail follows a mouse or trackpad. Tailwind is available for new utilities; it does not reset the editorial CSS. Impeccable skills live under `.cursor/skills/`.

@@ -58,7 +58,7 @@ Do not introduce a fourth family. Do not use Inter as a display face.
 
 - Max conceptual width `--max: 1440px`. Gutter `--gutter`.
 - Sticky header with hairline rule. Theme controls sit under the header, top-right, not inside the nav cells.
-- Homepage sequence: opening → now → field note → trajectory → continue.
+- Homepage sequence: opening → origin/adaptation → identity map → five worlds → Making → Life → Now → closing.
 - Writing / Now / Contact are quiet pages: large title, intro aligned toward the trailing edge on wide screens.
 - Hairline rules, not cards, are the primary grouping device.
 
@@ -87,6 +87,7 @@ Do not add marquee, text scramble, or animate-every-element libraries.
 - **Header / nav:** masthead name in the left cell (Instrument Serif, stacked Huy / Nguyen), numbered destination cells, notes, dropdowns, current-page signal dot.
 - **Opening:** serif headline, coordinates, optional photo or court geometry.
 - **Trajectory list:** numbered rows, not identity-category chips.
+- **Identity map:** connected place, study, sport, curiosity, and making nodes; hover, focus, tap, and arrow-key behavior must match.
 - **Placed photos:** full-bleed figures with mono captions; omit empty slots.
 - **Admin:** utilitarian dark panel; not a showcase.
 - **Buttons:** rectangular, inherited type, ink/paper inversion for primary.

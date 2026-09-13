@@ -33,11 +33,12 @@ Unique claim a neighbor could not copy: Ho Chi Minh City → California, electri
 
 ## Operating Context
 
-Owner updates copy and photos from `/admin` without a code change. Sign-in is a quiet footer `admin` line, not a header tab. Public pages fall back to local factual copy when Supabase is unset. Empty sections stay empty until real material exists.
+Owner updates copy and photos from `/admin` without a code change. The route is intentionally unlinked from public chrome. Public pages fall back to local factual copy when Supabase is unset.
 
 ## Capabilities and Constraints
 
-- Public: Index, Story (`/about`), Writing, Now, Contact. No `/work` or `/life` until real artifacts exist.
+- Public navigation: Home, Story, Making, Notes, Life, Now. Making and Life are evidence-backed homepage chapters; Notes routes to the reading shelf.
+- Homepage sequence: opening → origin/adaptation → interactive identity map → five worlds → Making → Life → Now → closing.
 - Owner: email/password gate, drafts, publish, Mac photo upload with page/slot placement.
 - Do not invent jobs, internships, tennis records, awards, quotes, metrics, or childhood scenes beyond the blueprint.
 - Motion must respect `prefers-reduced-motion`, remain keyboard-usable, and never hide information.
