@@ -37,6 +37,16 @@ const nextConfig: NextConfig = {
         hostname: supabaseHostname,
         pathname: "/storage/v1/object/public/**",
       },
+      {
+        protocol: "https",
+        hostname: "covers.openlibrary.org",
+        pathname: "/b/**",
+      },
+      {
+        protocol: "https",
+        hostname: "books.google.com",
+        pathname: "/books/content",
+      },
     ],
   },
 };

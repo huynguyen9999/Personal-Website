@@ -4,9 +4,9 @@ import { primaryNavLinks } from "@/components/navigation";
 describe("primary navigation helpers", () => {
   it("exposes the public archive and never Work, Life, or a header admin tab", () => {
     expect(primaryNavLinks.map((link) => [link.href, link.label])).toEqual([
-      ["/", "Index"],
+      ["/", "Home"],
       ["/about", "Story"],
-      ["/writing", "Writing"],
+      ["/reading", "Reading"],
       ["/now", "Now"],
     ]);
 

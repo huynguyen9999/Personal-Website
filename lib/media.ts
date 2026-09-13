@@ -4,9 +4,9 @@ import { createPublicClient } from "@/lib/supabase/public";
 export const MEDIA_BUCKET = "site-media";
 
 export const mediaPages = [
-  { id: "home", label: "Index (homepage)", href: "/" },
+  { id: "home", label: "Home", href: "/" },
   { id: "about", label: "Story", href: "/about" },
-  { id: "writing", label: "Writing", href: "/writing" },
+  { id: "reading", label: "Reading", href: "/reading" },
   { id: "now", label: "Now", href: "/now" },
   { id: "contact", label: "Contact", href: "/contact" },
 ] as const;
@@ -23,7 +23,7 @@ export const mediaSlots = [
   { page: "about", id: "moment-hcmc", label: "Ho Chi Minh City" },
   { page: "about", id: "moment-us", label: "United States" },
   { page: "about", id: "moment-ucsb", label: "UC Santa Barbara" },
-  { page: "writing", id: "archive", label: "Writing archive" },
+  { page: "reading", id: "shelf", label: "Reading shelf" },
   { page: "now", id: "now-present", label: "Now page" },
   { page: "contact", id: "contact", label: "Contact page" },
 ] as const;

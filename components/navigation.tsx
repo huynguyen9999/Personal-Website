@@ -6,9 +6,9 @@ import { useEffect, useState } from "react";
 import { ThemeControls } from "@/components/theme-controls";
 
 export const primaryNavLinks = [
-  { href: "/", label: "Index", note: "The present", items: [{ href: "/#opening-title", label: "Opening" }, { href: "/#present-title", label: "Now" }, { href: "/#threads-title", label: "Trajectory" }] },
+  { href: "/", label: "Home", note: "The present", items: [{ href: "/#opening-title", label: "Opening" }, { href: "/#present-title", label: "At a glance" }, { href: "/#threads-title", label: "Trajectory" }] },
   { href: "/about", label: "Story", note: "Vietnam to California", items: [{ href: "/about", label: "The route" }, { href: "/about#trajectory", label: "Three moments" }] },
-  { href: "/writing", label: "Writing", note: "Notes and questions", items: [{ href: "/writing", label: "Archive" }, { href: "/writing#first-note", label: "First note" }] },
+  { href: "/reading", label: "Reading", note: "Books and margins", items: [{ href: "/reading?shelf=currently-reading", label: "Currently reading" }, { href: "/reading?shelf=read", label: "Read" }, { href: "/reading?shelf=reading-next", label: "Reading next" }] },
   { href: "/now", label: "Now", note: "Present tense", items: [{ href: "/now", label: "Currently" }] },
 ] as const;
 
@@ -60,8 +60,8 @@ export function Navigation() {
       data-collapsed={collapsed ? "true" : "false"}
     >
       <Link className="site-mark" href="/" aria-label="Huy Nguyen, home">
-        <span aria-hidden="true">01</span>
-        <span>Huy Nguyen</span>
+        <span>Huy</span>
+        <span>Nguyen</span>
       </Link>
 
       <ThemeControls />

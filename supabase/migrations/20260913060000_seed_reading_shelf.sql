@@ -1,0 +1,172 @@
+create unique index if not exists library_books_owner_provider_idx
+on public.library_books (owner_id, provider_id);
+
+with shelf_seed (
+  title,
+  author,
+  isbn13,
+  goodreads_url,
+  shelf,
+  cover_url,
+  cover_source_url,
+  cover_alt,
+  provider_id,
+  published_date,
+  sort_order
+) as (
+  values
+    (
+      'The Richest Man in Babylon',
+      'George S. Clason',
+      null,
+      'https://www.goodreads.com/book/show/43097201',
+      'currently_reading'::public.book_shelf,
+      'https://covers.openlibrary.org/b/id/10491331-L.jpg',
+      'https://openlibrary.org/works/OL8165007W',
+      'Cover of The Richest Man in Babylon by George S. Clason',
+      'OL8165007W',
+      '1926',
+      0
+    ),
+    (
+      'Steve Jobs',
+      'Walter Isaacson',
+      '9781451648539',
+      'https://www.goodreads.com/book/show/11084145-steve-jobs?ref=nav_sb_ss_1_10',
+      'currently_reading'::public.book_shelf,
+      'https://covers.openlibrary.org/b/id/12374726-L.jpg',
+      'https://openlibrary.org/works/OL16085155W',
+      'Cover of Steve Jobs by Walter Isaacson',
+      'OL16085155W',
+      '2011',
+      1
+    ),
+    (
+      'Start with Why',
+      'Simon Sinek',
+      '9781591842804',
+      'https://www.goodreads.com/book/show/7108725-start-with-why?ref=nav_sb_ss_1_14',
+      'currently_reading'::public.book_shelf,
+      'https://covers.openlibrary.org/b/id/6395237-L.jpg',
+      'https://openlibrary.org/works/OL13806374W',
+      'Cover of Start with Why by Simon Sinek',
+      'OL13806374W',
+      '2009',
+      2
+    ),
+    (
+      'Atomic Habits',
+      'James Clear',
+      '9781847941831',
+      'https://www.goodreads.com/book/show/40121378',
+      'read'::public.book_shelf,
+      'https://covers.openlibrary.org/b/id/15247577-L.jpg',
+      'https://openlibrary.org/books/OL57360656M/Atomic_Habits',
+      'Cover of Atomic Habits by James Clear',
+      'OL57360656M',
+      '2018',
+      0
+    ),
+    (
+      'The Subtle Art of Not Giving a F*ck',
+      'Mark Manson',
+      '9780062457714',
+      'https://www.goodreads.com/book/show/28257707-the-subtle-art-of-not-giving-a-f-ck?ref=nav_sb_ss_1_10',
+      'read'::public.book_shelf,
+      'https://covers.openlibrary.org/b/id/8231990-L.jpg',
+      'https://openlibrary.org/works/OL17590212W',
+      'Cover of The Subtle Art of Not Giving a F*ck by Mark Manson',
+      'OL17590212W',
+      '2016',
+      1
+    ),
+    (
+      'The Lean Startup',
+      'Eric Ries',
+      '9780307887894',
+      'https://www.goodreads.com/book/show/10127019-the-lean-startup?ref=nav_sb_ss_1_16',
+      'reading_next'::public.book_shelf,
+      'https://covers.openlibrary.org/b/id/7104760-L.jpg',
+      'https://openlibrary.org/works/OL16086010W',
+      'Cover of The Lean Startup by Eric Ries',
+      'OL16086010W',
+      '2011',
+      0
+    ),
+    (
+      'Good to Great',
+      'Jim Collins',
+      '9780066620992',
+      'https://www.goodreads.com/book/show/76865.Good_to_Great?ref=nav_sb_ss_1_13',
+      'reading_next'::public.book_shelf,
+      'https://covers.openlibrary.org/b/id/7431270-L.jpg',
+      'https://openlibrary.org/works/OL3486275W',
+      'Cover of Good to Great by Jim Collins',
+      'OL3486275W',
+      '2001',
+      1
+    )
+)
+insert into public.library_books (
+  owner_id,
+  title,
+  author,
+  isbn13,
+  goodreads_url,
+  shelf,
+  cover_url,
+  cover_source,
+  cover_source_url,
+  cover_alt,
+  metadata_provider,
+  provider_id,
+  description,
+  published_date,
+  average_rating,
+  ratings_count,
+  note,
+  status,
+  sort_order,
+  published_at,
+  metadata_fetched_at
+)
+select
+  users.id,
+  seed.title,
+  seed.author,
+  seed.isbn13,
+  seed.goodreads_url,
+  seed.shelf,
+  seed.cover_url,
+  'open_library',
+  seed.cover_source_url,
+  seed.cover_alt,
+  'open_library',
+  seed.provider_id,
+  '',
+  seed.published_date,
+  null,
+  null,
+  '',
+  'published',
+  seed.sort_order,
+  now(),
+  now()
+from shelf_seed as seed
+cross join auth.users as users
+where lower(users.email) = 'dominichuyn@gmail.com'
+on conflict (owner_id, provider_id) do update set
+  title = excluded.title,
+  author = excluded.author,
+  isbn13 = excluded.isbn13,
+  goodreads_url = excluded.goodreads_url,
+  shelf = excluded.shelf,
+  cover_url = excluded.cover_url,
+  cover_source = excluded.cover_source,
+  cover_source_url = excluded.cover_source_url,
+  cover_alt = excluded.cover_alt,
+  metadata_provider = excluded.metadata_provider,
+  published_date = excluded.published_date,
+  status = 'published',
+  sort_order = excluded.sort_order,
+  updated_at = now();

@@ -7,6 +7,7 @@ describe("content fallbacks", () => {
   it("keeps only the blueprint-backed public sections", () => {
     expect(editableSections.map((section) => section.slug)).toEqual([
       "home-opening",
+      "home-now-teaser",
       "home-manifesto",
       "about-opening",
       "now-current",

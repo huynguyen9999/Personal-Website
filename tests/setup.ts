@@ -94,6 +94,11 @@ vi.mock("next/navigation", () => ({
     error.name = "NEXT_REDIRECT";
     throw error;
   },
+  permanentRedirect: (url: string) => {
+    const error = new Error(`NEXT_REDIRECT:${url}`);
+    error.name = "NEXT_REDIRECT";
+    throw error;
+  },
 }));
 
 vi.mock("next/cache", () => ({

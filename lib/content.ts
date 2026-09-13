@@ -2,7 +2,7 @@ import { hasSupabaseConfig } from "@/lib/supabase/config";
 import { createPublicClient } from "@/lib/supabase/public";
 
 export type EditableSection = {
-  slug: "home-opening" | "home-manifesto" | "about-opening" | "now-current" | "contact-opening";
+  slug: "home-opening" | "home-now-teaser" | "home-manifesto" | "about-opening" | "now-current" | "contact-opening";
   label: string;
   eyebrow: string;
   title: string;
@@ -21,6 +21,14 @@ export const editableSections: EditableSection[] = [
     accentTitle: "measured in circuits and baselines.",
     summary: "Electrical engineering at UC Santa Barbara. Collegiate tennis. Writing, making, and sharing what I learn.",
     body: "",
+  },
+  {
+    slug: "home-now-teaser",
+    label: "Homepage Now teaser",
+    eyebrow: "NOW / SNAPSHOT",
+    title: "A short signal from the present.",
+    summary: "",
+    body: "Studying electrical engineering, competing in collegiate tennis, and building this archive one honest entry at a time.",
   },
   {
     slug: "home-manifesto",

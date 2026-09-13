@@ -6,16 +6,16 @@ import { Reveal } from "@/components/reveal";
 import { SiteFooter } from "@/components/site-footer";
 
 const threads = [
-  ["01", "Ho Chi Minh City, Vietnam", "Neighborhood bike rides. Long school days and after-school lessons. Family. Significant time on tennis courts."],
-  ["02", "Electrical engineering · UCSB", "An interest in what happens behind the interface: systems, signals, hardware, software, and the internet."],
-  ["03", "Collegiate tennis", "Competition and engineering share a rhythm: observe, adjust, repeat."],
-  ["04", "Writing and creating", "A place for ideas and social-media work to become a durable archive, with context instead of metrics."],
+  ["01", "Engineering", "Systems, signals, hardware, software, and the questions behind an interface."],
+  ["02", "Tennis", "Competition as a practice of observation, adjustment, and repetition."],
+  ["03", "Reading", "A public shelf for books in progress, finished, and waiting next."],
+  ["04", "Making", "Turning ideas and experiments into a durable archive with context."],
 ] as const;
 
 const threadSlots = ["thread-origin", "thread-study", "thread-practice", "thread-public"] as const;
 
 export default async function HomePage() {
-  const [opening, manifesto, now] = await getPublishedSections(["home-opening", "home-manifesto", "now-current"]);
+  const [opening, manifesto, now] = await getPublishedSections(["home-opening", "home-manifesto", "home-now-teaser"]);
   const photos = await getPlacedPhotos("home");
   const openingPhotos = photosForSlot(photos, "opening");
 
@@ -68,7 +68,7 @@ export default async function HomePage() {
         <section className="threads" aria-labelledby="threads-title">
           <header className="section-heading">
             <p className="eyebrow">ONE TRAJECTORY</p>
-            <h2 id="threads-title">Not separate identities.<br />One evolving system.</h2>
+            <h2 id="threads-title">Four practices.<br />One current rhythm.</h2>
           </header>
           <div className="thread-list">
             {threads.map(([number, title, copy], index) => (
@@ -88,13 +88,13 @@ export default async function HomePage() {
           <p className="section-index">CONTINUE</p>
           <div>
             <h2 id="route-title">Two places, without reducing either to a chapter heading.</h2>
-            <p>Story stays close to the details already shared. Writing waits for a real piece. Contact is email and GitHub.</p>
+            <p>Story holds the biographical route. Reading holds the shelf. Now is the dated, changeable present.</p>
             <div className="continue-links">
               <Link className="text-link" href="/about">
                 Story <span aria-hidden="true">↗</span>
               </Link>
-              <Link className="text-link" href="/writing">
-                Writing <span aria-hidden="true">↗</span>
+              <Link className="text-link" href="/reading">
+                Reading <span aria-hidden="true">↗</span>
               </Link>
               <Link className="text-link" href="/contact">
                 Contact <span aria-hidden="true">↗</span>

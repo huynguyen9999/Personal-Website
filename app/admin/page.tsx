@@ -4,8 +4,10 @@ import { createClient } from "@/lib/supabase/server";
 import { isOwnerEmail, normalizeAdminEmail } from "@/lib/admin";
 import { editableSections } from "@/lib/content";
 import { mediaSelect, toPlacedPhoto } from "@/lib/media";
+import { libraryBookSelect, toLibraryBook } from "@/lib/books";
 import { AdminSubmit } from "@/components/admin-submit";
 import { MediaUploader } from "@/components/media-uploader";
+import { BookLibraryAdmin } from "@/components/book-library-admin";
 import { saveSection, signIn, signOut, signUp } from "./actions";
 
 export const metadata: Metadata = {
@@ -80,13 +82,15 @@ export default async function AdminPage({
     );
   }
 
-  const [publishedResult, draftResult, mediaResult] = await Promise.all([
+  const [publishedResult, draftResult, mediaResult, booksResult] = await Promise.all([
     supabase.from("content_items").select("slug,title,summary,body,status,updated_at").eq("kind", "page"),
     supabase.from("content_drafts").select("slug,title,summary,body,updated_at").eq("kind", "page"),
     supabase.from("media_assets").select(mediaSelect).order("created_at", { ascending: false }),
+    supabase.from("library_books").select(libraryBookSelect).order("sort_order", { ascending: true }),
   ]);
 
   const existingMedia = (mediaResult.data || []).map(toPlacedPhoto);
+  const existingBooks = (booksResult.data || []).map(toLibraryBook);
 
   const sections = editableSections.map((fallback) => {
     const stored = publishedResult.data?.find((item) => item.slug === fallback.slug);
@@ -110,6 +114,10 @@ export default async function AdminPage({
     draft: "Section saved as a draft.",
     placed: "Photo placement saved. The public page will show it in that location.",
     removed: "Photo removed from the library and the public site.",
+    "book-draft": "Book saved as a private draft.",
+    "book-published": "Book published to Reading.",
+    "book-imported": "Verified book metadata imported and cached.",
+    "book-removed": "Book removed from the reading library.",
   };
   const savedCopy = saved ? savedMessages[saved] : undefined;
 
@@ -120,8 +128,10 @@ export default async function AdminPage({
       <p>Edit copy, upload photos from your Mac, and place each image on a page location. Visitors never see this screen without the owner email and password.</p>
       {savedCopy && <p className="form-success">{savedCopy}</p>}
       {mediaResult.error && <p className="form-error">Photo library is not connected yet. Run the media_assets migration in Supabase, then refresh.</p>}
+      {booksResult.error && <p className="form-error">Reading library is not connected yet. Run the library_books migration in Supabase, then refresh.</p>}
       {error === "media" && <p className="form-error">The photo change could not be saved. Check the page and location, then try again.</p>}
-      {error && error !== "media" && <p className="form-error">The change could not be saved. Check the required fields and try again.</p>}
+      {error?.startsWith("book-") && <p className="form-error">The book change could not be completed. Check the ISBN, Goodreads URL, and provider availability.</p>}
+      {error && error !== "media" && !error.startsWith("book-") && <p className="form-error">The change could not be saved. Check the required fields and try again.</p>}
       <div className="editor-list" id="page-editor">
         {sections.map((section) => (
           <form className="editor-card" id={section.slug} action={saveSection} key={section.slug}>
@@ -142,6 +152,7 @@ export default async function AdminPage({
           </form>
         ))}
       </div>
+      <BookLibraryAdmin books={existingBooks} />
       <MediaUploader initialMedia={existingMedia} />
       <form action={signOut}><button className="text-button" type="submit">Sign out</button></form>
     </section>

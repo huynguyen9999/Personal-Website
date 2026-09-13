@@ -15,7 +15,7 @@ import { formDataFrom, samplePhoto } from "../helpers";
 
 describe("media page and slot validators", () => {
   it("accepts the public archive pages and rejects retired routes", () => {
-    expect(mediaPages.map((page) => page.id)).toEqual(["home", "about", "writing", "now", "contact"]);
+    expect(mediaPages.map((page) => page.id)).toEqual(["home", "about", "reading", "now", "contact"]);
     const hrefs = mediaPages.map((page) => page.href) as string[];
     expect(hrefs).not.toContain("/work");
     expect(hrefs).not.toContain("/life");
@@ -27,7 +27,7 @@ describe("media page and slot validators", () => {
   it("lists only slots that belong to a page", () => {
     expect(slotsForPage("home").map((slot) => slot.id)).toContain("opening");
     expect(slotsForPage("about").every((slot) => slot.page === "about")).toBe(true);
-    expect(slotsForPage("writing").map((slot) => slot.id)).toEqual(["archive"]);
+    expect(slotsForPage("reading").map((slot) => slot.id)).toEqual(["shelf"]);
   });
 
   it("rejects a slot that does not belong to the given page", () => {

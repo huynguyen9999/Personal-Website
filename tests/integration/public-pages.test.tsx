@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import HomePage from "@/app/page";
 import AboutPage from "@/app/about/page";
 import WritingPage from "@/app/writing/page";
+import ReadingPage from "@/app/reading/page";
 import NowPage from "@/app/now/page";
 import ContactPage from "@/app/contact/page";
 import { inventedCopyPatterns } from "../helpers";
@@ -20,12 +21,12 @@ describe("public App Router pages", () => {
     expect(screen.getByRole("heading", { level: 1, name: /A life in progress/ })).toBeInTheDocument();
     expect(screen.getByText("HO CHI MINH CITY → CALIFORNIA")).toBeInTheDocument();
     expect(screen.getByText("measured in circuits and baselines.")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /In motion, not a summary/ })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /A short signal from the present/ })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /I’ve always wanted to see what happens behind the scenes/ })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /Not separate identities/ })).toBeInTheDocument();
-    expect(screen.getByText("Ho Chi Minh City, Vietnam")).toBeInTheDocument();
-    expect(screen.getByText("Electrical engineering · UCSB")).toBeInTheDocument();
-    expect(screen.getByText("Collegiate tennis")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Four practices/ })).toBeInTheDocument();
+    expect(screen.getByText("Engineering")).toBeInTheDocument();
+    expect(screen.getByText("Tennis")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 3, name: "Reading" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /Two places, without reducing either/ })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /The present tense/ })).toHaveAttribute("href", "/now");
     expect(screen.getByRole("link", { name: /Story/ })).toHaveAttribute("href", "/about");
@@ -46,15 +47,19 @@ describe("public App Router pages", () => {
     expect(screen.getByText(/No dramatic arc has been invented/)).toBeInTheDocument();
   });
 
-  it("keeps the writing shelf empty", async () => {
-    render(await WritingPage());
+  it("renders the reading shelf and permanently redirects the old writing route", async () => {
+    render(await ReadingPage({ searchParams: Promise.resolve({}) }));
 
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("The shelf is ready.");
-    expect(screen.getByText(/The writing is not invented/)).toBeInTheDocument();
-    expect(screen.getByRole("status")).toHaveTextContent("000");
-    expect(screen.getByText("Published pieces")).toBeInTheDocument();
-    expect(screen.queryByRole("article")).not.toBeInTheDocument();
-    expect(screen.queryByRole("listitem")).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("My Shelf.");
+    expect(screen.getByRole("navigation", { name: "Reading shelves" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "The Richest Man in Babylon" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Steve Jobs" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Start with Why" })).toBeInTheDocument();
+    expect(screen.getAllByRole("link", { name: /View on Goodreads/ })[0]).toHaveAttribute(
+      "href",
+      "https://www.goodreads.com/book/show/43097201",
+    );
+    expect(() => WritingPage()).toThrow("NEXT_REDIRECT:/reading");
   });
 
   it("renders Now in the present tense", async () => {

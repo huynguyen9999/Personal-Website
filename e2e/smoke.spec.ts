@@ -8,7 +8,7 @@ test.describe("public archive smoke", () => {
     await expect(page.locator("header.site-header")).toHaveAttribute("data-collapsed", "false");
   });
 
-  test("primary nav reaches Story, Writing, Now, and Contact", async ({ page }) => {
+  test("primary nav reaches Story, Reading, Now, and Contact", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("a.nav-item[href='/admin']")).toHaveCount(0);
     await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: /^admin$/i })).toHaveCount(0);
@@ -17,10 +17,10 @@ test.describe("public archive smoke", () => {
     await expect(page).toHaveURL(/\/about$/);
     await expect(page.getByText("STORY / FIRST PASS")).toBeVisible();
 
-    await page.locator("a.nav-item[href='/writing']").click();
-    await expect(page).toHaveURL(/\/writing$/);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("The shelf is ready");
-    await expect(page.getByRole("status")).toContainText("000");
+    await page.locator("a.nav-item[href='/reading']").click();
+    await expect(page).toHaveURL(/\/reading$/);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("My Shelf");
+    await expect(page.getByRole("heading", { name: "The Richest Man in Babylon" })).toBeVisible();
 
     await page.locator("a.nav-item[href='/now']").click();
     await expect(page).toHaveURL(/\/now$/);
@@ -33,6 +33,20 @@ test.describe("public archive smoke", () => {
       "mailto:dominichuyn@gmail.com",
     );
     await expect(page.getByRole("navigation", { name: "Footer" }).getByRole("link", { name: /GitHub/ })).toBeVisible();
+  });
+
+  test("reading shelves preserve curated links and switch without live metadata", async ({ page }) => {
+    await page.goto("/reading");
+    await expect(page.getByRole("link", { name: /View on Goodreads/ }).first()).toHaveAttribute(
+      "href",
+      "https://www.goodreads.com/book/show/43097201",
+    );
+    await page.locator(".shelf-tabs a[href='/reading?shelf=read']").click();
+    await expect(page).toHaveURL(/shelf=read/);
+    await expect(page.getByRole("heading", { name: "Atomic Habits" })).toBeVisible();
+    await page.locator(".shelf-tabs a[href='/reading?shelf=reading-next']").click();
+    await expect(page.getByRole("heading", { name: "The Lean Startup" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Good to Great" })).toBeVisible();
   });
 
   test("theme toggle updates the document theme", async ({ page }) => {
@@ -96,5 +110,11 @@ test.describe("reduced motion", () => {
     await expect
       .poll(async () => page.locator("canvas.cursor-trail").evaluate((node) => (node as HTMLCanvasElement).height))
       .toBe(0);
+  });
+
+  test("keeps book covers static", async ({ page }) => {
+    await page.goto("/reading");
+    await expect(page.locator(".book-prism")).toHaveCount(0);
+    await expect(page.locator(".book-cover img").first()).toBeVisible();
   });
 });

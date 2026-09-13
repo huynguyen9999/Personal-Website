@@ -21,11 +21,15 @@ describe("Navigation", () => {
     installMatchMedia();
     render(<Navigation />);
 
-    expect(screen.getByRole("link", { name: /Huy Nguyen, home/ })).toHaveAttribute("href", "/");
+    expect(screen.getByRole("link", { name: "Huy Nguyen, home" })).toHaveAttribute("href", "/");
+    const mark = document.querySelector("a.site-mark");
+    expect(mark?.querySelectorAll("span")[0]).toHaveTextContent("Huy");
+    expect(mark?.querySelectorAll("span")[1]).toHaveTextContent("Nguyen");
+    expect(mark?.textContent).not.toMatch(/\b01\b/);
     expect(screen.getByRole("navigation", { name: "Primary navigation" })).toBeInTheDocument();
     expect(document.querySelector("a.nav-item[href='/']")).not.toBeNull();
     expect(document.querySelector("a.nav-item[href='/about']")).not.toBeNull();
-    expect(document.querySelector("a.nav-item[href='/writing']")).not.toBeNull();
+    expect(document.querySelector("a.nav-item[href='/reading']")).not.toBeNull();
     expect(document.querySelector("a.nav-item[href='/now']")).not.toBeNull();
     expect(document.querySelector("a.nav-item[href='/admin']")).toBeNull();
     expect(screen.queryByRole("link", { name: /^admin$/i })).not.toBeInTheDocument();

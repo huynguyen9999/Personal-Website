@@ -13,6 +13,7 @@ describe("ThemeControls", () => {
     await user.click(screen.getByRole("button", { name: "dark" }));
 
     expect(document.documentElement.dataset.theme).toBe("dark");
+    expect(document.documentElement.style.colorScheme).toBe("dark");
     expect(document.documentElement.dataset.themePreference).toBe("dark");
     expect(localStorage.getItem("site-theme")).toBe("dark");
     expect(screen.getByRole("button", { name: "dark" })).toHaveAttribute("aria-pressed", "true");
@@ -27,6 +28,7 @@ describe("ThemeControls", () => {
     await user.click(screen.getByRole("button", { name: "system" }));
 
     expect(document.documentElement.dataset.theme).toBe("dark");
+    expect(document.documentElement.style.colorScheme).toBe("dark");
     expect(document.documentElement.dataset.themePreference).toBe("system");
     expect(localStorage.getItem("site-theme")).toBe("system");
   });

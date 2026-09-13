@@ -9,8 +9,10 @@ colors:
   orange: "#ffb067"
   panel: "#18141c"
   panelInk: "#f8f3ff"
-  darkPaper: "#121016"
-  darkInk: "#f5f1fa"
+  darkPaper: "#16131b"
+  darkInk: "#f4eef8"
+  darkMuted: "#c0b6c8"
+  darkSelection: "#d7bcff"
 typography:
   display: "Instrument Serif"
   body: "Inter"
@@ -33,16 +35,16 @@ Calm, precise, readable, sophisticated. Editorial foundation with rare experimen
 
 | Token | Light | Dark | Use |
 | --- | --- | --- | --- |
-| `--paper` | `#f3f0f5` | `#121016` | Page ground |
-| `--ink` | `#17131c` | `#f5f1fa` | Primary text |
-| `--muted` | `#696170` | `#aaa1b2` | Supporting text |
-| `--rule` | ink at 21% | ink at 21% | Hairline dividers |
-| `--signal` | `#ff5656` | `#ff6565` | Current-page mark, emphasis |
-| `--lavender` | `#c9a8ff` | `#cdb3ff` | Nav accent 1, trail |
-| `--orange` | `#ffb067` | `#ffb873` | Nav accent 2, trail |
-| `--panel` | `#18141c` | `#09080c` | Inverse bands, admin |
-
-No purple-blue SaaS gradients. No glassmorphism as a style. Selection inverts ink/paper.
+| `--paper` | `#f3f0f5` | `#16131b` | Page ground |
+| `--ink` | `#17131c` | `#f4eef8` | Primary text |
+| `--muted` | `#696170` | `#c0b6c8` | Supporting text |
+| `--rule` | ink at 21% | ink at 18% | Hairline dividers |
+| `--signal` | `#ff5656` | `#ff7a7a` | Current-page mark, emphasis |
+| `--lavender` | `#c9a8ff` | `#d7bcff` | Nav accent 1, trail, dark selection |
+| `--orange` | `#ffb067` | `#ffc089` | Nav accent 2, trail |
+| `--panel` | `#18141c` | `#0c0a10` | Inverse bands, admin |
+| `--selection` | `#17131c` | `#d7bcff` | Text highlight fill |
+| `--selection-ink` | `#f3f0f5` | `#16131b` | Text on a highlight |
 
 ## Typography
 
@@ -66,7 +68,7 @@ Flat. Depth comes from blur on the nav veil (`backdrop-filter`) and the inverse 
 
 ## Shapes
 
-Radius **0** on controls, inputs, and panels. Circles only for the site mark square’s inner counter, moment markers, and the current-page dot. No rounded-rectangle card language.
+Radius **0** on controls, inputs, and panels. Circles only for moment markers and the current-page dot. No rounded-rectangle card language.
 
 ## Motion
 
@@ -82,7 +84,7 @@ Do not add marquee, text scramble, or animate-every-element libraries.
 
 ## Components
 
-- **Header / nav:** numbered cells, notes, dropdowns, current-page signal dot.
+- **Header / nav:** masthead name in the left cell (Instrument Serif, stacked Huy / Nguyen), numbered destination cells, notes, dropdowns, current-page signal dot.
 - **Opening:** serif headline, coordinates, optional photo or court geometry.
 - **Trajectory list:** numbered rows, not identity-category chips.
 - **Placed photos:** full-bleed figures with mono captions; omit empty slots.
