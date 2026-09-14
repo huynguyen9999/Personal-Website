@@ -619,8 +619,14 @@ body:has(.site-header[data-nav-active="true"]) main { filter: blur(7px); opacity
   border-radius: 0;
   box-shadow: none;
 }
-.origin-map__toggle {
+.origin-map__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .9rem 1.4rem;
   margin: .9rem 0 0;
+}
+.origin-map__toggle {
+  margin: 0;
   padding: 0;
   border: 0;
   border-bottom: 1px solid var(--rule);
@@ -634,6 +640,11 @@ body:has(.site-header[data-nav-active="true"]) main { filter: blur(7px); opacity
   cursor: pointer;
 }
 .origin-map__toggle:hover { border-bottom-color: var(--ink); }
+.origin-map__toggle:disabled {
+  color: var(--muted);
+  cursor: default;
+  border-bottom-color: transparent;
+}
 .origin-map__toggle:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
 .origin-map__marker {
   display: grid;

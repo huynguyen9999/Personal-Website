@@ -19,6 +19,9 @@ describe("places", () => {
     expect(visitorDistanceCopy(2467)).toBe(
       "I’m from Visalia, California, roughly 2,467 miles away from your current location, according to your IP address.",
     );
+    expect(visitorDistanceCopy(4, "device")).toBe(
+      "I’m from Visalia, California, roughly 4 miles away from your current location, according to a location from this device.",
+    );
     const arc = greatCircleCoordinates(HOME, { lat: 40.71, lon: -74.01 });
     expect(arc[0]?.[0]).toBeCloseTo(HOME.lon, 5);
     expect(arc[0]?.[1]).toBeCloseTo(HOME.lat, 5);

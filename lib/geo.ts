@@ -112,6 +112,10 @@ export function visitorPayload(visitor: VisitorGeo) {
   };
 }
 
+export function resolveVisitorGeo(ipLookup: VisitorGeo | null, vercel: VisitorGeo | null) {
+  return ipLookup ?? vercel;
+}
+
 type IpWhoResponse = {
   success?: boolean;
   latitude?: number;

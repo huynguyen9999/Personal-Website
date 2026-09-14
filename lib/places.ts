@@ -51,12 +51,14 @@ export function formatMiles(miles: number) {
   return new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(Math.round(miles));
 }
 
-export function visitorDistanceCopy(miles: number | null) {
+export function visitorDistanceCopy(miles: number | null, source: "ip" | "device" = "ip") {
+  const according =
+    source === "device" ? "according to a location from this device" : "according to your IP address";
   if (miles == null || !Number.isFinite(miles)) {
-    return "I’m from Visalia, California. Distance from your current location appears according to your IP address.";
+    return `I’m from Visalia, California. Distance from your current location appears ${according}.`;
   }
 
-  return `I’m from Visalia, California, roughly ${formatMiles(miles)} miles away from your current location, according to your IP address.`;
+  return `I’m from Visalia, California, roughly ${formatMiles(miles)} miles away from your current location, ${according}.`;
 }
 
 export function visitorFromPayload(payload: unknown): GeoPoint | null {

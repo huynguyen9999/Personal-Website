@@ -4,6 +4,7 @@ import {
   isPrivateIp,
   isValidIp,
   lookupIpGeo,
+  resolveVisitorGeo,
   vercelGeoFromHeaders,
   visitorPayload,
 } from "@/lib/geo";
@@ -69,5 +70,27 @@ describe("visitor geo", () => {
     const fetchImpl = vi.fn();
     expect(await lookupIpGeo("8.8.8.8@evil.example", fetchImpl as unknown as typeof fetch)).toBeNull();
     expect(fetchImpl).not.toHaveBeenCalled();
+  });
+
+  it("prefers a lookup of the visitor IP over Vercel metro headers", () => {
+    const vercel = vercelGeoFromHeaders(
+      new Headers({
+        "x-vercel-ip-latitude": "38.58",
+        "x-vercel-ip-longitude": "-121.49",
+        "x-vercel-ip-city": "Sacramento",
+        "x-vercel-ip-country-region": "CA",
+        "x-vercel-ip-country": "US",
+      }),
+    );
+    const ipLookup = {
+      lat: 36.33,
+      lon: -119.29,
+      city: "Visalia",
+      region: "California",
+      country: "US",
+      source: "ip" as const,
+    };
+    expect(resolveVisitorGeo(ipLookup, vercel)?.city).toBe("Visalia");
+    expect(resolveVisitorGeo(null, vercel)?.city).toBe("Sacramento");
   });
 });
