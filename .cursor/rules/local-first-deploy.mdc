@@ -1,0 +1,12 @@
+---
+description: Develop on localhost:3000; deploy to Vercel only after Huy agrees
+alwaysApply: true
+---
+
+# Local-first, then Vercel
+
+- Build and review every feature on `http://localhost:3000`.
+- Do not push to `origin/main` (or otherwise trigger a Vercel deploy) until Huy says the local changes look good and agrees to proceed.
+- Local git commits are fine when Huy asks to save work. Pushing to GitHub `main` is the production deploy.
+- Production is [thehobbiest.vercel.app](https://thehobbiest.vercel.app/). V1 stays an experiment branch.
+- After Huy approves, push `main` and tell him the live site will update after the Vercel deploy.
