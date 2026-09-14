@@ -113,9 +113,9 @@ describe("public App Router pages", () => {
     expect(screen.getByRole("button", { name: /pronunciation of Huy Nguyen/i })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Book shelf." })).toBeInTheDocument();
     expect(screen.getByText(/I’m from Visalia, California/)).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Hobbies." })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Life beyond the screens." })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: /Adventures/ })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: /Rubik’s cubes/ })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /^Cubes$/i })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: /Tennis/ })).toBeInTheDocument();
     expect(screen.queryByRole("tab", { name: /Creating/ })).not.toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "What I drive." })).not.toBeInTheDocument();

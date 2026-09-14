@@ -6,7 +6,8 @@ import { getPlacedPhotos, photosForSlot } from "@/lib/media";
 import { NameSay } from "@/components/name-say";
 import { OriginMap } from "@/components/origin-map";
 import { MotionSection } from "@/components/motion-section";
-import { HobbyCarousel, type HobbyCategory, type HobbyId } from "@/components/hobby-carousel";
+import { HobbiesInteractive } from "@/components/hobbies-interactive";
+import type { HobbyCategory, HobbyId } from "@/lib/hobbies";
 import { ReadingShelf } from "@/components/reading-shelf";
 import { SiteFooter } from "@/components/site-footer";
 
@@ -30,11 +31,11 @@ export default async function WhoIAmPage({
   const drivePhotos = photosForSlot(photos, "being-drive");
   const setupPhotos = photosForSlot(photos, "being-setup");
   const hobbies: HobbyCategory[] = [
-    { id: "adventures", label: "Adventures", description: "Places I have explored, close to home and farther away.", photos: [] },
-    { id: "machines", label: "Machines", description: "Cars and bikes, and the engineering decisions behind them.", photos: [...machinePhotoArchive, ...drivePhotos] },
-    { id: "rubiks-cubes", label: "Rubik’s cubes", description: "A puzzle I return to for pattern, speed, and repetition.", photos: [] },
-    { id: "work-setup", label: "Work setup", description: "The desk and tools I use to study and make things.", photos: setupPhotos },
-    { id: "tennis", label: "Tennis", description: "The practice I carried into collegiate competition at UC Santa Barbara.", photos: [] },
+    { id: "adventures", label: "Adventures", photos: [] },
+    { id: "machines", label: "Machines", photos: [...machinePhotoArchive, ...drivePhotos] },
+    { id: "rubiks-cubes", label: "Cubes", photos: [] },
+    { id: "work-setup", label: "Work setup", photos: setupPhotos },
+    { id: "tennis", label: "Tennis", photos: [] },
   ];
   const initialHobby = hobbies.some((category) => category.id === hobby) ? hobby as HobbyId : undefined;
 
@@ -56,7 +57,7 @@ export default async function WhoIAmPage({
           </div>
         </MotionSection>
 
-        <HobbyCarousel categories={hobbies} initialCategory={initialHobby} />
+        <HobbiesInteractive categories={hobbies} initialCategory={initialHobby} />
 
         <MotionSection className="person-band" id="shelf" aria-labelledby="shelf-heading">
           <p className="section-index">READING</p>

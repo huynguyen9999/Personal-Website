@@ -89,7 +89,7 @@ Do not add marquee, text scramble, or animate-every-element libraries on Home, S
 
 - **Header / nav:** masthead name in the left cell (Instrument Serif, stacked Huy / Nguyen), numbered destination cells, notes, dropdowns, current-page signal dot. Hover/focus uses one yellowish-orange → olive gradient bar on every tab.
 - **What I do:** ruled engineer / creator / student bands, not a 3-column project grid.
-- **Who I am:** MapLibre globe of the real Earth (OpenFreeMap), click-to-hear name, a reading shelf, and an unboxed Hobbies photo essay. Its typographic category index uses the red signal for selection; published photographs open in a wide image with a narrow caption/control column, while unpublished categories remain compact ruled notes. The globe pins Visalia 93291 and an IP-derived visitor location. Nearby visitors zoom into California; farther ones pull back to the continent or the globe.
+- **Who I am:** MapLibre globe of the real Earth (OpenFreeMap), click-to-hear name, a reading shelf, and a Hobbies interactive selector (`components/ui/interactive-selector.tsx`): expanding strips with lucide icons, site typography, and smooth flex transitions. Machines use local F-150 photos with step-through controls; other categories use Unsplash fallbacks until photos are published. The globe pins Visalia 93291 and an IP-derived visitor location. Nearby visitors zoom into California; farther ones pull back to the continent or the globe.
 - **Opening:** serif headline, coordinates, optional photo or court geometry.
 - **Trajectory list:** numbered rows, not identity-category chips.
 - **Identity map:** connected place, study, sport, curiosity, and making nodes; hover, focus, tap, and arrow-key behavior must match.

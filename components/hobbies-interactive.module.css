@@ -1,0 +1,105 @@
+.section {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+  padding: clamp(5rem, 10vw, 10rem) var(--gutter);
+  border-bottom: 1px solid var(--rule);
+  scroll-margin-top: 5.75rem;
+}
+
+.index {
+  margin: 0.4rem 0 0;
+}
+
+.stage {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  min-width: 0;
+}
+
+.header {
+  margin: 0;
+}
+
+.header h2 {
+  margin: 0;
+  max-width: none;
+  font: 400 clamp(2.2rem, 5vw, 4.6rem)/0.95 var(--font-serif), serif;
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+}
+
+.carousel {
+  width: 100%;
+  min-width: 0;
+}
+
+.meta {
+  width: 100%;
+  margin: 0;
+}
+
+.caption,
+.empty {
+  margin: 0;
+  color: var(--muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+}
+
+.controlButtons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.controlButtons button,
+.photoIndex button {
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 180ms ease, color 180ms ease;
+}
+
+.controlButtons button:hover,
+.photoIndex button:hover {
+  border-color: var(--ink);
+}
+
+.photoIndex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+}
+
+.photoIndexActive {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+@media (max-width: 899px) {
+  .section {
+    grid-template-columns: 1fr;
+  }
+
+  .header h2 {
+    white-space: normal;
+    text-wrap: balance;
+  }
+}
