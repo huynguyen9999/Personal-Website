@@ -93,10 +93,9 @@ export function IdentityMap() {
   return (
     <section id="identity-map" className={styles.section} aria-labelledby={headingId}>
       <header className={styles.header}>
-        <p className={styles.eyebrow}>IDENTITY MAP / 11 SIGNALS</p>
+        <p className={styles.eyebrow}>IDENTITY MAP</p>
         <div>
           <h2 id={headingId}>One life, seen through its connections.</h2>
-          <p>Choose a thread, then hover, focus, or tap a point to trace what it touches.</p>
         </div>
       </header>
 

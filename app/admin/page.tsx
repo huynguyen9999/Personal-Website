@@ -3,6 +3,7 @@ import { hasSupabaseConfig } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
 import { isOwnerEmail, normalizeAdminEmail } from "@/lib/admin";
 import { editableSections } from "@/lib/content";
+import { isHomeFaqSlug } from "@/lib/faq";
 import { mediaSelect, toPlacedPhoto } from "@/lib/media";
 import { libraryBookSelect, toLibraryBook } from "@/lib/books";
 import { AdminSubmit } from "@/components/admin-submit";
@@ -114,7 +115,9 @@ export default async function AdminPage({
     const body = contentBody && typeof contentBody === "object" ? contentBody as Record<string, unknown> : {};
     return {
       ...fallback,
-      title: draft?.title || stored?.title || fallback.title,
+      title: isHomeFaqSlug(fallback.slug)
+        ? fallback.title
+        : draft?.title || stored?.title || fallback.title,
       summary: (draft ? draft.summary : stored?.summary) ?? fallback.summary,
       eyebrow: typeof body.eyebrow === "string" ? body.eyebrow : fallback.eyebrow,
       accentTitle: typeof body.accentTitle === "string" ? body.accentTitle : fallback.accentTitle,
@@ -167,11 +170,25 @@ export default async function AdminPage({
               </div>
               <p className="editor-state"><span>{section.status}</span>{section.updatedAt ? `Updated ${new Date(section.updatedAt).toLocaleDateString("en-US")}` : "Using local copy"}</p>
             </header>
-            <label>Small heading<input name="eyebrow" defaultValue={section.eyebrow} maxLength={100} required /></label>
-            <label>Main heading<input name="title" defaultValue={section.title} maxLength={240} required /></label>
-            {section.slug === "home-opening" && <label>Accent heading line<input name="accentTitle" defaultValue={section.accentTitle} maxLength={240} /></label>}
-            {section.slug === "home-opening" && <label>Short introduction<input name="summary" defaultValue={section.summary} maxLength={500} /></label>}
-            {section.slug !== "home-opening" && <label>Body copy<textarea name="body" defaultValue={section.body} rows={5} maxLength={5000} /></label>}
+            {isHomeFaqSlug(section.slug) ? (
+              <>
+                <input type="hidden" name="eyebrow" value={section.eyebrow} />
+                <input type="hidden" name="title" value={section.title} />
+                <p className="editor-fixed-question">{section.title}</p>
+                <label>
+                  Answer
+                  <textarea name="body" defaultValue={section.body} rows={5} maxLength={5000} placeholder="Write the answer visitors see when they open this question." />
+                </label>
+              </>
+            ) : (
+              <>
+                <label>Small heading<input name="eyebrow" defaultValue={section.eyebrow} maxLength={100} required /></label>
+                <label>Main heading<input name="title" defaultValue={section.title} maxLength={240} required /></label>
+                {section.slug === "home-opening" && <label>Accent heading line<input name="accentTitle" defaultValue={section.accentTitle} maxLength={240} /></label>}
+                {section.slug === "home-opening" && <label>Short introduction<input name="summary" defaultValue={section.summary} maxLength={500} /></label>}
+                {section.slug !== "home-opening" && <label>Body copy<textarea name="body" defaultValue={section.body} rows={5} maxLength={5000} /></label>}
+              </>
+            )}
             <AdminSubmit />
           </form>
         ))}

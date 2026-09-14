@@ -6,7 +6,9 @@ import { IdentityMap } from "@/components/identity-map";
 import { PlacedPhotos } from "@/components/placed-photos";
 import { PresentSnapshot } from "@/components/present-snapshot";
 import { Reveal } from "@/components/reveal";
+import { HomeFaqSection } from "@/components/home-faq-section";
 import { SiteFooter } from "@/components/site-footer";
+import { homeFaqSlugs, sectionsToFaqItems } from "@/lib/faq";
 
 const threads = [
   ["01", "Engineering", "Systems, signals, hardware, software, and the questions behind an interface."],
@@ -18,11 +20,13 @@ const threads = [
 const threadSlots = ["thread-origin", "thread-study", "thread-practice", "thread-public"] as const;
 
 export default async function HomePage() {
-  const [opening, manifesto, now] = await getPublishedSections([
+  const [opening, manifesto, now, ...faqSections] = await getPublishedSections([
     "home-opening",
     "home-manifesto",
     "home-now-teaser",
+    ...homeFaqSlugs,
   ]);
+  const faqItems = sectionsToFaqItems(faqSections);
   const [photos, present] = await Promise.all([
     getPlacedPhotos("home"),
     getPresentState(),
@@ -114,6 +118,10 @@ export default async function HomePage() {
             <PlacedPhotos photos={photosForSlot(photos, "route")} layout="strip" />
           </div>
         </section>
+      </Reveal>
+
+      <Reveal>
+        <HomeFaqSection items={faqItems} />
       </Reveal>
 
       <SiteFooter />

@@ -1,5 +1,6 @@
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities);
+@import "tw-animate-css";
 
 @theme inline {
   --color-paper: var(--paper);
@@ -10,12 +11,17 @@
   --color-orange: var(--orange);
   --color-panel: var(--panel);
   --color-panel-ink: var(--panel-ink);
+  --color-background: var(--paper);
+  --color-foreground: var(--ink);
+  --color-muted-foreground: var(--muted);
+  --radius-lg: 0.5rem;
   --font-display: var(--font-serif), ui-serif, Georgia, serif;
   --font-body: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   --font-meta: var(--font-mono), ui-monospace, Menlo, monospace;
 }
 
 :root {
+  --radius: 0.5rem;
   --paper: #f3f0f5;
   --ink: #17131c;
   --muted: #696170;
@@ -27,8 +33,8 @@
   --nav-accent-to: #6f8f5a;
   --panel: #18141c;
   --panel-ink: #f8f3ff;
-  --selection: #17131c;
-  --selection-ink: #f3f0f5;
+  --selection: #a8d4ff;
+  --selection-ink: #17131c;
   --max: 1440px;
   --gutter: clamp(1.25rem, 4vw, 4.5rem);
 }
@@ -232,7 +238,7 @@ button, input, textarea { font: inherit; caret-color: var(--ink); }
 main { overflow: hidden; transition: filter 180ms ease, opacity 180ms ease, transform 180ms ease; }
 body:has(.site-header[data-nav-active="true"]) main { filter: blur(7px); opacity: .52; transform: scale(.998); }
 .cursor-layer, .cursor-trail { position: fixed; z-index: 80; inset: 0; width: 100vw; height: 100vh; pointer-events: none; }
-.cursor-pointer {
+.cursor-glyph {
   position: fixed;
   z-index: 81;
   top: 0;
@@ -503,6 +509,85 @@ body:has(.site-header[data-nav-active="true"]) main { filter: blur(7px); opacity
 .text-link { display: inline-block; margin-top: 3rem; padding-bottom: .2rem; border-bottom: 1px solid currentColor; }
 .continue-links { display: flex; flex-wrap: wrap; gap: 1.5rem 2rem; margin-top: 2.5rem; }
 .continue-links .text-link { margin-top: 0; }
+
+.faq-section-title {
+  margin: 0;
+  font-family: var(--font-serif), serif;
+  font-size: clamp(2.8rem, 6vw, 6.5rem);
+  font-weight: 400;
+  letter-spacing: -.045em;
+  line-height: .95;
+}
+
+.faq-section-lede {
+  max-width: 42rem;
+  margin: 1.25rem 0 0;
+  color: var(--muted);
+  font-size: clamp(1.05rem, 1.5vw, 1.35rem);
+}
+
+.faq-card {
+  border-color: var(--rule);
+}
+
+.faq-trigger {
+  cursor: pointer;
+  width: 100%;
+}
+
+.faq-question {
+  font-family: var(--font-sans), sans-serif;
+  font-size: clamp(1rem, 1.35vw, 1.15rem);
+  font-weight: 500;
+  letter-spacing: -.01em;
+  color: var(--ink);
+}
+
+.faq-answer {
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.35vw, 1.15rem);
+  line-height: 1.55;
+}
+
+.home-faq {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2.4fr);
+  gap: clamp(2rem, 5vw, 3.5rem);
+  padding: clamp(5rem, 10vw, 10rem) var(--gutter);
+  align-items: start;
+}
+
+.home-faq-index {
+  margin: 0.4rem 0 0;
+  color: var(--muted);
+}
+
+.home-faq-panel {
+  grid-column: 1 / -1;
+}
+
+.home-faq-panel > div > div:first-child {
+  text-align: left;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+@media (min-width: 900px) {
+  .home-faq-panel {
+    grid-column: 2;
+  }
+
+  .home-faq-index {
+    grid-column: 1;
+    grid-row: 1;
+  }
+}
+
+@media (max-width: 899px) {
+  .home-faq {
+    grid-template-columns: 1fr;
+  }
+}
 .site-footer { display: flex; justify-content: space-between; gap: 1.5rem; align-items: flex-end; padding: 2rem var(--gutter); font-family: var(--font-mono), monospace; font-size: .75rem; }
 .site-footer nav { display: flex; flex-wrap: wrap; gap: 1.25rem; }
 .footer-origin { display: grid; gap: .45rem; justify-items: start; }
@@ -1047,6 +1132,16 @@ a.text-button { display: inline-block; }
 .editor-card h2 { max-width: 24ch; margin: .6rem 0 0; font: 400 clamp(2rem, 4vw, 4rem)/1 var(--font-serif), serif; }
 .editor-state { display: grid; align-content: start; gap: .25rem; margin: 0; color: #8f8795; text-align: right; font: .65rem var(--font-mono), monospace; text-transform: uppercase; }
 .editor-state span { color: var(--orange); }
+.editor-fixed-question {
+  margin: 1.25rem 0 0;
+  padding: .85rem 0;
+  border-bottom: 1px solid #504957;
+  color: var(--panel-ink);
+  font-family: var(--font-serif), serif;
+  font-size: clamp(1.35rem, 2.5vw, 2rem);
+  line-height: 1.15;
+}
+
 .editor-card label { display: grid; gap: .5rem; margin-top: 1.25rem; color: #aaa1b2; font-size: .78rem; letter-spacing: .04em; text-transform: uppercase; }
 .editor-card input, .editor-card textarea, .editor-card select { width: 100%; padding: .85rem 0; border: 0; border-bottom: 1px solid #504957; border-radius: 0; outline: 0; color: var(--panel-ink); background: transparent; resize: vertical; }
 .editor-card input:focus, .editor-card textarea:focus, .editor-card select:focus { border-color: var(--lavender); }

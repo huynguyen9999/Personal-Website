@@ -5,7 +5,7 @@ import { installMatchMedia } from "../helpers";
 
 function trailElements() {
   const canvas = document.querySelector("canvas.cursor-trail") as HTMLCanvasElement | null;
-  const pointer = document.querySelector("svg.cursor-pointer") as SVGSVGElement | null;
+  const pointer = document.querySelector("svg.cursor-glyph") as SVGSVGElement | null;
   return { canvas, pointer };
 }
 

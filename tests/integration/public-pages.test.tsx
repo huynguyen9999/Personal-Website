@@ -37,6 +37,8 @@ describe("public App Router pages", () => {
     expect(screen.getByRole("heading", { name: /I’ve always wanted to see what happens behind the scenes/ })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /Four practices/ })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /Two places, without reducing either/ })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Quick answers" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /How did you learn English/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /The present tense/ })).toHaveAttribute("href", "/now");
     expect(screen.getByRole("link", { name: /Story/ })).toHaveAttribute("href", "/about");
     expect(screen.getByText("Huy Nguyen · Ho Chi Minh City → California")).toBeInTheDocument();
@@ -104,16 +106,19 @@ describe("public App Router pages", () => {
     expect(screen.getByText("Resume PDF not published yet.")).toBeInTheDocument();
   });
 
-  it("renders Who I am with origin, shelf, and empty object rooms", async () => {
+  it("renders Who I am with origin, hobbies, and shelf", async () => {
     render(await WhoIAmPage({ searchParams: Promise.resolve({}) }));
 
     expect(screen.getByRole("heading", { level: 1, name: "Huy Nguyen." })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /pronunciation of Huy Nguyen/i })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Book shelf." })).toBeInTheDocument();
     expect(screen.getByText(/I’m from Visalia, California/)).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "What I drive." })).toBeInTheDocument();
-    expect(screen.getByText("No vehicle has been published yet.")).toBeInTheDocument();
-    expect(screen.getByText("No work setup has been published yet.")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Hobbies." })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /Adventures/ })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /Rubik’s cubes/ })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /Tennis/ })).toBeInTheDocument();
+    expect(screen.queryByRole("tab", { name: /Creating/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "What I drive." })).not.toBeInTheDocument();
   });
 
   it("does not invent biography on the public fallbacks", async () => {

@@ -1,8 +1,16 @@
+import { isHomeFaqSlug, type HomeFaqSlug } from "@/lib/faq";
 import { hasSupabaseConfig } from "@/lib/supabase/config";
 import { createPublicClient } from "@/lib/supabase/public";
 
 export type EditableSection = {
-  slug: "home-opening" | "home-now-teaser" | "home-manifesto" | "about-opening" | "now-current" | "contact-opening";
+  slug:
+    | "home-opening"
+    | "home-now-teaser"
+    | "home-manifesto"
+    | HomeFaqSlug
+    | "about-opening"
+    | "now-current"
+    | "contact-opening";
   label: string;
   eyebrow: string;
   title: string;
@@ -37,6 +45,46 @@ export const editableSections: EditableSection[] = [
     title: "I’ve always wanted to see what happens behind the scenes.",
     summary: "",
     body: "As a child, that meant cars, multiplayer games, the internet, and the impulse to break—or “hack”—a system just to understand it. Electrical engineering gave that curiosity a place to become practice.",
+  },
+  {
+    slug: "home-faq-english",
+    label: "Home FAQ · English",
+    eyebrow: "HOME / FAQ",
+    title: "How did you learn English?",
+    summary: "",
+    body: "",
+  },
+  {
+    slug: "home-faq-siblings",
+    label: "Home FAQ · Siblings",
+    eyebrow: "HOME / FAQ",
+    title: "How many siblings do you have?",
+    summary: "",
+    body: "",
+  },
+  {
+    slug: "home-faq-free-time",
+    label: "Home FAQ · Free time",
+    eyebrow: "HOME / FAQ",
+    title: "How do you spend your free time?",
+    summary: "",
+    body: "",
+  },
+  {
+    slug: "home-faq-ucsb",
+    label: "Home FAQ · UCSB",
+    eyebrow: "HOME / FAQ",
+    title: "What's your favorite memory at UCSB?",
+    summary: "",
+    body: "",
+  },
+  {
+    slug: "home-faq-vietnam",
+    label: "Home FAQ · Vietnam",
+    eyebrow: "HOME / FAQ",
+    title: "What do you miss most in Vietnam?",
+    summary: "",
+    body: "",
   },
   {
     slug: "about-opening",
@@ -98,7 +146,7 @@ export async function getPublishedSections(slugs: EditableSection["slug"][]) {
     return {
       ...fallback,
       eyebrow: typeof body.eyebrow === "string" ? body.eyebrow : fallback.eyebrow,
-      title: record.title || fallback.title,
+      title: isHomeFaqSlug(fallback.slug) ? fallback.title : record.title || fallback.title,
       accentTitle: typeof body.accentTitle === "string" ? body.accentTitle : fallback.accentTitle,
       summary: record.summary || "",
       body: typeof body.copy === "string" ? body.copy : "",

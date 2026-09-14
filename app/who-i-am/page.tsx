@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getPublishedBooks, shelfFromSlug } from "@/lib/books";
+import { machinePhotoArchive } from "@/lib/hobby-photos";
 import { getPlacedPhotos, photosForSlot } from "@/lib/media";
 import { NameSay } from "@/components/name-say";
 import { OriginMap } from "@/components/origin-map";
 import { MotionSection } from "@/components/motion-section";
-import { PlacedPhotos } from "@/components/placed-photos";
+import { HobbyCarousel, type HobbyCategory, type HobbyId } from "@/components/hobby-carousel";
 import { ReadingShelf } from "@/components/reading-shelf";
 import { SiteFooter } from "@/components/site-footer";
 
@@ -18,9 +19,9 @@ export const metadata: Metadata = {
 export default async function WhoIAmPage({
   searchParams,
 }: {
-  searchParams: Promise<{ shelf?: string }>;
+  searchParams: Promise<{ shelf?: string; hobby?: string }>;
 }) {
-  const { shelf } = await searchParams;
+  const { shelf, hobby } = await searchParams;
   const activeShelf = shelfFromSlug(shelf);
   const [books, photos] = await Promise.all([
     getPublishedBooks(),
@@ -28,6 +29,14 @@ export default async function WhoIAmPage({
   ]);
   const drivePhotos = photosForSlot(photos, "being-drive");
   const setupPhotos = photosForSlot(photos, "being-setup");
+  const hobbies: HobbyCategory[] = [
+    { id: "adventures", label: "Adventures", description: "Places I have explored, close to home and farther away.", photos: [] },
+    { id: "machines", label: "Machines", description: "Cars and bikes, and the engineering decisions behind them.", photos: [...machinePhotoArchive, ...drivePhotos] },
+    { id: "rubiks-cubes", label: "Rubik’s cubes", description: "A puzzle I return to for pattern, speed, and repetition.", photos: [] },
+    { id: "work-setup", label: "Work setup", description: "The desk and tools I use to study and make things.", photos: setupPhotos },
+    { id: "tennis", label: "Tennis", description: "The practice I carried into collegiate competition at UC Santa Barbara.", photos: [] },
+  ];
+  const initialHobby = hobbies.some((category) => category.id === hobby) ? hobby as HobbyId : undefined;
 
   return (
     <>
@@ -47,6 +56,8 @@ export default async function WhoIAmPage({
           </div>
         </MotionSection>
 
+        <HobbyCarousel categories={hobbies} initialCategory={initialHobby} />
+
         <MotionSection className="person-band" id="shelf" aria-labelledby="shelf-heading">
           <p className="section-index">READING</p>
           <div>
@@ -58,32 +69,6 @@ export default async function WhoIAmPage({
           </div>
         </MotionSection>
         <ReadingShelf books={books} activeShelf={activeShelf} hrefBase="/who-i-am" />
-
-        <MotionSection className="person-band" id="drive" aria-labelledby="drive-title">
-          <p className="section-index">MACHINES</p>
-          <div>
-            <h2 id="drive-title">What I drive.</h2>
-            <p>Cars and bikes belong to the curiosity thread. Specific vehicles will appear here when their photos are placed from the editor.</p>
-            {drivePhotos.length > 0 ? (
-              <PlacedPhotos photos={drivePhotos} layout="strip" />
-            ) : (
-              <p className="empty-copy">No vehicle has been published yet.</p>
-            )}
-          </div>
-        </MotionSection>
-
-        <MotionSection className="person-band" id="setup" aria-labelledby="setup-title">
-          <p className="section-index">DESK</p>
-          <div>
-            <h2 id="setup-title">Work setup.</h2>
-            <p>The desk, tools, and room will sit here as a quiet record—not a product roundup—once photographs are placed.</p>
-            {setupPhotos.length > 0 ? (
-              <PlacedPhotos photos={setupPhotos} layout="stack" />
-            ) : (
-              <p className="empty-copy">No work setup has been published yet.</p>
-            )}
-          </div>
-        </MotionSection>
       </article>
       <SiteFooter />
     </>

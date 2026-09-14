@@ -13,6 +13,11 @@ test.describe("public archive smoke", () => {
     await expect(page.getByRole("button", { name: "Cars & bikes" })).toBeVisible();
     await expect(page.getByText("Huy Nguyen · Ho Chi Minh City → California")).toBeVisible();
     await expect(page.locator("header.site-header")).toHaveAttribute("data-collapsed", "false");
+    await expect(page.getByRole("heading", { name: "Quick answers" })).toBeVisible();
+    const vietnamFaq = page.getByRole("button", { name: /What do you miss most in Vietnam/i });
+    await expect(vietnamFaq).toBeVisible();
+    await vietnamFaq.click();
+    await expect(vietnamFaq).toHaveAttribute("aria-expanded", "true");
   });
 
   test("compact nav reaches Story, What I do, Who I am, and Contact", async ({ page }) => {

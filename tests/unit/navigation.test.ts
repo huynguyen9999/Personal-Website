@@ -23,9 +23,13 @@ describe("primary navigation helpers", () => {
     expect(hrefs).toContain("/about#trajectory");
     expect(hrefs).toContain("/what-i-do#resume");
     expect(hrefs).toContain("https://github.com/huynguyen9999");
+    expect(hrefs).toContain("/who-i-am#hobbies");
+    expect(hrefs).toContain("/who-i-am?hobby=adventures#hobbies");
+    expect(hrefs).toContain("/who-i-am?hobby=machines#hobbies");
+    expect(hrefs).toContain("/who-i-am?hobby=tennis#hobbies");
     expect(hrefs).toContain("/who-i-am#shelf");
-    expect(hrefs).toContain("/who-i-am#drive");
-    expect(hrefs).toContain("/who-i-am#setup");
+    expect(hrefs).not.toContain("/who-i-am#drive");
+    expect(hrefs).not.toContain("/who-i-am#setup");
     expect(isExternalHref("https://github.com/huynguyen9999")).toBe(true);
     expect(isExternalHref("/what-i-do")).toBe(false);
   });

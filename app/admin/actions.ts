@@ -12,7 +12,8 @@ import {
   isWeakSignUpPassword,
 } from "@/lib/auth-guard";
 import { createClient } from "@/lib/supabase/server";
-import { editableSections, type EditableSection } from "@/lib/content";
+import { editableSections, getFallbackSection, type EditableSection } from "@/lib/content";
+import { isHomeFaqSlug } from "@/lib/faq";
 import { MEDIA_BUCKET, parseMediaPlacement } from "@/lib/media";
 
 const allowedSlugs = new Set(editableSections.map((section) => section.slug));
@@ -102,8 +103,13 @@ export async function saveSection(formData: FormData) {
   const slug = String(formData.get("slug") || "") as EditableSection["slug"];
   if (!allowedSlugs.has(slug)) redirect("/admin?error=invalid-section");
 
-  const eyebrow = String(formData.get("eyebrow") || "").trim().slice(0, 100);
-  const title = String(formData.get("title") || "").trim().slice(0, 240);
+  const fallback = getFallbackSection(slug);
+  const eyebrow = (isHomeFaqSlug(slug)
+    ? fallback.eyebrow
+    : String(formData.get("eyebrow") || "").trim()).slice(0, 100);
+  const title = (isHomeFaqSlug(slug)
+    ? fallback.title
+    : String(formData.get("title") || "").trim()).slice(0, 240);
   const accentTitle = String(formData.get("accentTitle") || "").trim().slice(0, 240);
   const summary = String(formData.get("summary") || "").trim().slice(0, 500);
   const copy = String(formData.get("body") || "").trim().slice(0, 5000);

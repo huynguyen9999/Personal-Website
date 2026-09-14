@@ -35,11 +35,13 @@ export const primaryNavLinks = [
   {
     href: "/who-i-am",
     label: "Who I am",
-    note: "Books, machines, and setup",
+    note: "Hobbies, books, and origin",
     items: [
+      { href: "/who-i-am#hobbies", label: "Hobbies" },
+      { href: "/who-i-am?hobby=adventures#hobbies", label: "Adventures" },
+      { href: "/who-i-am?hobby=machines#hobbies", label: "Machines" },
+      { href: "/who-i-am?hobby=tennis#hobbies", label: "Tennis" },
       { href: "/who-i-am#shelf", label: "Book shelf" },
-      { href: "/who-i-am#drive", label: "What I drive" },
-      { href: "/who-i-am#setup", label: "Work setup" },
     ],
   },
 ] as const;

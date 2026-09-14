@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Instrument_Serif, Inter, IBM_Plex_Mono } from "next/font/google";
+import { IBM_Plex_Mono, Instrument_Serif, Inter } from "next/font/google";
 import { Navigation } from "@/components/navigation";
 import { CursorTrail } from "@/components/cursor-trail";
 import "./globals.css";

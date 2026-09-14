@@ -129,7 +129,7 @@ export function CursorTrail() {
   return (
     <div className="cursor-layer" aria-hidden="true">
       <canvas ref={canvasRef} className="cursor-trail" />
-      <svg ref={pointerRef} className="cursor-pointer" viewBox="0 0 12 20" width="12" height="20">
+      <svg ref={pointerRef} className="cursor-glyph" viewBox="0 0 12 20" width="12" height="20">
         <path d="M1.2 1.2 1.2 14.8 4.1 11.9 6.7 18.2 8.6 17.4 6 11.1 10.6 11.1Z" />
       </svg>
     </div>
