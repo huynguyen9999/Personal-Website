@@ -1,13 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { primaryNavLinks } from "@/components/navigation";
+import { isExternalHref, primaryNavLinks } from "@/lib/navigation";
 
 describe("primary navigation helpers", () => {
   it("exposes the compact four-part public archive without owner access", () => {
     expect(primaryNavLinks.map((link) => [link.href, link.label])).toEqual([
       ["/", "Home"],
       ["/about", "My Story"],
-      ["https://github.com/huynguyen9999", "My Projects"],
-      ["/reading", "Life"],
+      ["/what-i-do", "What I do"],
+      ["/who-i-am", "Who I am"],
     ]);
 
     const hrefs = primaryNavLinks.flatMap((link) => [link.href, ...link.items.map((item) => item.href)]) as string[];
@@ -20,8 +20,13 @@ describe("primary navigation helpers", () => {
     expect(hrefs).toContain("/#opening-title");
     expect(hrefs).toContain("/#identity-map");
     expect(hrefs).toContain("/#present-title");
-    expect(hrefs).toContain("/reading?shelf=currently-reading");
-    expect(hrefs).toContain("/reading?shelf=read");
-    expect(hrefs).toContain("/reading?shelf=reading-next");
+    expect(hrefs).toContain("/about#trajectory");
+    expect(hrefs).toContain("/what-i-do#resume");
+    expect(hrefs).toContain("https://github.com/huynguyen9999");
+    expect(hrefs).toContain("/who-i-am#shelf");
+    expect(hrefs).toContain("/who-i-am#drive");
+    expect(hrefs).toContain("/who-i-am#setup");
+    expect(isExternalHref("https://github.com/huynguyen9999")).toBe(true);
+    expect(isExternalHref("/what-i-do")).toBe(false);
   });
 });

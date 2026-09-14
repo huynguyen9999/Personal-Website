@@ -6,6 +6,8 @@ import WritingPage from "@/app/writing/page";
 import ReadingPage from "@/app/reading/page";
 import NowPage from "@/app/now/page";
 import ContactPage from "@/app/contact/page";
+import WhatIDoPage from "@/app/what-i-do/page";
+import WhoIAmPage from "@/app/who-i-am/page";
 import { inventedCopyPatterns } from "../helpers";
 
 describe("public App Router pages", () => {
@@ -91,11 +93,42 @@ describe("public App Router pages", () => {
     expect(document.querySelector('a[href="https://github.com/huynguyen9999"]')).not.toBeNull();
   });
 
+  it("renders What I do as engineer, creator, and student", async () => {
+    render(await WhatIDoPage());
+
+    expect(screen.getByRole("heading", { level: 1, name: /Three practices/ })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Engineer" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Creator" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Student" })).toBeInTheDocument();
+    expect(document.querySelector('a.text-link[href="https://github.com/huynguyen9999"]')).not.toBeNull();
+    expect(screen.getByText("Resume PDF not published yet.")).toBeInTheDocument();
+  });
+
+  it("renders Who I am with origin, shelf, and empty object rooms", async () => {
+    render(await WhoIAmPage({ searchParams: Promise.resolve({}) }));
+
+    expect(screen.getByRole("heading", { level: 1, name: "Huy Nguyen." })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /pronunciation of Huy Nguyen/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Book shelf." })).toBeInTheDocument();
+    expect(screen.getByText(/I’m from Visalia, California/)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "What I drive." })).toBeInTheDocument();
+    expect(screen.getByText("No vehicle has been published yet.")).toBeInTheDocument();
+    expect(screen.getByText("No work setup has been published yet.")).toBeInTheDocument();
+  });
+
   it("does not invent biography on the public fallbacks", async () => {
-    render(await HomePage());
-    const text = document.body.textContent || "";
-    for (const pattern of inventedCopyPatterns) {
-      expect(text).not.toMatch(pattern);
+    const pages = [
+      await HomePage(),
+      await WhatIDoPage(),
+      await WhoIAmPage({ searchParams: Promise.resolve({}) }),
+    ];
+    for (const node of pages) {
+      const { unmount } = render(node);
+      const text = document.body.textContent || "";
+      for (const pattern of inventedCopyPatterns) {
+        expect(text).not.toMatch(pattern);
+      }
+      unmount();
     }
   });
 });

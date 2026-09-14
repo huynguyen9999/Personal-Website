@@ -7,7 +7,7 @@ test.describe("public archive smoke", () => {
     await expect(page.getByRole("heading", { name: /A short signal from the present/ })).toBeVisible();
     await expect(page.getByRole("button", { name: /Building\. Personal website admin\/editor/ })).toBeVisible();
     await expect(page.getByRole("button", { name: /Reading\. .*Steve Jobs/ })).toBeVisible();
-    await expect(page.getByText(/Q3 2026/)).toBeVisible();
+    await expect(page.locator(".present-dispatch")).toContainText(/Q3 2026/);
     await expect(page.locator(".present-clock")).toContainText(/PDT|PST/);
     await expect(page.getByText("ORIGIN / ADAPTATION")).toHaveCount(0);
     await expect(page.getByRole("button", { name: "Cars & bikes" })).toBeVisible();
@@ -15,7 +15,7 @@ test.describe("public archive smoke", () => {
     await expect(page.locator("header.site-header")).toHaveAttribute("data-collapsed", "false");
   });
 
-  test("compact nav reaches Story, the reading shelf, and Contact", async ({ page }) => {
+  test("compact nav reaches Story, What I do, Who I am, and Contact", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("a.nav-item[href='/admin']")).toHaveCount(0);
     await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: /^admin$/i })).toHaveCount(0);
@@ -24,10 +24,10 @@ test.describe("public archive smoke", () => {
     await expect(page).toHaveURL(/\/about$/);
     await expect(page.getByText("STORY / TWO COORDINATES")).toBeVisible();
 
-    await page.locator("a.nav-item[href='/reading']").hover();
-    await page.locator(".nav-dropdown a[href='/reading?shelf=currently-reading']").click();
-    await expect(page).toHaveURL(/\/reading$/);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("My Shelf");
+    await page.locator("a.nav-item[href='/who-i-am']").hover();
+    await page.locator(".nav-dropdown a[href='/who-i-am#shelf']").click();
+    await expect(page).toHaveURL(/\/who-i-am/);
+    await expect(page.getByRole("heading", { name: "Book shelf." })).toBeVisible();
     await expect(page.getByRole("heading", { name: "The Richest Man in Babylon" })).toBeVisible();
 
     await page.getByRole("navigation", { name: "Footer" }).getByRole("link", { name: "Contact" }).click();
@@ -37,6 +37,32 @@ test.describe("public archive smoke", () => {
       "mailto:dominichuyn@gmail.com",
     );
     await expect(page.getByRole("navigation", { name: "Footer" }).getByRole("link", { name: /GitHub/ })).toBeVisible();
+  });
+
+  test("What I do and Who I am land as their own pages", async ({ page }) => {
+    await page.goto("/");
+    await page.locator("a.nav-item[href='/what-i-do']").click();
+    await expect(page).toHaveURL(/\/what-i-do$/);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Three practices");
+    await page.getByRole("heading", { name: "Engineer" }).scrollIntoViewIfNeeded();
+    await expect(page.getByRole("heading", { name: "Engineer" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Creator" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Student" })).toBeVisible();
+    await page.getByText("Resume PDF not published yet.").scrollIntoViewIfNeeded();
+    await expect(page.getByText("Resume PDF not published yet.")).toBeVisible();
+
+    await page.locator("a.nav-item[href='/who-i-am']").click();
+    await expect(page).toHaveURL(/\/who-i-am$/);
+    await expect(page.getByRole("heading", { level: 1, name: "Huy Nguyen." })).toBeVisible();
+    await expect(page.getByRole("button", { name: /pronunciation of Huy Nguyen/i })).toBeVisible();
+    await expect(page.getByText(/from Visalia, California/)).toBeVisible();
+    await expect(page.locator(".origin-map")).toBeVisible();
+    await expect(page.getByRole("button", { name: /See the region|See the world/ })).toBeVisible();
+    await page.getByRole("heading", { name: "What I drive." }).scrollIntoViewIfNeeded();
+    await expect(page.getByRole("heading", { name: "What I drive." })).toBeVisible();
+    await expect(page.getByText("No vehicle has been published yet.")).toBeVisible();
+    await page.getByRole("heading", { name: "Work setup." }).scrollIntoViewIfNeeded();
+    await expect(page.getByRole("heading", { name: "Work setup." })).toBeVisible();
   });
 
   test("reading shelves preserve curated links and switch without live metadata", async ({ page }) => {

@@ -14,5 +14,7 @@ describe("crawlers", () => {
     expect(disallowed).toContain("/admin");
     expect(disallowed).toContain("/admin/");
     expect(sitemap().some((entry) => entry.url.includes("/admin"))).toBe(false);
+    expect(sitemap().some((entry) => entry.url.endsWith("/what-i-do"))).toBe(true);
+    expect(sitemap().some((entry) => entry.url.endsWith("/who-i-am"))).toBe(true);
   });
 });

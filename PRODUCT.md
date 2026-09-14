@@ -37,11 +37,11 @@ Owner updates copy and photos from `/admin` without a code change. Sign-in is a 
 
 ## Capabilities and Constraints
 
-- Public navigation: Home, My Story, My Projects, Life. The compact, right-aligned menu gives each destination a dropdown; Life links directly to current, finished, and future reading shelves. My Projects points to GitHub until a separate portfolio is ready.
+- Who I am includes a MapLibre globe of the real Earth, pinned to Visalia, CA 93291. Visitor distance is estimated from IP on the server (Vercel geo headers, then IP lookup). The raw IP is never shown.
 - Homepage: the original archive sequence (opening, present, manifesto, trajectory, continue) plus the interactive identity map; no V1 ORIGIN / ADAPTATION band.
 - Owner: email/password gate, drafts, publish, Mac photo upload with page/slot placement.
 - Do not invent jobs, internships, tennis records, awards, quotes, metrics, or childhood scenes beyond the blueprint.
-- Motion must respect `prefers-reduced-motion`, remain keyboard-usable, and never hide information.
+- Motion must respect `prefers-reduced-motion`, remain keyboard-usable, and never hide information. What I do and Who I am may use Motion (`framer-motion`) for section entrance; other pages stay on native CSS.
 - Do not use generic developer-portfolio patterns (skill pills, logo clouds, “Hi I’m X”, gradient orbs).
 
 ## Brand Commitments
@@ -53,7 +53,7 @@ Owner updates copy and photos from `/admin` without a code change. Sign-in is a 
 
 ## Evidence on Hand
 
-See blueprint §14. Confirmed facts only: grew up in Ho Chi Minh City; moved to the U.S. at about 11; studies Electrical Engineering; collegiate tennis at UC Santa Barbara; creates social-media content; wants an authenticated editor.
+See blueprint §14. Confirmed facts only: grew up in Ho Chi Minh City; moved to the U.S. at about 11; studies Electrical Engineering; collegiate tennis at UC Santa Barbara; present map coordinate Visalia, CA 93291; creates social-media content; wants an authenticated editor.
 
 ## Product Principles
 

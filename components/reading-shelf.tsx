@@ -5,9 +5,11 @@ import { InteractiveBookCover } from "@/components/interactive-book-cover";
 export function ReadingShelf({
   books,
   activeShelf,
+  hrefBase = "/reading",
 }: {
   books: LibraryBook[];
   activeShelf: BookShelf;
+  hrefBase?: string;
 }) {
   const visibleBooks = books.filter((book) => book.shelf === activeShelf);
   const activeLabel = bookShelves.find((shelf) => shelf.id === activeShelf)?.label;
@@ -20,7 +22,7 @@ export function ReadingShelf({
           return (
             <Link
               key={shelf.id}
-              href={`/reading?shelf=${shelf.slug}`}
+              href={`${hrefBase}?shelf=${shelf.slug}`}
               aria-current={activeShelf === shelf.id ? "page" : undefined}
               scroll={false}
             >

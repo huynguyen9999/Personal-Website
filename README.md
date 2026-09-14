@@ -44,6 +44,8 @@ Making and Life begin as evidence-backed homepage chapters rather than generic p
 | --- | --- |
 | `/` | Home — original archive plus interactive identity map |
 | `/about` | Story — Vietnam to California |
+| `/what-i-do` | Engineer, creator, and student practices; GitHub; unpublished resume |
+| `/who-i-am` | Name, origin map, reading shelf, drive, and work setup |
 | `/reading` | Notes — current, finished, and next reading shelves |
 | `/writing` | Permanent redirect to `/reading` |
 | `/now` | Present tense; last-updated when published from admin |
@@ -58,6 +60,8 @@ app/
   globals.css             Tokens, editorial layout, motion
   template.tsx            Page-enter animation wrapper
   page.tsx                Homepage
+  what-i-do/page.tsx      Engineer / creator / student
+  who-i-am/page.tsx       Origin, pronunciation, shelf, drive, setup
   about/page.tsx          Story
   reading/page.tsx        Reading shelf / Notes destination
   writing/page.tsx        Legacy redirect to Reading
@@ -67,7 +71,7 @@ app/
   admin/actions.ts        Sign-in, drafts, publish, photo placement
   sitemap.ts / robots.ts
 components/
-  navigation.tsx          Compact header menus (Home, My Story, My Projects, Life)
+  navigation.tsx          Compact header menus (Home, My Story, What I do, Who I am)
   identity-map.tsx        Interactive, keyboard-accessible relationship map
   site-footer.tsx         Shared public footer
   theme-controls.tsx      Light / dark / system
@@ -242,6 +246,8 @@ Standard Next.js on Vercel (project `personal-website`). Local `pnpm dev` never 
 
 ## Design notes
 
-Editorial personal archive: serif headlines, compact right-aligned four-part header, Shield-like nav focus (active item, muted neighbors, page blur), and an interactive identity map added to the original homepage. The Life menu provides direct access to current, finished, and future reading shelves. Theme preference is `site-theme` in `localStorage`.
+The Who I am globe is a live MapLibre map (no API token required). Visitor distance uses IP on the server and never prints the address.
+
+Editorial personal archive: serif headlines, compact right-aligned four-part header, Shield-like nav focus with a shared orange-to-olive hover bar, and an interactive identity map on the homepage. What I do and Who I am are dedicated landings. Theme preference is `site-theme` in `localStorage`.
 
 Route changes fade and rise the page content. The header tucks away on scroll down and returns on scroll up. Homepage and Story sections reveal once on scroll. A colored cursor trail follows a mouse or trackpad. Tailwind is available for new utilities; it does not reset the editorial CSS. Impeccable skills live under `.cursor/skills/`.

@@ -40,8 +40,10 @@ Calm, precise, readable, sophisticated. Editorial foundation with rare experimen
 | `--muted` | `#696170` | `#c0b6c8` | Supporting text |
 | `--rule` | ink at 21% | ink at 18% | Hairline dividers |
 | `--signal` | `#ff5656` | `#ff7a7a` | Current-page mark, emphasis |
-| `--lavender` | `#c9a8ff` | `#d7bcff` | Nav accent 1, trail, dark selection |
-| `--orange` | `#ffb067` | `#ffc089` | Nav accent 2, trail |
+| `--lavender` | `#c9a8ff` | `#d7bcff` | Cursor trail, dark selection |
+| `--orange` | `#ffb067` | `#ffc089` | Trail, warm accent |
+| `--nav-accent-from` | `#ffc44d` | `#ffd27a` | Shared nav hover gradient start |
+| `--nav-accent-to` | `#6f8f5a` | `#8fb56a` | Shared nav hover gradient end (olive, not tennis-ball green) |
 | `--panel` | `#18141c` | `#0c0a10` | Inverse bands, admin |
 | `--selection` | `#17131c` | `#d7bcff` | Text highlight fill |
 | `--selection-ink` | `#f3f0f5` | `#16131b` | Text on a highlight |
@@ -77,14 +79,17 @@ Three families only (plus the existing cursor trail):
 1. **Page enter** — CSS fade-and-rise on `app/template.tsx` remounts. Header hide/show on scroll is separate.
 2. **Nav focus veil** — Shield-like: focused item, muted neighbors, page blur. Keyboard equivalent. Disabled as a blur on small screens (accordion instead).
 3. **Scroll reveal** — short opacity/translate on section entry. Once. No scroll hijacking.
+4. **What I do / Who I am** — Motion (`framer-motion`) for in-view section fades, the Pacific route drawing, and reduced-motion fallbacks. Do not spread this library to the rest of the archive.
 
 Respect `prefers-reduced-motion`: durations → 0; cursor trail off. Keep transitions short (~150–800ms).
 
-Do not add marquee, text scramble, or animate-every-element libraries.
+Do not add marquee, text scramble, or animate-every-element libraries on Home, Story, Reading, Now, or Contact.
 
 ## Components
 
-- **Header / nav:** masthead name in the left cell (Instrument Serif, stacked Huy / Nguyen), numbered destination cells, notes, dropdowns, current-page signal dot.
+- **Header / nav:** masthead name in the left cell (Instrument Serif, stacked Huy / Nguyen), numbered destination cells, notes, dropdowns, current-page signal dot. Hover/focus uses one yellowish-orange → olive gradient bar on every tab.
+- **What I do:** ruled engineer / creator / student bands, not a 3-column project grid.
+- **Who I am:** MapLibre globe of the real Earth (OpenFreeMap), click-to-hear name, reading shelf, empty drive and setup until photos exist. The globe pins Visalia 93291 and an IP-derived visitor location. Nearby visitors zoom into California; farther ones pull back to the continent or the globe.
 - **Opening:** serif headline, coordinates, optional photo or court geometry.
 - **Trajectory list:** numbered rows, not identity-category chips.
 - **Identity map:** connected place, study, sport, curiosity, and making nodes; hover, focus, tap, and arrow-key behavior must match.

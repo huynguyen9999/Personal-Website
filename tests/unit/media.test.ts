@@ -15,7 +15,15 @@ import { formDataFrom, samplePhoto } from "../helpers";
 
 describe("media page and slot validators", () => {
   it("accepts the public archive pages and rejects retired routes", () => {
-    expect(mediaPages.map((page) => page.id)).toEqual(["home", "about", "reading", "now", "contact"]);
+    expect(mediaPages.map((page) => page.id)).toEqual([
+      "home",
+      "about",
+      "what-i-do",
+      "who-i-am",
+      "reading",
+      "now",
+      "contact",
+    ]);
     const hrefs = mediaPages.map((page) => page.href) as string[];
     expect(hrefs).not.toContain("/work");
     expect(hrefs).not.toContain("/life");
@@ -28,6 +36,12 @@ describe("media page and slot validators", () => {
     expect(slotsForPage("home").map((slot) => slot.id)).toContain("opening");
     expect(slotsForPage("about").every((slot) => slot.page === "about")).toBe(true);
     expect(slotsForPage("reading").map((slot) => slot.id)).toEqual(["shelf"]);
+    expect(slotsForPage("what-i-do").map((slot) => slot.id)).toEqual([
+      "doing-engineer",
+      "doing-creator",
+      "doing-student",
+    ]);
+    expect(slotsForPage("who-i-am").map((slot) => slot.id)).toEqual(["being-drive", "being-setup"]);
   });
 
   it("rejects a slot that does not belong to the given page", () => {
@@ -35,6 +49,9 @@ describe("media page and slot validators", () => {
     expect(isValidMediaPlacement("about", "opening")).toBe(false);
     expect(isValidMediaPlacement("writing", "header")).toBe(false);
     expect(isValidMediaPlacement("contact", "contact")).toBe(true);
+    expect(isValidMediaPlacement("what-i-do", "doing-engineer")).toBe(true);
+    expect(isValidMediaPlacement("who-i-am", "being-setup")).toBe(true);
+    expect(isValidMediaPlacement("who-i-am", "opening")).toBe(false);
     expect(isMediaSlot("opening")).toBe(true);
     expect(isMediaSlot("hero")).toBe(false);
   });

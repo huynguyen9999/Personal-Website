@@ -29,14 +29,15 @@ describe("Navigation", () => {
     expect(screen.getByRole("navigation", { name: "Primary navigation" })).toBeInTheDocument();
     expect(document.querySelector("a.nav-item[href='/']")).not.toBeNull();
     expect(document.querySelector("a.nav-item[href='/about']")).not.toBeNull();
-    expect(document.querySelector("a.nav-item[href='https://github.com/huynguyen9999']")).not.toBeNull();
-    expect(document.querySelector("a.nav-item[href='/reading']")).not.toBeNull();
+    expect(document.querySelector("a.nav-item[href='/what-i-do']")).not.toBeNull();
+    expect(document.querySelector("a.nav-item[href='/who-i-am']")).not.toBeNull();
     expect(document.querySelectorAll("a.nav-item")).toHaveLength(4);
     expect(document.querySelector("a.nav-item[href='/admin']")).toBeNull();
     expect(screen.queryByRole("link", { name: /^admin$/i })).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: /^Work$/ })).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: /^Now$/ })).not.toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /Currently reading/ })).toHaveAttribute("href", "/reading?shelf=currently-reading");
+    expect(screen.getByRole("link", { name: /^GitHub/ })).toHaveAttribute("href", "https://github.com/huynguyen9999");
+    expect(screen.getByRole("link", { name: /Book shelf/ })).toHaveAttribute("href", "/who-i-am#shelf");
   });
 
   it("collapses on scroll down and returns on scroll up", () => {

@@ -14,6 +14,7 @@ const supabaseHostname = (() => {
 const nextConfig: NextConfig = {
   distDir: process.env.NEXT_DIST_DIR || ".next",
   poweredByHeader: false,
+  transpilePackages: ["maplibre-gl"],
   async headers() {
     return [
       {

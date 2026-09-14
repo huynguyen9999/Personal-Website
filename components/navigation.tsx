@@ -2,15 +2,34 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { ThemeControls } from "@/components/theme-controls";
+import { isExternalHref, primaryNavLinks } from "@/lib/navigation";
 
-export const primaryNavLinks = [
-  { href: "/", label: "Home", note: "Start here", items: [{ href: "/#opening-title", label: "Opening" }, { href: "/#identity-map", label: "Explore the identity map" }, { href: "/#present-title", label: "At a glance" }, { href: "/#threads-title", label: "Trajectory" }] },
-  { href: "/about", label: "My Story", note: "Vietnam to California", items: [{ href: "/about", label: "The full story" }, { href: "/about#trajectory", label: "Personal timeline" }] },
-  { href: "https://github.com/huynguyen9999", label: "My Projects", note: "Portfolio · planned", items: [{ href: "https://github.com/huynguyen9999", label: "GitHub projects" }] },
-  { href: "/reading", label: "Life", note: "Reading and interests", items: [{ href: "/reading", label: "Reading shelf" }, { href: "/reading?shelf=currently-reading", label: "Currently reading" }, { href: "/reading?shelf=read", label: "Finished reads" }, { href: "/reading?shelf=reading-next", label: "Future reads" }] },
-] as const;
+function NavJump({
+  href,
+  children,
+  className,
+  ...props
+}: {
+  href: string;
+  children: ReactNode;
+  className?: string;
+} & Omit<React.ComponentPropsWithoutRef<"a">, "href">) {
+  if (isExternalHref(href)) {
+    return (
+      <a className={className} href={href} target="_blank" rel="noreferrer" {...props}>
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <Link className={className} href={href} {...props}>
+      {children}
+    </Link>
+  );
+}
 
 export function Navigation() {
   const pathname = usePathname();
@@ -109,7 +128,7 @@ export function Navigation() {
                 if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setFocused(null);
               }}
             >
-              <Link
+              <NavJump
                 href={link.href}
                 className="nav-item"
                 aria-current={active ? "page" : undefined}
@@ -122,17 +141,17 @@ export function Navigation() {
                 <span className="nav-number">0{index + 1}</span>
                 <span>{link.label}</span>
                 <span className="nav-note">{link.note}</span>
-              </Link>
+              </NavJump>
               <div id={menuId} className="nav-dropdown" aria-label={`${link.label} menu`}>
                 <p>{link.note}</p>
                 {link.items.map((item) => (
-                  <Link
+                  <NavJump
                     key={item.label}
                     href={item.href}
                     onClick={() => { setOpen(false); setFocused(null); }}
                   >
                     {item.label}<span aria-hidden="true">↗</span>
-                  </Link>
+                  </NavJump>
                 ))}
               </div>
             </div>
