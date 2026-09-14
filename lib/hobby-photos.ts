@@ -81,3 +81,39 @@ export const machinePhotoArchive: PlacedPhoto[] = [
     createdAt: addedAt,
   },
 ];
+
+export const cubePhotoArchive: PlacedPhoto[] = [
+  {
+    id: "cube-gan-christmas",
+    storagePath: "local/gan-christmas.jpg",
+    url: "/images/hobbies/cubes/gan-christmas.jpg",
+    page: "who-i-am",
+    slot: "being-cubes",
+    alt: "Pink-framed GAN speed cube in front of a red Santa hat",
+    caption: "Holiday scramble.",
+    sortOrder: 0,
+    createdAt: addedAt,
+  },
+  {
+    id: "cube-collection",
+    storagePath: "local/collection.jpg",
+    url: "/images/hobbies/cubes/collection.jpg",
+    page: "who-i-am",
+    slot: "being-cubes",
+    alt: "Assorted twisty puzzles scattered on a bed sheet",
+    caption: "The wider collection.",
+    sortOrder: 1,
+    createdAt: addedAt,
+  },
+  {
+    id: "cube-tennis-court-dusk",
+    storagePath: "local/tennis-court-dusk.jpg",
+    url: "/images/hobbies/cubes/tennis-court-dusk.jpg",
+    page: "who-i-am",
+    slot: "being-cubes",
+    alt: "Hand holding a scrambled cube at a tennis court gate at dusk",
+    caption: "Courtside, after practice.",
+    sortOrder: 2,
+    createdAt: addedAt,
+  },
+];

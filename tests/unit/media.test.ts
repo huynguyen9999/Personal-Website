@@ -41,7 +41,13 @@ describe("media page and slot validators", () => {
       "doing-creator",
       "doing-student",
     ]);
-    expect(slotsForPage("who-i-am").map((slot) => slot.id)).toEqual(["being-drive", "being-setup"]);
+    expect(slotsForPage("who-i-am").map((slot) => slot.id)).toEqual([
+      "being-drive",
+      "being-cubes",
+      "being-setup",
+      "being-adventures",
+      "being-tennis",
+    ]);
   });
 
   it("rejects a slot that does not belong to the given page", () => {

@@ -65,11 +65,12 @@ test.describe("public archive smoke", () => {
     await expect(page.getByRole("button", { name: /See the region|See the world/ })).toBeVisible();
     await expect(page.getByLabel("Or enter where you are now")).toBeVisible();
     await expect(page.getByRole("button", { name: /Use this device|Refresh device location/ })).toBeVisible();
-    await page.getByRole("heading", { name: "What I drive." }).scrollIntoViewIfNeeded();
-    await expect(page.getByRole("heading", { name: "What I drive." })).toBeVisible();
-    await expect(page.getByText("No vehicle has been published yet.")).toBeVisible();
-    await page.getByRole("heading", { name: "Work setup." }).scrollIntoViewIfNeeded();
-    await expect(page.getByRole("heading", { name: "Work setup." })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Life beyond the screens." })).toBeVisible();
+    await expect(page.getByRole("tab", { name: "Cubes" })).toBeVisible();
+    await page.getByRole("tab", { name: "Cubes" }).click();
+    await expect(page.getByText("Holiday scramble.")).toBeVisible();
+    await expect(page.getByRole("tab", { name: "Machines" })).toBeVisible();
+    await expect(page.getByRole("tab", { name: "Work setup" })).toBeVisible();
   });
 
   test("reading shelves preserve curated links and switch without live metadata", async ({ page }) => {

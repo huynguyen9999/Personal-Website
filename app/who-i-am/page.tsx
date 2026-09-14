@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getPublishedBooks, shelfFromSlug } from "@/lib/books";
-import { machinePhotoArchive } from "@/lib/hobby-photos";
+import { cubePhotoArchive, machinePhotoArchive } from "@/lib/hobby-photos";
 import { getPlacedPhotos, photosForSlot } from "@/lib/media";
 import { NameSay } from "@/components/name-say";
 import { OriginMap } from "@/components/origin-map";
@@ -28,14 +28,17 @@ export default async function WhoIAmPage({
     getPublishedBooks(),
     getPlacedPhotos("who-i-am"),
   ]);
+  const adventurePhotos = photosForSlot(photos, "being-adventures");
   const drivePhotos = photosForSlot(photos, "being-drive");
+  const cubePhotos = photosForSlot(photos, "being-cubes");
   const setupPhotos = photosForSlot(photos, "being-setup");
+  const tennisPhotos = photosForSlot(photos, "being-tennis");
   const hobbies: HobbyCategory[] = [
-    { id: "adventures", label: "Adventures", photos: [] },
+    { id: "adventures", label: "Adventures", photos: adventurePhotos },
     { id: "machines", label: "Machines", photos: [...machinePhotoArchive, ...drivePhotos] },
-    { id: "rubiks-cubes", label: "Cubes", photos: [] },
+    { id: "rubiks-cubes", label: "Cubes", photos: [...cubePhotoArchive, ...cubePhotos] },
     { id: "work-setup", label: "Work setup", photos: setupPhotos },
-    { id: "tennis", label: "Tennis", photos: [] },
+    { id: "tennis", label: "Tennis", photos: tennisPhotos },
   ];
   const initialHobby = hobbies.some((category) => category.id === hobby) ? hobby as HobbyId : undefined;
 
