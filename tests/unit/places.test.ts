@@ -16,11 +16,14 @@ describe("places", () => {
   it("treats Visalia 93291 as the present home coordinate", () => {
     expect(HOME).toEqual(VISALIA);
     expect(VISALIA.postalCode).toBe("93291");
-    expect(visitorDistanceCopy(2467)).toBe(
-      "I’m from Visalia, California, roughly 2,467 miles away from your current location, according to your IP address.",
+    expect(visitorDistanceCopy(2467, "network", "Sacramento")).toBe(
+      "I’m from Visalia, California. Your network appears to be near Sacramento, roughly 2,467 miles from Visalia.",
     );
-    expect(visitorDistanceCopy(4, "device")).toBe(
-      "I’m from Visalia, California, roughly 4 miles away from your current location, according to a location from this device.",
+    expect(visitorDistanceCopy(4, "device", "You")).toBe(
+      "I’m from Visalia, California. This device appears to be roughly 4 miles from Visalia.",
+    );
+    expect(visitorDistanceCopy(44, "provided", "Fresno, California")).toBe(
+      "I’m from Visalia, California. Fresno, California is roughly 44 miles from Visalia.",
     );
     const arc = greatCircleCoordinates(HOME, { lat: 40.71, lon: -74.01 });
     expect(arc[0]?.[0]).toBeCloseTo(HOME.lon, 5);
@@ -62,8 +65,13 @@ describe("places", () => {
       lon: -119.3,
       label: "Visalia",
     });
+    expect(visitorFromPayload({ lat: 36.7, lon: -119.8, label: "Fresno, California" })).toEqual({
+      lat: 36.7,
+      lon: -119.8,
+      label: "Fresno, California",
+    });
     expect(visitorFromPayload({ lat: 0, lon: 0, city: "Null Island" })).toBeNull();
     expect(visitorFromPayload({ lat: "36", lon: -119 })).toBeNull();
-    expect(visitorFromPayload({ lat: 36.3, lon: -119.3, city: "x".repeat(200) })?.label).toHaveLength(80);
+    expect(visitorFromPayload({ lat: 36.3, lon: -119.3, city: "x".repeat(200) })?.label).toHaveLength(120);
   });
 });

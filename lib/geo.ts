@@ -103,12 +103,17 @@ function cleanPlace(value: string, max = 80) {
 }
 
 export function visitorPayload(visitor: VisitorGeo) {
+  const city = cleanPlace(visitor.city);
+  const region = cleanPlace(visitor.region, 40);
+  const country = cleanPlace(visitor.country, 56);
+  const label = [city, region].filter(Boolean).join(", ") || city || country || "your area";
   return {
     lat: visitor.lat,
     lon: visitor.lon,
-    city: cleanPlace(visitor.city),
-    region: cleanPlace(visitor.region, 40),
-    country: cleanPlace(visitor.country, 56),
+    city,
+    region,
+    country,
+    label,
   };
 }
 

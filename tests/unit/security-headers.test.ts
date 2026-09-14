@@ -12,6 +12,9 @@ describe("security headers", () => {
       "Cross-Origin-Opener-Policy",
     ]);
     expect(SITE_SECURITY_HEADERS.find(([name]) => name === "X-Frame-Options")?.[1]).toBe("DENY");
+    expect(SITE_SECURITY_HEADERS.find(([name]) => name === "Permissions-Policy")?.[1]).toBe(
+      "camera=(), microphone=(), geolocation=(self)",
+    );
   });
 
   it("keeps the admin surface out of caches and search indexes", () => {

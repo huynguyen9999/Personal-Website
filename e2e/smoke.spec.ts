@@ -58,6 +58,8 @@ test.describe("public archive smoke", () => {
     await expect(page.getByText(/from Visalia, California/)).toBeVisible();
     await expect(page.locator(".origin-map")).toBeVisible();
     await expect(page.getByRole("button", { name: /See the region|See the world/ })).toBeVisible();
+    await expect(page.getByLabel("Or enter where you are now")).toBeVisible();
+    await expect(page.getByRole("button", { name: /Use this device|Refresh device location/ })).toBeVisible();
     await page.getByRole("heading", { name: "What I drive." }).scrollIntoViewIfNeeded();
     await expect(page.getByRole("heading", { name: "What I drive." })).toBeVisible();
     await expect(page.getByText("No vehicle has been published yet.")).toBeVisible();

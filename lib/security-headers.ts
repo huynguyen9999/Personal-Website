@@ -2,7 +2,7 @@ export const SITE_SECURITY_HEADERS: ReadonlyArray<readonly [string, string]> = [
   ["X-Content-Type-Options", "nosniff"],
   ["Referrer-Policy", "strict-origin-when-cross-origin"],
   ["X-Frame-Options", "DENY"],
-  ["Permissions-Policy", "camera=(), microphone=(), geolocation=()"],
+  ["Permissions-Policy", "camera=(), microphone=(), geolocation=(self)"],
   ["Cross-Origin-Opener-Policy", "same-origin"],
 ];
 

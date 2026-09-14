@@ -646,6 +646,70 @@ body:has(.site-header[data-nav-active="true"]) main { filter: blur(7px); opacity
   border-bottom-color: transparent;
 }
 .origin-map__toggle:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+.origin-map__status {
+  margin: .65rem 0 0;
+  color: var(--muted);
+  font-size: .78rem;
+}
+.origin-map__place-form {
+  max-width: 32rem;
+  margin: 1.25rem 0 0;
+}
+.origin-map__place-form label {
+  display: block;
+  margin: 0 0 .45rem;
+  color: var(--muted);
+  font-family: var(--font-mono), monospace;
+  font-size: .7rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.origin-map__place-form > div {
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+.origin-map__place-form input,
+.origin-map__place-form button,
+.origin-map__results button {
+  min-height: 2.65rem;
+  border: 1px solid var(--rule);
+  border-radius: 0;
+  background: var(--paper);
+  color: var(--ink);
+}
+.origin-map__place-form input {
+  min-width: 0;
+  padding: .65rem .75rem;
+  border-right: 0;
+}
+.origin-map__place-form button {
+  padding: .65rem .9rem;
+  cursor: pointer;
+}
+.origin-map__place-form button:disabled { color: var(--muted); cursor: wait; }
+.origin-map__place-form input:focus-visible,
+.origin-map__place-form button:focus-visible,
+.origin-map__results button:focus-visible {
+  position: relative;
+  z-index: 1;
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.origin-map__results {
+  display: grid;
+  gap: .35rem;
+  max-width: 32rem;
+  margin: .55rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.origin-map__results button {
+  width: 100%;
+  padding: .55rem .7rem;
+  text-align: left;
+  cursor: pointer;
+}
+.origin-map__results button:hover { border-color: var(--ink); }
 .origin-map__marker {
   display: grid;
   justify-items: center;
@@ -675,6 +739,12 @@ body:has(.site-header[data-nav-active="true"]) main { filter: blur(7px); opacity
   margin: 1.25rem 0 0;
   color: var(--muted);
   font-size: 1rem;
+}
+.origin-map__privacy {
+  max-width: 42rem;
+  margin: .55rem 0 0;
+  color: var(--muted);
+  font-size: .72rem;
 }
 .trajectory { position: relative; max-width: var(--max); margin: 0 auto; padding: 8rem var(--gutter); }
 .trajectory-line { position: absolute; left: calc(var(--gutter) + 1rem); top: 9rem; bottom: 10rem; width: 1px; background: var(--rule); }

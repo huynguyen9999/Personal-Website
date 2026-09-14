@@ -34,6 +34,12 @@ describe("visitor geo", () => {
       }),
     );
     expect(visitor).toMatchObject({ lat: 36.33, lon: -119.29, city: "Visalia", source: "vercel" });
+    expect(visitorPayload(visitor!)).toMatchObject({
+      city: "Visalia",
+      region: "CA",
+      country: "US",
+      label: "Visalia, CA",
+    });
     expect(visitorPayload(visitor!)).not.toHaveProperty("ip");
     expect(visitorPayload(visitor!)).not.toHaveProperty("source");
     expect(vercelGeoFromHeaders(new Headers())).toBeNull();

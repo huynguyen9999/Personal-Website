@@ -42,7 +42,7 @@ export default async function WhoIAmPage({
           <p className="section-index">ORIGIN</p>
           <div>
             <h2 id="origin-title">Two coordinates, one route.</h2>
-            <p>Ho Chi Minh City to California. The map holds the present coordinate in Visalia, and an approximate reading of where you are.</p>
+            <p>Ho Chi Minh City to California. The map holds Visalia, and an estimate of where you are now. Network location can be a distant metro; you can refine it with this device or a city/postal code.</p>
             <OriginMap />
           </div>
         </MotionSection>

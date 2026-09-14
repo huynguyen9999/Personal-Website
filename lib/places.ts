@@ -51,14 +51,24 @@ export function formatMiles(miles: number) {
   return new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(Math.round(miles));
 }
 
-export function visitorDistanceCopy(miles: number | null, source: "ip" | "device" = "ip") {
-  const according =
-    source === "device" ? "according to a location from this device" : "according to your IP address";
+export type VisitorLocationSource = "network" | "device" | "provided";
+
+export function visitorDistanceCopy(
+  miles: number | null,
+  source: VisitorLocationSource = "network",
+  label = "your area",
+) {
   if (miles == null || !Number.isFinite(miles)) {
-    return `I’m from Visalia, California. Distance from your current location appears ${according}.`;
+    return "I’m from Visalia, California. Choose a location to compare its distance with Visalia.";
   }
 
-  return `I’m from Visalia, California, roughly ${formatMiles(miles)} miles away from your current location, ${according}.`;
+  if (source === "network") {
+    return `I’m from Visalia, California. Your network appears to be near ${label}, roughly ${formatMiles(miles)} miles from Visalia.`;
+  }
+  if (source === "provided") {
+    return `I’m from Visalia, California. ${label} is roughly ${formatMiles(miles)} miles from Visalia.`;
+  }
+  return `I’m from Visalia, California. This device appears to be roughly ${formatMiles(miles)} miles from Visalia.`;
 }
 
 export function visitorFromPayload(payload: unknown): GeoPoint | null {
@@ -70,8 +80,14 @@ export function visitorFromPayload(payload: unknown): GeoPoint | null {
     return null;
   }
   if (lat === 0 && lon === 0) return null;
-  const city = typeof record.city === "string" ? record.city.replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, 80) : "";
-  return { lat, lon, label: city || "You" };
+  const rawLabel =
+    typeof record.label === "string"
+      ? record.label
+      : typeof record.city === "string"
+        ? record.city
+        : "";
+  const label = rawLabel.replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, 120);
+  return { lat, lon, label: label || "You" };
 }
 
 export function greatCircleCoordinates(from: GeoPoint, to: GeoPoint, steps = 48): [number, number][] {
