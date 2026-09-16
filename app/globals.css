@@ -597,6 +597,11 @@ body:has(.site-header[data-nav-active="true"]) main {
 .site-footer nav { display: flex; flex-wrap: wrap; gap: 1.25rem; }
 .footer-origin { display: grid; gap: .45rem; justify-items: start; }
 .footer-origin p { margin: 0; }
+.footer-name {
+  color: var(--ink);
+  font-size: .8rem;
+  letter-spacing: .04em;
+}
 .admin-whisper {
   color: var(--muted);
   opacity: .32;

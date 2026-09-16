@@ -4,7 +4,7 @@ export function SiteFooter() {
   return (
     <footer className="site-footer">
       <div className="footer-origin">
-        <p>Huy Nguyen · Ho Chi Minh City → California</p>
+        <p className="footer-name">Huy Nguyen</p>
         <Link className="admin-whisper" href="/admin">admin</Link>
       </div>
       <nav aria-label="Footer">

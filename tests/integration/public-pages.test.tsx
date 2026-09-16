@@ -41,7 +41,7 @@ describe("public App Router pages", () => {
     expect(screen.getByRole("button", { name: /How did you learn English/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /The present tense/ })).toHaveAttribute("href", "/now");
     expect(screen.getByRole("link", { name: /Story/ })).toHaveAttribute("href", "/about");
-    expect(screen.getByText("Huy Nguyen · Ho Chi Minh City → California")).toBeInTheDocument();
+    expect(screen.getByText("Huy Nguyen")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "admin" })).toHaveAttribute("href", "/admin");
     expect(screen.queryByText(/ORIGIN \/ ADAPTATION/)).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "Edit" })).not.toBeInTheDocument();
