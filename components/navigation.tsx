@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
 import { ThemeControls } from "@/components/theme-controls";
-import { isExternalHref, primaryNavLinks } from "@/lib/navigation";
+import { opensInNewTab, primaryNavLinks } from "@/lib/navigation";
 
 function NavJump({
   href,
@@ -16,7 +16,7 @@ function NavJump({
   children: ReactNode;
   className?: string;
 } & Omit<React.ComponentPropsWithoutRef<"a">, "href">) {
-  if (isExternalHref(href)) {
+  if (opensInNewTab(href)) {
     return (
       <a className={className} href={href} target="_blank" rel="noreferrer" {...props}>
         {children}

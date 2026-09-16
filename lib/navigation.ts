@@ -1,4 +1,5 @@
 export const GITHUB_URL = "https://github.com/huynguyen9999";
+export const RESUME_URL = "/files/Huy-B-Nguyen-Resume.pdf";
 
 export const primaryNavLinks = [
   {
@@ -29,7 +30,7 @@ export const primaryNavLinks = [
     note: "Engineer · creator · student",
     items: [
       { href: GITHUB_URL, label: "GitHub" },
-      { href: "/what-i-do#resume", label: "Resume" },
+      { href: RESUME_URL, label: "Resume" },
     ],
   },
   {
@@ -48,4 +49,8 @@ export const primaryNavLinks = [
 
 export function isExternalHref(href: string) {
   return href.startsWith("http://") || href.startsWith("https://");
+}
+
+export function opensInNewTab(href: string) {
+  return isExternalHref(href) || /\.pdf(?:$|[?#])/i.test(href);
 }

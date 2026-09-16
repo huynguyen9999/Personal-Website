@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { GITHUB_URL } from "@/lib/navigation";
-import { getPlacedPhotos, photosForSlot } from "@/lib/media";
-import { PlacedPhotos } from "@/components/placed-photos";
-import { MotionSection } from "@/components/motion-section";
+
+import { PracticeStack } from "@/components/practice-stack";
 import { SiteFooter } from "@/components/site-footer";
+import { GITHUB_URL, RESUME_URL } from "@/lib/navigation";
+import { getPlacedPhotos, photosForSlot } from "@/lib/media";
 
 export const metadata: Metadata = {
   title: "What I do",
@@ -44,41 +44,39 @@ export default async function WhatIDoPage() {
         <header className="practice-header ruled-section">
           <p className="eyebrow">WHAT I DO</p>
           <h1>Three practices, running at once.</h1>
-          <p>
-            Engineering, making, and study share the same calendar. GitHub is public. A resume file will live here
-            when it is ready to publish.
-          </p>
+          <p>Engineering, making, and study share the same calendar.</p>
         </header>
 
-        {practices.map((practice) => (
-          <MotionSection
-            key={practice.id}
-            id={practice.id}
-            className="practice-band"
-            aria-labelledby={`${practice.id}-title`}
-          >
-            <p className="section-index">{practice.number}</p>
-            <div>
-              <h2 id={`${practice.id}-title`}>{practice.title}</h2>
-              <p>{practice.body}</p>
-              <PlacedPhotos photos={photosForSlot(photos, practice.slot)} layout="figure" />
-            </div>
-          </MotionSection>
-        ))}
+        <PracticeStack
+          practices={practices.map((practice) => ({
+            ...practice,
+            photos: photosForSlot(photos, practice.slot),
+          }))}
+        />
 
-        <MotionSection className="practice-links" id="resume" aria-labelledby="resume-title">
-          <p className="section-index">EVIDENCE</p>
+        <section className="practice-links" id="resume" aria-labelledby="resume-title">
+          <div className="practice-links__actions">
+            <a
+              className="practice-action"
+              href={GITHUB_URL}
+              target="_blank"
+              rel="noreferrer"
+            >
+              GitHub <span aria-hidden="true">↗</span>
+            </a>
+            <a
+              className="practice-action"
+              href={RESUME_URL}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Resume <span aria-hidden="true">↗</span>
+            </a>
+          </div>
           <div>
             <h2 id="resume-title">GitHub and resume.</h2>
-            <p>The public code is on GitHub. The resume file is empty until it is placed here on purpose.</p>
-            <div className="continue-links">
-              <a className="text-link" href={GITHUB_URL} target="_blank" rel="noreferrer">
-                GitHub <span aria-hidden="true">↗</span>
-              </a>
-              <p className="empty-copy">Resume PDF not published yet.</p>
-            </div>
           </div>
-        </MotionSection>
+        </section>
       </article>
       <SiteFooter />
     </>

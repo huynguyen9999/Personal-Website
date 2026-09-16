@@ -102,8 +102,16 @@ describe("public App Router pages", () => {
     expect(screen.getByRole("heading", { name: "Engineer" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Creator" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Student" })).toBeInTheDocument();
-    expect(document.querySelector('a.text-link[href="https://github.com/huynguyen9999"]')).not.toBeNull();
-    expect(screen.getByText("Resume PDF not published yet.")).toBeInTheDocument();
+    const resumeSection = document.getElementById("resume");
+    expect(resumeSection).not.toBeNull();
+    const github = resumeSection!.querySelector('a.practice-action[href="https://github.com/huynguyen9999"]');
+    const resume = resumeSection!.querySelector('a.practice-action[href="/files/Huy-B-Nguyen-Resume.pdf"]');
+    expect(github).not.toBeNull();
+    expect(github).toHaveAttribute("target", "_blank");
+    expect(resume).not.toBeNull();
+    expect(resume).toHaveAttribute("target", "_blank");
+    expect(screen.queryByText("Resume PDF not published yet.")).not.toBeInTheDocument();
+    expect(screen.queryByText(/The public code is on GitHub/)).not.toBeInTheDocument();
   });
 
   it("renders Who I am with origin, hobbies, and shelf", async () => {

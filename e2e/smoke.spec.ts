@@ -53,8 +53,11 @@ test.describe("public archive smoke", () => {
     await expect(page.getByRole("heading", { name: "Engineer" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Creator" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Student" })).toBeVisible();
-    await page.getByText("Resume PDF not published yet.").scrollIntoViewIfNeeded();
-    await expect(page.getByText("Resume PDF not published yet.")).toBeVisible();
+    const github = page.locator("#resume a.practice-action[href='https://github.com/huynguyen9999']");
+    const resume = page.locator("#resume a.practice-action[href='/files/Huy-B-Nguyen-Resume.pdf']");
+    await expect(github).toHaveAttribute("target", "_blank");
+    await expect(resume).toHaveAttribute("target", "_blank");
+    await expect(page.getByText("Resume PDF not published yet.")).toHaveCount(0);
 
     await page.locator("a.nav-item[href='/who-i-am']").click();
     await expect(page).toHaveURL(/\/who-i-am$/);

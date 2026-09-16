@@ -88,7 +88,7 @@ Do not add marquee, text scramble, or animate-every-element libraries on Home, S
 ## Components
 
 - **Header / nav:** masthead name in the left cell (Instrument Serif, stacked Huy / Nguyen), numbered destination cells, notes, dropdowns, current-page signal dot. Hover/focus uses one yellowish-orange → olive gradient bar on every tab.
-- **What I do:** ruled engineer / creator / student bands, not a 3-column project grid.
+- **What I do:** sticky stacked Engineer / Creator / Student panels that pile as you scroll (Qwerio-like deck, editorial surfaces—not glass cards). GitHub and Resume open as left-column action buttons; the resume PDF lives at `/files/Huy-B-Nguyen-Resume.pdf`.
 - **Who I am:** MapLibre globe of the real Earth (OpenFreeMap), click-to-hear name, a reading shelf, and a Hobbies interactive selector (`components/ui/interactive-selector.tsx`): expanding strips with lucide icons, site typography, and smooth flex transitions. Machines and Cubes ship local photo archives; Adventures, Work setup, and Tennis also accept admin placements (`being-adventures`, `being-drive`, `being-cubes`, `being-setup`, `being-tennis`). Empty categories show a short note instead of stock fallbacks in the panel. The globe pins Visalia 93291 and an IP-derived visitor location. Nearby visitors zoom into California; farther ones pull back to the continent or the globe.
 - **Opening:** serif headline, coordinates, optional photo or court geometry.
 - **Trajectory list:** numbered rows, not identity-category chips.

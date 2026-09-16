@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isExternalHref, primaryNavLinks } from "@/lib/navigation";
+import { isExternalHref, opensInNewTab, primaryNavLinks } from "@/lib/navigation";
 
 describe("primary navigation helpers", () => {
   it("exposes the compact four-part public archive without owner access", () => {
@@ -21,8 +21,9 @@ describe("primary navigation helpers", () => {
     expect(hrefs).toContain("/#identity-map");
     expect(hrefs).toContain("/#present-title");
     expect(hrefs).toContain("/about#trajectory");
-    expect(hrefs).toContain("/what-i-do#resume");
+    expect(hrefs).toContain("/files/Huy-B-Nguyen-Resume.pdf");
     expect(hrefs).toContain("https://github.com/huynguyen9999");
+    expect(hrefs).not.toContain("/what-i-do#resume");
     expect(hrefs).toContain("/who-i-am#hobbies");
     expect(hrefs).toContain("/who-i-am?hobby=adventures#hobbies");
     expect(hrefs).toContain("/who-i-am?hobby=machines#hobbies");
@@ -32,5 +33,7 @@ describe("primary navigation helpers", () => {
     expect(hrefs).not.toContain("/who-i-am#setup");
     expect(isExternalHref("https://github.com/huynguyen9999")).toBe(true);
     expect(isExternalHref("/what-i-do")).toBe(false);
+    expect(opensInNewTab("/files/Huy-B-Nguyen-Resume.pdf")).toBe(true);
+    expect(opensInNewTab("/what-i-do")).toBe(false);
   });
 });
