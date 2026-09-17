@@ -159,9 +159,10 @@ test.describe("public archive smoke", () => {
     for (const action of await contactActions.all()) {
       const box = await action.boundingBox();
       expect(box).not.toBeNull();
-      expect(box!.height).toBeGreaterThanOrEqual(44);
+      expect(box!.height).toBeGreaterThanOrEqual(48);
       expect(box!.x).toBeGreaterThanOrEqual(0);
       expect(box!.x + box!.width).toBeLessThanOrEqual(390);
+      expect(await action.evaluate((node) => node.scrollWidth <= node.clientWidth)).toBe(true);
     }
     await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   });
