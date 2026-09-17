@@ -7,6 +7,7 @@ import { PlacedPhotos } from "@/components/placed-photos";
 import { PresentSnapshot } from "@/components/present-snapshot";
 import { Reveal } from "@/components/reveal";
 import { HomeFaqSection } from "@/components/home-faq-section";
+import { HomePortraitOpening } from "@/components/home-portrait-opening";
 import { SiteFooter } from "@/components/site-footer";
 import { homeFaqSlugs, sectionsToFaqItems } from "@/lib/faq";
 
@@ -35,6 +36,8 @@ export default async function HomePage() {
 
   return (
     <>
+      <HomePortraitOpening />
+
       <section className="opening ruled-section" aria-labelledby="opening-title">
         <p className="eyebrow">{opening.eyebrow}</p>
         <h1 id="opening-title">

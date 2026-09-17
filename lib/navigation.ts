@@ -39,9 +39,6 @@ export const primaryNavLinks = [
     note: "Hobbies, books, and origin",
     items: [
       { href: "/who-i-am#hobbies", label: "Hobbies" },
-      { href: "/who-i-am?hobby=adventures#hobbies", label: "Adventures" },
-      { href: "/who-i-am?hobby=machines#hobbies", label: "Machines" },
-      { href: "/who-i-am?hobby=tennis#hobbies", label: "Tennis" },
       { href: "/who-i-am#shelf", label: "Book shelf" },
     ],
   },

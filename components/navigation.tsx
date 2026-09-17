@@ -141,6 +141,12 @@ export function Navigation() {
                 <span className="nav-number">0{index + 1}</span>
                 <span>{link.label}</span>
                 <span className="nav-note">{link.note}</span>
+                <span className="nav-corners" aria-hidden="true">
+                  <span className="nav-corner nav-corner--top-left" />
+                  <span className="nav-corner nav-corner--top-right" />
+                  <span className="nav-corner nav-corner--bottom-left" />
+                  <span className="nav-corner nav-corner--bottom-right" />
+                </span>
               </NavJump>
               <div id={menuId} className="nav-dropdown" aria-label={`${link.label} menu`}>
                 <p>{link.note}</p>

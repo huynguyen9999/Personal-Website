@@ -53,24 +53,6 @@ export function formatMiles(miles: number) {
 
 export type VisitorLocationSource = "network" | "device" | "provided";
 
-export function visitorDistanceCopy(
-  miles: number | null,
-  source: VisitorLocationSource = "network",
-  label = "your area",
-) {
-  if (miles == null || !Number.isFinite(miles)) {
-    return "I’m from Visalia, California. Choose a location to compare its distance with Visalia.";
-  }
-
-  if (source === "network") {
-    return `I’m from Visalia, California. Your network appears to be near ${label}, roughly ${formatMiles(miles)} miles from Visalia.`;
-  }
-  if (source === "provided") {
-    return `I’m from Visalia, California. ${label} is roughly ${formatMiles(miles)} miles from Visalia.`;
-  }
-  return `I’m from Visalia, California. This device appears to be roughly ${formatMiles(miles)} miles from Visalia.`;
-}
-
 export function visitorFromPayload(payload: unknown): GeoPoint | null {
   if (!payload || typeof payload !== "object") return null;
   const record = payload as Record<string, unknown>;

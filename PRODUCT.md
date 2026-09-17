@@ -38,7 +38,7 @@ Owner updates copy and photos from `/admin` without a code change. Sign-in is a 
 ## Capabilities and Constraints
 
 - Who I am includes a MapLibre globe of the real Earth, pinned to Visalia, CA 93291. Visitor distance is estimated from IP on the server (Vercel geo headers, then IP lookup). The raw IP is never shown.
-- Homepage: the original archive sequence (opening, present, manifesto, trajectory, continue) plus the interactive identity map; no V1 ORIGIN / ADAPTATION band.
+- Homepage: a full-viewport, user-provided dusk-beach portrait opening with lowercase `huy nguyen.`, followed by the original archive sequence (opening, present, manifesto, trajectory, continue) plus the interactive identity map; no V1 ORIGIN / ADAPTATION band.
 - Owner: email/password gate, drafts, publish, Mac photo upload with page/slot placement.
 - Do not invent jobs, internships, tennis records, awards, quotes, metrics, or childhood scenes beyond the blueprint.
 - Motion must respect `prefers-reduced-motion`, remain keyboard-usable, and never hide information. What I do and Who I am may use Motion (`framer-motion`) for section entrance; other pages stay on native CSS.

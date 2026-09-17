@@ -33,11 +33,17 @@ describe("Navigation", () => {
     expect(document.querySelector("a.nav-item[href='/who-i-am']")).not.toBeNull();
     expect(document.querySelectorAll("a.nav-item")).toHaveLength(4);
     expect(document.querySelector("a.nav-item[href='/admin']")).toBeNull();
+    expect(document.querySelectorAll(".nav-corners")).toHaveLength(4);
+    expect(document.querySelectorAll(".nav-corner")).toHaveLength(16);
     expect(screen.queryByRole("link", { name: /^admin$/i })).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: /^Work$/ })).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: /^Now$/ })).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: /^GitHub/ })).toHaveAttribute("href", "https://github.com/huynguyen9999");
     expect(screen.getByRole("link", { name: /Book shelf/ })).toHaveAttribute("href", "/who-i-am#shelf");
+    expect(screen.getByRole("link", { name: /^Hobbies/ })).toHaveAttribute("href", "/who-i-am#hobbies");
+    expect(screen.queryByRole("link", { name: /^Adventures/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /^Machines/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /^Tennis/ })).not.toBeInTheDocument();
   });
 
   it("collapses on scroll down and returns on scroll up", () => {
@@ -83,5 +89,19 @@ describe("Navigation", () => {
     await user.click(toggle);
     expect(toggle).toHaveAttribute("aria-expanded", "true");
     expect(screen.getByRole("navigation", { name: "Primary navigation" })).toHaveAttribute("data-open", "true");
+  });
+
+  it("activates the desktop hover state for a navigation cell", async () => {
+    vi.spyOn(window, "scrollY", "get").mockImplementation(() => scrollY);
+    installMatchMedia();
+    const user = userEvent.setup();
+    render(<Navigation />);
+
+    const whoIAm = document.querySelector<HTMLAnchorElement>("a.nav-item[href='/who-i-am']");
+    expect(whoIAm).not.toBeNull();
+    await user.hover(whoIAm!);
+
+    expect(document.querySelector("header.site-header")).toHaveAttribute("data-nav-active", "true");
+    expect(whoIAm).toHaveAttribute("data-focused", "true");
   });
 });

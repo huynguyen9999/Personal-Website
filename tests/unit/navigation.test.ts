@@ -25,10 +25,10 @@ describe("primary navigation helpers", () => {
     expect(hrefs).toContain("https://github.com/huynguyen9999");
     expect(hrefs).not.toContain("/what-i-do#resume");
     expect(hrefs).toContain("/who-i-am#hobbies");
-    expect(hrefs).toContain("/who-i-am?hobby=adventures#hobbies");
-    expect(hrefs).toContain("/who-i-am?hobby=machines#hobbies");
-    expect(hrefs).toContain("/who-i-am?hobby=tennis#hobbies");
     expect(hrefs).toContain("/who-i-am#shelf");
+    expect(hrefs).not.toContain("/who-i-am?hobby=adventures#hobbies");
+    expect(hrefs).not.toContain("/who-i-am?hobby=machines#hobbies");
+    expect(hrefs).not.toContain("/who-i-am?hobby=tennis#hobbies");
     expect(hrefs).not.toContain("/who-i-am#drive");
     expect(hrefs).not.toContain("/who-i-am#setup");
     expect(isExternalHref("https://github.com/huynguyen9999")).toBe(true);

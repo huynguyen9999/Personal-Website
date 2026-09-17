@@ -3,7 +3,9 @@ import { expect, test } from "@playwright/test";
 test.describe("public archive smoke", () => {
   test("home keeps the original archive and adds the identity map", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("A life in progress");
+    await expect(page.getByRole("heading", { level: 1, name: "huy nguyen." })).toBeVisible();
+    await expect(page.getByAltText("Huy Nguyen standing on a beach at dusk.")).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: /A life in progress/ })).toBeVisible();
     await expect(page.getByRole("heading", { name: /A short signal from the present/ })).toBeVisible();
     await expect(page.getByRole("button", { name: /Building\. Personal website admin\/editor/ })).toBeVisible();
     await expect(page.getByRole("button", { name: /Reading\. .*Steve Jobs/ })).toBeVisible();
@@ -30,7 +32,11 @@ test.describe("public archive smoke", () => {
     await expect(page.getByText("STORY / TWO COORDINATES")).toBeVisible();
 
     await page.locator("a.nav-item[href='/who-i-am']").hover();
-    await page.locator(".nav-dropdown a[href='/who-i-am#shelf']").click();
+    await expect(page.locator("a.nav-item[href='/who-i-am'] .nav-corner")).toHaveCount(4);
+    const whoMenu = page.locator(".nav-cell:has(a.nav-item[href='/who-i-am']) .nav-dropdown");
+    await expect(whoMenu.getByRole("link")).toHaveCount(2);
+    await expect(whoMenu.locator("a[href='/who-i-am#hobbies']")).toBeVisible();
+    await whoMenu.locator("a[href='/who-i-am#shelf']").click();
     await expect(page).toHaveURL(/\/who-i-am/);
     await expect(page.getByRole("heading", { name: "Book shelf." })).toBeVisible();
     await expect(page.getByRole("heading", { name: "The Richest Man in Babylon" })).toBeVisible();
@@ -63,10 +69,12 @@ test.describe("public archive smoke", () => {
     await expect(page).toHaveURL(/\/who-i-am$/);
     await expect(page.getByRole("heading", { level: 1, name: "Huy Nguyen." })).toBeVisible();
     await expect(page.getByRole("button", { name: /pronunciation of Huy Nguyen/i })).toBeVisible();
-    await expect(page.getByText(/from Visalia, California/)).toBeVisible();
+    await expect(page.getByRole("heading", { name: /You are .* miles away from Huy Nguyen/ })).toBeVisible();
+    await expect(page.getByText(/Two coordinates, one route/)).toHaveCount(0);
+    await expect(page.getByText(/Network location is an ISP estimate/)).toHaveCount(0);
     await expect(page.locator(".origin-map")).toBeVisible();
     await expect(page.getByRole("button", { name: /See the region|See the world/ })).toBeVisible();
-    await expect(page.getByLabel("Or enter where you are now")).toBeVisible();
+    await expect(page.getByLabel("Set your location instead")).toBeVisible();
     await expect(page.getByRole("button", { name: /Use this device|Refresh device location/ })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Life beyond the screens." })).toBeVisible();
     await expect(page.getByRole("tab", { name: "Cubes" })).toBeVisible();

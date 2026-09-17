@@ -4,9 +4,9 @@ import dynamic from "next/dynamic";
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import {
   GLOBE_MILES,
+  formatMiles,
   haversineMiles,
   HOME,
-  visitorDistanceCopy,
   visitorFromPayload,
   type GeoPoint,
   type OriginFrame,
@@ -24,6 +24,27 @@ const OriginGlobe = dynamic(
 type PlaceResult = GeoPoint & { label: string };
 
 const PLACE_STORAGE_KEY = "origin-place";
+const DISTANCE_COLORS = ["lavender", "orange", "signal"] as const;
+
+function DistanceNumber({ miles }: { miles: number | null }) {
+  if (miles == null || !Number.isFinite(miles)) {
+    return <span className="origin-map__distance origin-map__distance--pending">—</span>;
+  }
+
+  return (
+    <span className="origin-map__distance" aria-label={formatMiles(miles)}>
+      {formatMiles(miles).split("").map((character, index) => (
+        <span
+          aria-hidden="true"
+          className={`origin-map__distance-character origin-map__distance-character--${DISTANCE_COLORS[index % DISTANCE_COLORS.length]}`}
+          key={`${character}-${index}`}
+        >
+          {character}
+        </span>
+      ))}
+    </span>
+  );
+}
 
 export function OriginMap() {
   const [visitor, setVisitor] = useState<GeoPoint | null>(null);
@@ -50,7 +71,6 @@ export function OriginMap() {
         setVisitor(saved);
         sourceRef.current = "provided";
         setSource("provided");
-        setSearchMessage(`Using saved place: ${saved.label}. Stored only in this browser.`);
       }
     } catch {
       localStorage.removeItem(PLACE_STORAGE_KEY);
@@ -74,11 +94,11 @@ export function OriginMap() {
 
   function useDeviceLocation() {
     if (!navigator.geolocation) {
-      setLocationMessage("This browser does not provide device location. Enter a city or postal code instead.");
+      setLocationMessage("This browser cannot share its location. Enter a city or postal code instead.");
       return;
     }
     setLocating(true);
-    setLocationMessage("Requesting this device’s location…");
+    setLocationMessage("");
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const next = visitorFromPayload({
@@ -92,12 +112,6 @@ export function OriginMap() {
           setSource("device");
           setFrame("near");
           localStorage.removeItem(PLACE_STORAGE_KEY);
-          const accuracyMiles = position.coords.accuracy / 1609.344;
-          setLocationMessage(
-            Number.isFinite(accuracyMiles)
-              ? `Device location updated. Browser-reported accuracy is within about ${Math.max(0.1, accuracyMiles).toFixed(1)} miles.`
-              : "Device location updated.",
-          );
         } else {
           setLocationMessage("This device returned an unusable location. Enter a city or postal code below.");
         }
@@ -143,9 +157,7 @@ export function OriginMap() {
       });
       setResults(nextResults);
       setSearchMessage(
-        nextResults.length
-          ? "Choose the matching place."
-          : "No matching place found. Try a city and country, or a postal code.",
+        nextResults.length ? "" : "No matching place found. Try a city and country, or a postal code.",
       );
     } catch (error) {
       setSearchMessage(error instanceof Error ? error.message : "Location search failed.");
@@ -161,7 +173,7 @@ export function OriginMap() {
     setFrame("near");
     setResults([]);
     setLocationMessage("");
-    setSearchMessage(`Using ${place.label}. Saved only in this browser.`);
+    setSearchMessage("");
     localStorage.setItem(PLACE_STORAGE_KEY, JSON.stringify(place));
   }
 
@@ -170,7 +182,7 @@ export function OriginMap() {
     sourceRef.current = "network";
     setSource("network");
     setResults([]);
-    setSearchMessage("Saved place cleared. Using the network estimate again.");
+    setSearchMessage("");
     fetch("/api/geo", { cache: "no-store" })
       .then((response) => (response.ok ? response.json() : null))
       .then((payload) => {
@@ -182,6 +194,9 @@ export function OriginMap() {
 
   return (
     <figure className="origin-map">
+      <h2 id="origin-title">
+        You are <DistanceNumber miles={miles} /> miles away from Huy Nguyen
+      </h2>
       <OriginGlobe visitor={visitor} frame={frame} />
       <div className="origin-map__controls">
         <button
@@ -210,7 +225,7 @@ export function OriginMap() {
       </div>
       {locationMessage ? <p className="origin-map__status" aria-live="polite">{locationMessage}</p> : null}
       <form className="origin-map__place-form" onSubmit={searchPlacesForm}>
-        <label htmlFor="origin-place">Or enter where you are now</label>
+        <label htmlFor="origin-place">Set your location instead</label>
         <div>
           <input
             id="origin-place"
@@ -234,10 +249,6 @@ export function OriginMap() {
           ))}
         </ul>
       ) : null}
-      <figcaption>{visitorDistanceCopy(miles, source, visitor?.label)}</figcaption>
-      <p className="origin-map__privacy">
-        Network location is an ISP estimate and can be a distant metro. Device location stays on this device; a place you select is stored only in this browser.
-      </p>
     </figure>
   );
 }

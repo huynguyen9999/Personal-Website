@@ -20,6 +20,8 @@ describe("public App Router pages", () => {
   it("renders the original homepage sequence plus the identity map", async () => {
     render(await HomePage());
 
+    expect(screen.getByRole("heading", { level: 1, name: "huy nguyen." })).toBeInTheDocument();
+    expect(screen.getByAltText("Huy Nguyen standing on a beach at dusk.")).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 1, name: /A life in progress/ })).toBeInTheDocument();
     expect(screen.getByText("HO CHI MINH CITY → CALIFORNIA")).toBeInTheDocument();
     expect(screen.getByText("measured in circuits and baselines.")).toBeInTheDocument();
@@ -119,8 +121,10 @@ describe("public App Router pages", () => {
 
     expect(screen.getByRole("heading", { level: 1, name: "Huy Nguyen." })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /pronunciation of Huy Nguyen/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /You are — miles away from Huy Nguyen/ })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Book shelf." })).toBeInTheDocument();
-    expect(screen.getByText(/I’m from Visalia, California/)).toBeInTheDocument();
+    expect(screen.queryByText(/Two coordinates, one route/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Network location is an ISP estimate/)).not.toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Life beyond the screens." })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: /Adventures/ })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: /^Cubes$/i })).toBeInTheDocument();
