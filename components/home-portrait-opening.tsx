@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 import { useEffect, useRef } from "react";
-import homePortrait from "@/public/images/home/huy-at-dusk.jpg";
+import mountainPortrait from "@/public/images/home/huy-in-the-mountains.jpg";
 
 const PARALLAX_SETTINGS = {
-  desktop: { imageTravel: -340, imageScale: 1.26, imageScaleAtExit: 1.08, titleTravel: -96 },
-  compact: { imageTravel: -190, imageScale: 1.18, imageScaleAtExit: 1.06, titleTravel: -48 },
+  desktop: { imageTravel: -300, imageScale: 1.16, imageScaleAtExit: 1.04, titleTravel: -96 },
+  compact: { imageTravel: -180, imageScale: 1.2, imageScaleAtExit: 1.06, titleTravel: -48 },
 } as const;
 
 function clamp(value: number, minimum: number, maximum: number) {
@@ -55,8 +55,8 @@ export function HomePortraitOpening() {
     <section className="home-portrait-opening" ref={openingRef} aria-labelledby="home-portrait-title">
       <div className="home-portrait-opening__media">
         <Image
-          src={homePortrait}
-          alt="Huy Nguyen standing on a beach at dusk."
+          src={mountainPortrait}
+          alt="Huy Nguyen looking across a mountain landscape."
           fill
           priority
           sizes="100vw"
@@ -64,7 +64,7 @@ export function HomePortraitOpening() {
         />
       </div>
       <div className="home-portrait-opening__wash" aria-hidden="true" />
-      <h1 id="home-portrait-title">huy nguyen.</h1>
+      <h1 id="home-portrait-title"><span>huy nguyen.</span></h1>
     </section>
   );
 }

@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 
 import { PracticeStack } from "@/components/practice-stack";
+import { StravaSnapshot } from "@/components/strava-snapshot";
+import { Testimonials } from "@/components/ui/unique-testimonial";
 import { SiteFooter } from "@/components/site-footer";
-import { GITHUB_URL, RESUME_URL } from "@/lib/navigation";
 import { getPlacedPhotos, photosForSlot } from "@/lib/media";
+import { getStravaStats } from "@/lib/strava";
 
 export const metadata: Metadata = {
   title: "What I do",
@@ -36,7 +38,7 @@ const practices = [
 ] as const;
 
 export default async function WhatIDoPage() {
-  const photos = await getPlacedPhotos("what-i-do");
+  const [photos, stravaStats] = await Promise.all([getPlacedPhotos("what-i-do"), getStravaStats()]);
 
   return (
     <>
@@ -51,30 +53,25 @@ export default async function WhatIDoPage() {
           practices={practices.map((practice) => ({
             ...practice,
             photos: photosForSlot(photos, practice.slot),
+            supplement: practice.id === "student" ? <StravaSnapshot stats={stravaStats} /> : undefined,
           }))}
         />
 
-        <section className="practice-links" id="resume" aria-labelledby="resume-title">
-          <div className="practice-links__actions">
-            <a
-              className="practice-action"
-              href={GITHUB_URL}
-              target="_blank"
-              rel="noreferrer"
-            >
-              GitHub <span aria-hidden="true">↗</span>
-            </a>
-            <a
-              className="practice-action"
-              href={RESUME_URL}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Resume <span aria-hidden="true">↗</span>
-            </a>
+        <section className="practice-links" id="testimonials" aria-labelledby="testimonials-title">
+          <div>
+            <p className="eyebrow">TESTIMONIAL</p>
           </div>
           <div>
-            <h2 id="resume-title">GitHub and resume.</h2>
+            <h2 id="testimonials-title">A note from someone I worked with.</h2>
+            <Testimonials
+              testimonials={[{
+                id: "peter-sutherland",
+                quote: "He showed meticulous attention to detail while simultaneously demonstrating the flexibility to learn and try new things. In his capstone project he presented on the core challenges of developing software for non-deterministic systems.",
+                author: "Peter Sutherland",
+                role: "Engineering Leader · AI Native Development & LLM Integration",
+                sourceUrl: "https://www.linkedin.com/in/huynguyen06",
+              }]}
+            />
           </div>
         </section>
       </article>

@@ -21,7 +21,7 @@ describe("public App Router pages", () => {
     render(await HomePage());
 
     expect(screen.getByRole("heading", { level: 1, name: "huy nguyen." })).toBeInTheDocument();
-    expect(screen.getByAltText("Huy Nguyen standing on a beach at dusk.")).toBeInTheDocument();
+    expect(screen.getByAltText("Huy Nguyen looking across a mountain landscape.")).toBeInTheDocument();
     expect(screen.getByText("CURRENT FOCUS")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Electrical engineering at UC Santa Barbara." })).toBeInTheDocument();
     expect(screen.getAllByRole("link", { name: /What I do/ })[0]).toHaveAttribute("href", "/what-i-do");
@@ -61,7 +61,7 @@ describe("public App Router pages", () => {
     expect(screen.getByText("Ho Chi Minh City")).toBeInTheDocument();
     expect(screen.getByText("United States")).toBeInTheDocument();
     expect(screen.getByText("UC Santa Barbara")).toBeInTheDocument();
-    expect(screen.getByText(/Curiosity, repetition/)).toBeInTheDocument();
+    expect(screen.queryByText("WHAT STAYED CONSTANT")).not.toBeInTheDocument();
   });
 
   it("renders the reading shelf and permanently redirects the old writing route", async () => {
@@ -107,16 +107,14 @@ describe("public App Router pages", () => {
     expect(screen.getByRole("heading", { name: "Engineer" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Creator" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Student" })).toBeInTheDocument();
-    const resumeSection = document.getElementById("resume");
-    expect(resumeSection).not.toBeNull();
-    const github = resumeSection!.querySelector('a.practice-action[href="https://github.com/huynguyen9999"]');
-    const resume = resumeSection!.querySelector('a.practice-action[href="/files/Huy-B-Nguyen-Resume.pdf"]');
-    expect(github).not.toBeNull();
-    expect(github).toHaveAttribute("target", "_blank");
-    expect(resume).not.toBeNull();
-    expect(resume).toHaveAttribute("target", "_blank");
-    expect(screen.queryByText("Resume PDF not published yet.")).not.toBeInTheDocument();
-    expect(screen.queryByText(/The public code is on GitHub/)).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Running, outside the classroom." })).toBeInTheDocument();
+    const strava = screen.getByRole("link", { name: /View Huy on Strava/ });
+    expect(strava).toHaveAttribute("href", "https://www.strava.com/athletes/45200919");
+    expect(strava).toHaveAttribute("target", "_blank");
+    expect(screen.getByRole("heading", { name: "A note from someone I worked with." })).toBeInTheDocument();
+    expect(screen.getByText(/He showed meticulous attention to detail/)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Peter Sutherland/ })).toBeInTheDocument();
+    expect(document.getElementById("resume")).toBeNull();
   });
 
   it("renders Who I am with origin, hobbies, and shelf", async () => {

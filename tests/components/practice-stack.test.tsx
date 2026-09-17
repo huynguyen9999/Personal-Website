@@ -28,6 +28,7 @@ describe("PracticeStack", () => {
             title: "Student",
             body: "Study and tennis.",
             photos: [],
+            supplement: <a href="https://www.strava.com">Training log</a>,
           },
         ]}
       />,
@@ -39,5 +40,6 @@ describe("PracticeStack", () => {
     expect(container.querySelectorAll("section")).toHaveLength(3);
     expect(container.querySelector('section[style*="--stack-index: 0"]')).not.toBeNull();
     expect(container.querySelector('section[style*="--stack-index: 2"]')).not.toBeNull();
+    expect(screen.getByRole("link", { name: "Training log" })).toHaveAttribute("href", "https://www.strava.com");
   });
 });

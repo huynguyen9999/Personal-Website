@@ -62,13 +62,6 @@ export default async function AboutPage() {
             </Reveal>
           ))}
         </div>
-
-        <Reveal>
-          <aside className="story-note">
-            <p className="section-index">WHAT STAYED CONSTANT</p>
-            <p>Curiosity, repetition, and the habit of learning by looking closely—at a system, a match, or a new environment.</p>
-          </aside>
-        </Reveal>
       </article>
       <SiteFooter />
     </>

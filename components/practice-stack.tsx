@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 import { PlacedPhotos } from "@/components/placed-photos";
 import type { PlacedPhoto } from "@/lib/media";
@@ -11,6 +11,7 @@ export type PracticeCard = {
   title: string;
   body: string;
   photos: PlacedPhoto[];
+  supplement?: ReactNode;
 };
 
 export function PracticeStack({ practices }: { practices: PracticeCard[] }) {
@@ -31,6 +32,7 @@ export function PracticeStack({ practices }: { practices: PracticeCard[] }) {
             </h2>
             <p className={styles.copy}>{practice.body}</p>
             <PlacedPhotos photos={practice.photos} layout="figure" />
+            {practice.supplement}
           </div>
         </section>
       ))}

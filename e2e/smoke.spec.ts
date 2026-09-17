@@ -4,7 +4,7 @@ test.describe("public archive smoke", () => {
   test("home keeps the original archive and adds the identity map", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1, name: "huy nguyen." })).toBeVisible();
-    await expect(page.getByAltText("Huy Nguyen standing on a beach at dusk.")).toBeVisible();
+    await expect(page.getByAltText("Huy Nguyen looking across a mountain landscape.")).toBeVisible();
     await expect(page.getByText("CURRENT FOCUS")).toBeVisible();
     await expect(page.getByRole("heading", { name: "Electrical engineering at UC Santa Barbara." })).toBeVisible();
     await expect(page.getByRole("link", { name: /What I do/ }).first()).toHaveAttribute("href", "/what-i-do");
@@ -62,11 +62,14 @@ test.describe("public archive smoke", () => {
     await expect(page.getByRole("heading", { name: "Engineer" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Creator" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Student" })).toBeVisible();
-    const github = page.locator("#resume a.practice-action[href='https://github.com/huynguyen9999']");
-    const resume = page.locator("#resume a.practice-action[href='/files/Huy-B-Nguyen-Resume.pdf']");
-    await expect(github).toHaveAttribute("target", "_blank");
-    await expect(resume).toHaveAttribute("target", "_blank");
-    await expect(page.getByText("Resume PDF not published yet.")).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: "Running, outside the classroom." })).toBeVisible();
+    await expect(page.getByRole("link", { name: /View Huy on Strava/ })).toHaveAttribute(
+      "href",
+      "https://www.strava.com/athletes/45200919",
+    );
+    await expect(page.getByRole("heading", { name: "A note from someone I worked with." })).toBeVisible();
+    await expect(page.getByText(/He showed meticulous attention to detail/)).toBeVisible();
+    await expect(page.locator("#resume")).toHaveCount(0);
 
     await page.locator("a.nav-item[href='/who-i-am']").click();
     await expect(page).toHaveURL(/\/who-i-am$/);
