@@ -314,7 +314,9 @@ body:has(.site-header .nav-cell:hover) main {
   isolation: isolate;
   padding: clamp(4rem, 9vw, 7rem) var(--gutter) clamp(3rem, 7vw, 5rem);
 }
-.opening > :not(.court-line) { position: relative; z-index: 1; }
+.opening > .eyebrow,
+.opening > h1,
+.opening > .opening-meta { position: relative; z-index: 1; }
 .home-portrait-opening {
   --portrait-scroll-offset: 0px;
   --portrait-title-offset: 0px;
@@ -1361,9 +1363,10 @@ a.text-button { display: inline-block; }
 .media-placement-form__actions button { padding: .7rem .9rem; border: 1px solid #5d5663; color: var(--panel-ink); background: transparent; cursor: pointer; }
 .opening-media {
   position: absolute;
-  right: 8%;
-  top: 18%;
-  width: min(32vw, 26rem);
+  z-index: 1;
+  right: clamp(1.5rem, 6vw, 6rem);
+  top: clamp(8rem, 21vh, 13rem);
+  width: clamp(16rem, 25vw, 24rem);
 }
 .placed-photos { display: grid; gap: 1px; margin: 2rem 0 0; padding: 0; list-style: none; }
 .placed-photos figure { margin: 0; }
@@ -1413,7 +1416,7 @@ a.text-button { display: inline-block; }
   .site-footer { flex-direction: column; align-items: flex-start; }
   .moment { grid-template-columns: 3rem 1fr; }
   .moment-place, .moment > div { grid-column: 2; }
-  .opening-media { position: relative; right: auto; top: auto; width: min(100%, 22rem); margin: 2.5rem 0 0; }
+  .opening-media { position: relative; right: auto; top: auto; width: min(100%, 28rem); margin: 2.5rem auto 0; }
   .media-uploader__placement { grid-template-columns: 1fr; }
   .placed-photos--stack { margin-left: 0; }
   .trajectory-line { left: calc(var(--gutter) + .95rem); }

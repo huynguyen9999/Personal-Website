@@ -127,6 +127,24 @@ test.describe("public archive smoke", () => {
     }
   });
 
+  test("the life-in-progress photo uses the desktop side column and mobile reading flow", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto("/");
+    const photo = page.locator(".opening-media img");
+    const desktopBox = await photo.boundingBox();
+    expect(desktopBox).not.toBeNull();
+    expect(desktopBox!.x).toBeGreaterThan(720);
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/");
+    const mobileBox = await photo.boundingBox();
+    const openingMeta = await page.locator(".opening-meta").boundingBox();
+    expect(mobileBox).not.toBeNull();
+    expect(openingMeta).not.toBeNull();
+    expect(mobileBox!.y).toBeGreaterThan(openingMeta!.y + openingMeta!.height);
+    expect(mobileBox!.width).toBeLessThanOrEqual(390);
+  });
+
   test("header collapses on scroll down and returns on scroll up", async ({ page }) => {
     await page.goto("/");
     const header = page.locator("header.site-header");
