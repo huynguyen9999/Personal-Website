@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test.describe("public archive smoke", () => {
   test("home keeps the original archive and adds the identity map", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("heading", { level: 1, name: "huy nguyen." })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: "HUY NGUYEN" })).toBeVisible();
     await expect(page.getByAltText("Huy Nguyen looking across a mountain landscape.")).toBeVisible();
     await expect(page.getByText("CURRENT FOCUS")).toBeVisible();
     await expect(page.getByRole("heading", { name: "Electrical engineering at UC Santa Barbara." })).toBeVisible();
@@ -18,7 +18,7 @@ test.describe("public archive smoke", () => {
     await expect(page.getByRole("button", { name: "Cars & bikes" })).toBeVisible();
     await expect(page.getByText("Huy Nguyen · Ho Chi Minh City → California")).toBeVisible();
     await expect(page.locator("header.site-header")).toHaveAttribute("data-collapsed", "false");
-    await expect(page.getByRole("heading", { name: "Quick answers" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "FAQ" })).toBeVisible();
     const vietnamFaq = page.getByRole("button", { name: /What do you miss most in Vietnam/i });
     await expect(vietnamFaq).toBeVisible();
     await vietnamFaq.click();
@@ -57,7 +57,7 @@ test.describe("public archive smoke", () => {
     await page.goto("/");
     await page.locator("a.nav-item[href='/what-i-do']").click();
     await expect(page).toHaveURL(/\/what-i-do$/);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Three practices");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("MY BEST.");
     await page.getByRole("heading", { name: "Engineer" }).scrollIntoViewIfNeeded();
     await expect(page.getByRole("heading", { name: "Engineer" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Creator" })).toBeVisible();
@@ -67,8 +67,11 @@ test.describe("public archive smoke", () => {
       "href",
       "https://www.strava.com/athletes/45200919",
     );
-    await expect(page.getByRole("heading", { name: "A note from someone I worked with." })).toBeVisible();
     await expect(page.getByText(/He showed meticulous attention to detail/)).toBeVisible();
+    await expect(page.getByRole("link", { name: "Peter Sutherland on LinkedIn" })).toHaveAttribute(
+      "href",
+      "https://www.linkedin.com/in/sutherlandpb/",
+    );
     await expect(page.locator("#resume")).toHaveCount(0);
 
     await page.locator("a.nav-item[href='/who-i-am']").click();

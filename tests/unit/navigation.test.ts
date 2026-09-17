@@ -2,12 +2,13 @@ import { describe, expect, it } from "vitest";
 import { isExternalHref, opensInNewTab, primaryNavLinks } from "@/lib/navigation";
 
 describe("primary navigation helpers", () => {
-  it("exposes the compact four-part public archive without owner access", () => {
+  it("exposes the public archive with a direct contact route and without owner access", () => {
     expect(primaryNavLinks.map((link) => [link.href, link.label])).toEqual([
       ["/", "Home"],
       ["/about", "My Story"],
       ["/what-i-do", "What I do"],
       ["/who-i-am", "Who I am"],
+      ["/contact", "Contact"],
     ]);
 
     const hrefs = primaryNavLinks.flatMap((link) => [link.href, ...link.items.map((item) => item.href)]) as string[];

@@ -20,7 +20,7 @@ describe("public App Router pages", () => {
   it("renders the homepage as a personal archive with a compact engineering proof", async () => {
     render(await HomePage());
 
-    expect(screen.getByRole("heading", { level: 1, name: "huy nguyen." })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "HUY NGUYEN" })).toBeInTheDocument();
     expect(screen.getByAltText("Huy Nguyen looking across a mountain landscape.")).toBeInTheDocument();
     expect(screen.getByText("CURRENT FOCUS")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Electrical engineering at UC Santa Barbara." })).toBeInTheDocument();
@@ -42,7 +42,8 @@ describe("public App Router pages", () => {
     expect(screen.getByRole("heading", { name: /I tend to start with the part that is hidden/ })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /Four practices\.\s*One way of paying attention/ })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Keep following the thread." })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Quick answers" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "FAQ" })).toBeInTheDocument();
+    expect(screen.queryByText("Open a question when you want the longer version.")).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: /How did you learn English/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /The present tense/ })).toHaveAttribute("href", "/now");
     expect(screen.getByRole("link", { name: /Story/ })).toHaveAttribute("href", "/about");
@@ -103,7 +104,7 @@ describe("public App Router pages", () => {
   it("renders What I do as engineer, creator, and student", async () => {
     render(await WhatIDoPage());
 
-    expect(screen.getByRole("heading", { level: 1, name: /Three practices/ })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "MY BEST." })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Engineer" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Creator" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Student" })).toBeInTheDocument();
@@ -111,9 +112,13 @@ describe("public App Router pages", () => {
     const strava = screen.getByRole("link", { name: /View Huy on Strava/ });
     expect(strava).toHaveAttribute("href", "https://www.strava.com/athletes/45200919");
     expect(strava).toHaveAttribute("target", "_blank");
-    expect(screen.getByRole("heading", { name: "A note from someone I worked with." })).toBeInTheDocument();
     expect(screen.getByText(/He showed meticulous attention to detail/)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Peter Sutherland/ })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Peter Sutherland on LinkedIn" })).toHaveAttribute(
+      "href",
+      "https://www.linkedin.com/in/sutherlandpb/",
+    );
+    expect(screen.getByText("RECOMMENDATIONS")).toBeInTheDocument();
     expect(document.getElementById("resume")).toBeNull();
   });
 

@@ -64,7 +64,7 @@ export function HomePortraitOpening() {
         />
       </div>
       <div className="home-portrait-opening__wash" aria-hidden="true" />
-      <h1 id="home-portrait-title"><span>huy nguyen.</span></h1>
+      <h1 id="home-portrait-title"><span>HUY NGUYEN</span></h1>
     </section>
   );
 }

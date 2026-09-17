@@ -16,7 +16,7 @@ afterEach(() => {
 });
 
 describe("Navigation", () => {
-  it("renders the compact four-part archive and hides owner access", () => {
+  it("renders the compact archive with a direct contact route and hides owner access", () => {
     vi.spyOn(window, "scrollY", "get").mockImplementation(() => scrollY);
     installMatchMedia();
     render(<Navigation />);
@@ -31,10 +31,11 @@ describe("Navigation", () => {
     expect(document.querySelector("a.nav-item[href='/about']")).not.toBeNull();
     expect(document.querySelector("a.nav-item[href='/what-i-do']")).not.toBeNull();
     expect(document.querySelector("a.nav-item[href='/who-i-am']")).not.toBeNull();
-    expect(document.querySelectorAll("a.nav-item")).toHaveLength(4);
+    expect(document.querySelector("a.nav-item[href='/contact']")).not.toBeNull();
+    expect(document.querySelectorAll("a.nav-item")).toHaveLength(5);
     expect(document.querySelector("a.nav-item[href='/admin']")).toBeNull();
-    expect(document.querySelectorAll(".nav-corners")).toHaveLength(4);
-    expect(document.querySelectorAll(".nav-corner")).toHaveLength(16);
+    expect(document.querySelectorAll(".nav-corners")).toHaveLength(5);
+    expect(document.querySelectorAll(".nav-corner")).toHaveLength(20);
     expect(screen.queryByRole("link", { name: /^admin$/i })).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: /^Work$/ })).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: /^Now$/ })).not.toBeInTheDocument();

@@ -36,9 +36,7 @@ export function StravaSnapshot({ stats }: { stats: StravaStats | null }) {
           <Metric label="YTD TIME" total={stats.yearToDateRun} value={movingTime(stats.yearToDateRun.movingSeconds)} />
           <Metric label="ALL-TIME RUN" total={stats.allTimeRun} value={`${miles(stats.allTimeRun.distanceMeters)} mi`} />
         </dl>
-      ) : (
-        <p className="strava-snapshot__empty">The public profile is live. Quick stats will appear here once the private Strava connection is enabled.</p>
-      )}
+      ) : null}
       <a className="strava-snapshot__link" href={STRAVA_PROFILE_URL} target="_blank" rel="noreferrer">
         View Huy on Strava <ExternalLink aria-hidden="true" size={14} />
       </a>

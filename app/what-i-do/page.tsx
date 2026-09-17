@@ -45,7 +45,7 @@ export default async function WhatIDoPage() {
       <article className="practice-page">
         <header className="practice-header ruled-section">
           <p className="eyebrow">WHAT I DO</p>
-          <h1>Three practices, running at once.</h1>
+          <h1>MY BEST.</h1>
           <p>Engineering, making, and study share the same calendar.</p>
         </header>
 
@@ -57,22 +57,19 @@ export default async function WhatIDoPage() {
           }))}
         />
 
-        <section className="practice-links" id="testimonials" aria-labelledby="testimonials-title">
-          <div>
-            <p className="eyebrow">TESTIMONIAL</p>
-          </div>
-          <div>
-            <h2 id="testimonials-title">A note from someone I worked with.</h2>
-            <Testimonials
-              testimonials={[{
-                id: "peter-sutherland",
-                quote: "He showed meticulous attention to detail while simultaneously demonstrating the flexibility to learn and try new things. In his capstone project he presented on the core challenges of developing software for non-deterministic systems.",
-                author: "Peter Sutherland",
-                role: "Engineering Leader · AI Native Development & LLM Integration",
-                sourceUrl: "https://www.linkedin.com/in/huynguyen06",
-              }]}
-            />
-          </div>
+        <section className="practice-links" id="testimonials" aria-label="Recommendations">
+          <p className="eyebrow">RECOMMENDATIONS</p>
+          <Testimonials
+            testimonials={[{
+              id: "peter-sutherland",
+              quote: "He showed meticulous attention to detail while simultaneously demonstrating the flexibility to learn and try new things. In his capstone project he presented on the core challenges of developing software for non-deterministic systems.",
+              author: "Peter Sutherland",
+              role: "Engineering Leader · AI Native Development & LLM Integration",
+              sourceUrl: "https://www.linkedin.com/in/huynguyen06",
+              profileUrl: "https://www.linkedin.com/in/sutherlandpb/",
+              avatarSrc: "/images/peter-sutherland.png",
+            }]}
+          />
         </section>
       </article>
       <SiteFooter />

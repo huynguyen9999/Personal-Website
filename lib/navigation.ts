@@ -42,6 +42,12 @@ export const primaryNavLinks = [
       { href: "/who-i-am#shelf", label: "Book shelf" },
     ],
   },
+  {
+    href: "/contact",
+    label: "Contact",
+    note: "Get in touch",
+    items: [],
+  },
 ] as const;
 
 export function isExternalHref(href: string) {

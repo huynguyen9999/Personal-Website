@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
@@ -10,6 +11,8 @@ export type Testimonial = {
   author: string;
   role: string;
   sourceUrl?: string;
+  profileUrl?: string;
+  avatarSrc?: string;
 };
 
 export function Testimonials({ testimonials }: { testimonials: readonly Testimonial[] }) {
@@ -38,6 +41,7 @@ export function Testimonials({ testimonials }: { testimonials: readonly Testimon
       <div className="testimonial-selector__quote" aria-live="polite">
         <span aria-hidden="true">“</span>
         <blockquote className={cn(isAnimating && "testimonial-selector__quote--changing")}>{active.quote}</blockquote>
+        <span className="testimonial-selector__quote-close" aria-hidden="true">”</span>
       </div>
       <div className={cn("testimonial-selector__attribution", isAnimating && "testimonial-selector__attribution--changing")}>
         <p>{active.role}</p>
@@ -48,16 +52,24 @@ export function Testimonials({ testimonials }: { testimonials: readonly Testimon
           const isActive = index === activeIndex;
           const initials = testimonial.author.split(" ").map((part) => part[0]).join("");
           return (
-            <button
-              key={testimonial.id}
-              type="button"
-              className={cn("testimonial-selector__person", isActive && "testimonial-selector__person--active")}
-              aria-pressed={isActive}
-              onClick={() => select(index)}
-            >
-              <span aria-hidden="true">{initials}</span>
-              <strong>{testimonial.author}</strong>
-            </button>
+            <div key={testimonial.id} className={cn("testimonial-selector__person", isActive && "testimonial-selector__person--active")}>
+              {testimonial.profileUrl ? (
+                <a
+                  className="testimonial-selector__avatar"
+                  href={testimonial.profileUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`${testimonial.author} on LinkedIn`}
+                >
+                  {testimonial.avatarSrc ? (
+                    <Image src={testimonial.avatarSrc} alt="" width={40} height={40} />
+                  ) : <span aria-hidden="true">{initials}</span>}
+                </a>
+              ) : <span className="testimonial-selector__avatar" aria-hidden="true">{initials}</span>}
+              <button type="button" aria-pressed={isActive} onClick={() => select(index)}>
+                <strong>{testimonial.author}</strong>
+              </button>
+            </div>
           );
         })}
       </div>

@@ -10,8 +10,7 @@ export function HomeFaqSection({ items }: { items: FAQItem[] }) {
       <p className="section-index home-faq-index">FAQ</p>
       <FAQ2
         titleId="home-faq-title"
-        title="Quick answers"
-        description="Open a question when you want the longer version."
+        title="FAQ"
         items={items}
         className="home-faq-panel px-0 py-0"
       />

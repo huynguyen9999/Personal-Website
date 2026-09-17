@@ -153,9 +153,9 @@ button, input, textarea { font: inherit; caret-color: var(--ink); }
 .site-header:has(.nav-cell:hover) .theme-controls { opacity: .2; pointer-events: none; }
 .primary-nav {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   justify-self: end;
-  width: min(52rem, 100%);
+  width: min(64rem, 100%);
   border-left: 1px solid var(--rule);
 }
 .nav-cell { position: relative; min-width: 0; border-right: 1px solid var(--rule); }
@@ -831,20 +831,27 @@ body:has(.site-header .nav-cell:hover) main {
   text-transform: uppercase;
 }
 .strava-snapshot__link:hover, .strava-snapshot__link:focus-visible { color: var(--signal); text-decoration: underline; text-underline-offset: .35rem; }
+.practice-links#testimonials { display: block; text-align: center; }
+.practice-links#testimonials > .eyebrow { margin: 0; }
 .testimonial-selector { margin-top: clamp(2rem, 4vw, 3.5rem); }
+.practice-links#testimonials .testimonial-selector { max-width: 46rem; margin-right: auto; margin-left: auto; }
 .testimonial-selector__quote { position: relative; }
 .testimonial-selector__quote > span { position: absolute; top: -.8rem; left: -1.35rem; color: color-mix(in srgb, var(--signal) 24%, transparent); font: 6rem/.7 var(--font-serif), serif; pointer-events: none; }
-.testimonial-selector blockquote { max-width: 40rem; margin: 0; font: 400 clamp(1.45rem, 2.7vw, 2.4rem)/1.16 var(--font-serif), serif; letter-spacing: -.025em; transition: opacity 180ms ease, filter 180ms ease, transform 180ms ease; }
+.testimonial-selector__quote-close { top: auto !important; right: -1.35rem; bottom: -2.25rem; left: auto !important; }
+.testimonial-selector blockquote { max-width: 40rem; margin: 0 auto; font: 400 clamp(1.45rem, 2.7vw, 2.4rem)/1.16 var(--font-serif), serif; letter-spacing: -.025em; transition: opacity 180ms ease, filter 180ms ease, transform 180ms ease; }
 .testimonial-selector__quote--changing { opacity: 0; filter: blur(4px); transform: translate3d(0, .25rem, 0); }
-.testimonial-selector__attribution { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1rem; margin-top: 1.4rem; transition: opacity 180ms ease, transform 180ms ease; }
+.testimonial-selector__attribution { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .75rem 1rem; margin-top: 1.4rem; transition: opacity 180ms ease, transform 180ms ease; }
 .testimonial-selector__attribution p { margin: 0; color: var(--muted); font: .7rem/1.3 var(--font-mono), monospace; letter-spacing: .08em; text-transform: uppercase; }
 .testimonial-selector__attribution a { color: var(--ink); font: .7rem/1.3 var(--font-mono), monospace; letter-spacing: .06em; text-decoration-color: var(--signal); text-underline-offset: .3rem; }
 .testimonial-selector__attribution--changing { opacity: 0; transform: translate3d(0, .25rem, 0); }
-.testimonial-selector__people { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1.65rem; }
-.testimonial-selector__person { display: inline-flex; align-items: center; gap: .55rem; min-height: 2.65rem; padding: .35rem .8rem .35rem .4rem; border: 1px solid var(--rule); border-radius: 999px; background: transparent; color: var(--ink); cursor: pointer; font: .74rem/1 var(--font-mono), monospace; transition: color 180ms ease, background 180ms ease, border-color 180ms ease; }
-.testimonial-selector__person > span { display: grid; width: 1.72rem; height: 1.72rem; place-items: center; border-radius: 50%; background: var(--paper); font-size: .62rem; }
-.testimonial-selector__person--active, .testimonial-selector__person:hover, .testimonial-selector__person:focus-visible { border-color: var(--ink); background: var(--ink); color: var(--paper); outline: 0; }
-.testimonial-selector__person:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+.testimonial-selector__people { display: flex; flex-wrap: wrap; justify-content: center; gap: .55rem; margin-top: 1.65rem; }
+.testimonial-selector__person { display: inline-flex; align-items: center; min-height: 2.65rem; padding: .35rem .8rem .35rem .4rem; border: 1px solid var(--rule); border-radius: 999px; background: transparent; color: var(--ink); font: .74rem/1 var(--font-mono), monospace; transition: color 180ms ease, background 180ms ease, border-color 180ms ease; }
+.testimonial-selector__avatar { display: grid; width: 1.72rem; height: 1.72rem; place-items: center; overflow: hidden; border-radius: 50%; background: var(--paper); color: var(--ink); font-size: .62rem; }
+.testimonial-selector__avatar img { width: 100%; height: 100%; object-fit: cover; }
+.testimonial-selector__avatar:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+.testimonial-selector__person button { padding: 0 0 0 .55rem; border: 0; background: transparent; color: inherit; cursor: pointer; font: inherit; }
+.testimonial-selector__person--active, .testimonial-selector__person:hover, .testimonial-selector__person:focus-within { border-color: var(--ink); background: var(--ink); color: var(--paper); outline: 0; }
+.testimonial-selector__person button:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
 .empty-copy {
   color: var(--muted);
   font-family: var(--font-mono), monospace;
@@ -888,12 +895,14 @@ body:has(.site-header .nav-cell:hover) main {
 .name-say__play:disabled { color: var(--muted); cursor: default; border-bottom-color: transparent; }
 .name-say__play:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
 .origin-map {
-  max-width: 52rem;
+  max-width: min(70rem, 100%);
   margin: 0;
 }
 .origin-map h2 {
-  max-width: 11ch;
+  max-width: none;
   margin: 0 0 2rem;
+  font-size: clamp(2.8rem, 4.1vw, 4.5rem);
+  white-space: nowrap;
 }
 .origin-map__distance {
   display: inline-flex;
@@ -1471,6 +1480,7 @@ a.text-button { display: inline-block; }
   .home-portrait-opening__image { object-position: 50% 52%; }
   .home-portrait-opening h1 { font-size: clamp(4.6rem, 18vw, 8rem); }
   .strava-snapshot__stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .origin-map h2 { white-space: normal; }
   .opening { min-height: 0; }
   .opening h1 { margin-top: 0; }
   .opening h1 span { margin-left: 0; }
@@ -1507,6 +1517,8 @@ a.text-button { display: inline-block; }
 
 @media (max-width: 34rem) {
   .strava-snapshot__stats { grid-template-columns: 1fr; }
+  .testimonial-selector__quote > span { left: -.55rem; }
+  .testimonial-selector__quote-close { right: -.55rem; }
 }
 
 @media (max-width: 520px) {

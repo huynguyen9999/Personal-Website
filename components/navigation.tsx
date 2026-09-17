@@ -132,8 +132,8 @@ export function Navigation() {
                 href={link.href}
                 className="nav-item"
                 aria-current={active ? "page" : undefined}
-                aria-expanded={focused === link.href}
-                aria-controls={menuId}
+                aria-expanded={link.items.length ? focused === link.href : undefined}
+                aria-controls={link.items.length ? menuId : undefined}
                 data-focused={focused === link.href}
                 data-muted={focused && focused !== link.href ? "true" : "false"}
                 onClick={() => setOpen(false)}
@@ -148,18 +148,20 @@ export function Navigation() {
                   <span className="nav-corner nav-corner--bottom-right" />
                 </span>
               </NavJump>
-              <div id={menuId} className="nav-dropdown" aria-label={`${link.label} menu`}>
-                <p>{link.note}</p>
-                {link.items.map((item) => (
-                  <NavJump
-                    key={item.label}
-                    href={item.href}
-                    onClick={() => { setOpen(false); setFocused(null); }}
-                  >
-                    {item.label}<span aria-hidden="true">↗</span>
-                  </NavJump>
-                ))}
-              </div>
+              {link.items.length ? (
+                <div id={menuId} className="nav-dropdown" aria-label={`${link.label} menu`}>
+                  <p>{link.note}</p>
+                  {link.items.map((item) => (
+                    <NavJump
+                      key={item.label}
+                      href={item.href}
+                      onClick={() => { setOpen(false); setFocused(null); }}
+                    >
+                      {item.label}<span aria-hidden="true">↗</span>
+                    </NavJump>
+                  ))}
+                </div>
+              ) : null}
             </div>
           );
         })}
