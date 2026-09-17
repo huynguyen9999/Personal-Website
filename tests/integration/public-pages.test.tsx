@@ -92,13 +92,15 @@ describe("public App Router pages", () => {
     expect(screen.getByRole("button", { name: /Building\. Personal website admin\/editor/ })).toBeInTheDocument();
   });
 
-  it("renders Contact with the public email and GitHub", async () => {
+  it("renders Contact as centered direct actions", async () => {
     render(await ContactPage());
 
-    expect(screen.getByRole("heading", { level: 1, name: "Direct, when you want to reach me." })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "let's get in touch." })).toBeInTheDocument();
     const email = screen.getByRole("link", { name: "dominichuyn@gmail.com" });
     expect(email).toHaveAttribute("href", "mailto:dominichuyn@gmail.com");
     expect(document.querySelector('a[href="https://github.com/huynguyen9999"]')).not.toBeNull();
+    expect(document.querySelector('a[href="https://www.linkedin.com/in/huynguyen06"]')).not.toBeNull();
+    expect(screen.queryByText(/GitHub is public/)).not.toBeInTheDocument();
   });
 
   it("renders What I do as engineer, creator, and student", async () => {
@@ -107,6 +109,14 @@ describe("public App Router pages", () => {
     expect(screen.getByRole("heading", { level: 1, name: "MY BEST." })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Engineer" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Creator" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /@huy\.engineer on Instagram/ })).toHaveAttribute(
+      "href",
+      "https://www.instagram.com/huy.engineer/",
+    );
+    expect(screen.getByRole("link", { name: /@huy_engineer on TikTok/ })).toHaveAttribute(
+      "href",
+      "https://www.tiktok.com/@huy_engineer",
+    );
     expect(screen.getByRole("heading", { name: "Student" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Running, outside the classroom." })).toBeInTheDocument();
     const strava = screen.getByRole("link", { name: /View Huy on Strava/ });
@@ -117,6 +127,11 @@ describe("public App Router pages", () => {
     expect(screen.getByRole("link", { name: "Peter Sutherland on LinkedIn" })).toHaveAttribute(
       "href",
       "https://www.linkedin.com/in/sutherlandpb/",
+    );
+    expect(screen.getByRole("button", { name: "Harshit Sharma" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Harshit Sharma on LinkedIn" })).toHaveAttribute(
+      "href",
+      "https://www.linkedin.com/in/hsharma369/",
     );
     expect(screen.getByText("RECOMMENDATIONS")).toBeInTheDocument();
     expect(document.getElementById("resume")).toBeNull();

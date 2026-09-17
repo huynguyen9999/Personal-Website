@@ -52,7 +52,8 @@ describe("content fallbacks", () => {
     expect(now.body).toMatch(/Electrical engineering at UC Santa Barbara/);
 
     const contact = getFallbackSection("contact-opening");
-    expect(contact.body).toMatch(/GitHub is public/);
+    expect(contact.title).toBe("let's get in touch.");
+    expect(contact.body).toBe("");
   });
 });
 

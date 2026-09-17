@@ -35,7 +35,7 @@ export function HomePortraitOpening() {
       opening.style.setProperty("--portrait-scroll-offset", `${imageOffset.toFixed(1)}px`);
       opening.style.setProperty("--portrait-title-offset", `${(settings.titleTravel * progress).toFixed(1)}px`);
       opening.style.setProperty("--portrait-image-scale", imageScale.toFixed(3));
-      opening.style.setProperty("--portrait-wash-opacity", (0.9 + progress * 0.1).toFixed(3));
+      opening.style.setProperty("--portrait-wash-opacity", (0.82 + progress * 0.1).toFixed(3));
     };
     const onScroll = () => {
       if (!animationFrame) animationFrame = window.requestAnimationFrame(updatePosition);

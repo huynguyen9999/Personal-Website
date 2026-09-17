@@ -61,6 +61,14 @@ test.describe("public archive smoke", () => {
     await page.getByRole("heading", { name: "Engineer" }).scrollIntoViewIfNeeded();
     await expect(page.getByRole("heading", { name: "Engineer" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Creator" })).toBeVisible();
+    await expect(page.getByRole("link", { name: /@huy\.engineer on Instagram/ })).toHaveAttribute(
+      "href",
+      "https://www.instagram.com/huy.engineer/",
+    );
+    await expect(page.getByRole("link", { name: /@huy_engineer on TikTok/ })).toHaveAttribute(
+      "href",
+      "https://www.tiktok.com/@huy_engineer",
+    );
     await expect(page.getByRole("heading", { name: "Student" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Running, outside the classroom." })).toBeVisible();
     await expect(page.getByRole("link", { name: /View Huy on Strava/ })).toHaveAttribute(
@@ -71,6 +79,11 @@ test.describe("public archive smoke", () => {
     await expect(page.getByRole("link", { name: "Peter Sutherland on LinkedIn" })).toHaveAttribute(
       "href",
       "https://www.linkedin.com/in/sutherlandpb/",
+    );
+    await expect(page.getByRole("button", { name: "Harshit Sharma" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Harshit Sharma on LinkedIn" })).toHaveAttribute(
+      "href",
+      "https://www.linkedin.com/in/hsharma369/",
     );
     await expect(page.locator("#resume")).toHaveCount(0);
 

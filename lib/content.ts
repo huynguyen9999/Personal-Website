@@ -115,9 +115,9 @@ export const editableSections: EditableSection[] = [
     slug: "contact-opening",
     label: "Contact page",
     eyebrow: "CONTACT",
-    title: "Direct, when you want to reach me.",
+    title: "let's get in touch.",
     summary: "",
-    body: "GitHub is public. Email is the direct line; other channels will appear here when they are meant to be public.",
+    body: "",
   },
 ];
 

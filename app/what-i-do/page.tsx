@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { CreatorSocialLinks } from "@/components/creator-social-links";
 import { PracticeStack } from "@/components/practice-stack";
 import { StravaSnapshot } from "@/components/strava-snapshot";
 import { Testimonials } from "@/components/ui/unique-testimonial";
@@ -53,7 +54,11 @@ export default async function WhatIDoPage() {
           practices={practices.map((practice) => ({
             ...practice,
             photos: photosForSlot(photos, practice.slot),
-            supplement: practice.id === "student" ? <StravaSnapshot stats={stravaStats} /> : undefined,
+            supplement: practice.id === "student"
+              ? <StravaSnapshot stats={stravaStats} />
+              : practice.id === "creator"
+                ? <CreatorSocialLinks />
+                : undefined,
           }))}
         />
 
@@ -65,9 +70,17 @@ export default async function WhatIDoPage() {
               quote: "He showed meticulous attention to detail while simultaneously demonstrating the flexibility to learn and try new things. In his capstone project he presented on the core challenges of developing software for non-deterministic systems.",
               author: "Peter Sutherland",
               role: "Engineering Leader · AI Native Development & LLM Integration",
-              sourceUrl: "https://www.linkedin.com/in/huynguyen06",
+              sourceUrl: "https://www.linkedin.com/in/sutherlandpb/",
               profileUrl: "https://www.linkedin.com/in/sutherlandpb/",
               avatarSrc: "/images/peter-sutherland.png",
+            }, {
+              id: "harshit-sharma",
+              quote: "During his internship, what stood out was his combination of technical curiosity and execution excellence – he not only asked the right questions to fully understand problems, but also reliably delivered on implementation tasks within project timelines.",
+              author: "Harshit Sharma",
+              role: "Senior SDE · Amazon",
+              sourceUrl: "https://www.linkedin.com/in/hsharma369/",
+              profileUrl: "https://www.linkedin.com/in/hsharma369/",
+              avatarSrc: "/images/harshit-sharma.jpg",
             }]}
           />
         </section>

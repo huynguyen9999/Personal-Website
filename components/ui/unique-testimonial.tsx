@@ -47,7 +47,7 @@ export function Testimonials({ testimonials }: { testimonials: readonly Testimon
         <p>{active.role}</p>
         {active.sourceUrl ? <a href={active.sourceUrl} target="_blank" rel="noreferrer">View recommendation ↗</a> : null}
       </div>
-      <div className="testimonial-selector__people" aria-label="Select a testimonial">
+      <div className="testimonial-selector__people" aria-label="Select a recommendation">
         {testimonials.map((testimonial, index) => {
           const isActive = index === activeIndex;
           const initials = testimonial.author.split(" ").map((part) => part[0]).join("");
