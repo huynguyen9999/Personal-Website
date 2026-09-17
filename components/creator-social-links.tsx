@@ -1,5 +1,7 @@
 import { Instagram, Music2 } from "lucide-react";
 
+import { LiquidGlassButton } from "@/components/ui/liquid-glass-button";
+
 const socialProfiles = [
   {
     href: "https://www.instagram.com/huy.engineer/",
@@ -17,11 +19,13 @@ export function CreatorSocialLinks() {
   return (
     <nav className="creator-social-links" aria-label="Huy Nguyen creator profiles">
       {socialProfiles.map(({ href, label, Icon }) => (
-        <a key={href} href={href} target="_blank" rel="noreferrer">
-          <Icon aria-hidden="true" size={16} strokeWidth={1.6} />
-          <span>{label}</span>
-          <span aria-hidden="true">↗</span>
-        </a>
+        <LiquidGlassButton key={href} asChild size="compact">
+          <a href={href} target="_blank" rel="noopener noreferrer">
+            <Icon aria-hidden="true" size={16} strokeWidth={1.6} />
+            <span>{label}</span>
+            <span aria-hidden="true">↗</span>
+          </a>
+        </LiquidGlassButton>
       ))}
     </nav>
   );

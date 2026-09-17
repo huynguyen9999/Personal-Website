@@ -1,6 +1,7 @@
 import { ExternalLink, Footprints } from "lucide-react";
 
 import { STRAVA_PROFILE_URL, type ActivityTotal, type StravaStats } from "@/lib/strava";
+import { LiquidGlassButton } from "@/components/ui/liquid-glass-button";
 
 function miles(meters: number) {
   return new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(meters / 1_609.344);
@@ -37,9 +38,11 @@ export function StravaSnapshot({ stats }: { stats: StravaStats | null }) {
           <Metric label="ALL-TIME RUN" total={stats.allTimeRun} value={`${miles(stats.allTimeRun.distanceMeters)} mi`} />
         </dl>
       ) : null}
-      <a className="strava-snapshot__link" href={STRAVA_PROFILE_URL} target="_blank" rel="noreferrer">
-        View Huy on Strava <ExternalLink aria-hidden="true" size={14} />
-      </a>
+      <LiquidGlassButton asChild size="compact">
+        <a className="strava-snapshot__link" href={STRAVA_PROFILE_URL} target="_blank" rel="noopener noreferrer">
+          View Huy on Strava <ExternalLink aria-hidden="true" size={14} />
+        </a>
+      </LiquidGlassButton>
     </aside>
   );
 }

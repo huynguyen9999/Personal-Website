@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { bookShelves, shelfSlug, type BookShelf, type LibraryBook } from "@/lib/books";
 import { InteractiveBookCover } from "@/components/interactive-book-cover";
+import { LiquidGlassButton } from "@/components/ui/liquid-glass-button";
 
 export function ReadingShelf({
   books,
@@ -20,15 +21,16 @@ export function ReadingShelf({
         {bookShelves.map((shelf) => {
           const count = books.filter((book) => book.shelf === shelf.id).length;
           return (
-            <Link
-              key={shelf.id}
-              href={`${hrefBase}?shelf=${shelf.slug}`}
-              aria-current={activeShelf === shelf.id ? "page" : undefined}
-              scroll={false}
-            >
-              <span>{shelf.label}</span>
-              <span aria-label={`${count} books`}>{String(count).padStart(2, "0")}</span>
-            </Link>
+            <LiquidGlassButton key={shelf.id} asChild size="compact">
+              <Link
+                href={`${hrefBase}?shelf=${shelf.slug}`}
+                aria-current={activeShelf === shelf.id ? "page" : undefined}
+                scroll={false}
+              >
+                <span>{shelf.label}</span>
+                <span aria-label={`${count} books`}>{String(count).padStart(2, "0")}</span>
+              </Link>
+            </LiquidGlassButton>
           );
         })}
       </div>

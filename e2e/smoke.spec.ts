@@ -50,6 +50,7 @@ test.describe("public archive smoke", () => {
       "href",
       "mailto:dominichuyn@gmail.com",
     );
+    await expect(page.getByRole("link", { name: "dominichuyn@gmail.com" })).toHaveClass(/liquid-glass-button/);
     await expect(page.getByRole("navigation", { name: "Footer" }).getByRole("link", { name: /GitHub/ })).toBeVisible();
   });
 
@@ -65,6 +66,7 @@ test.describe("public archive smoke", () => {
       "href",
       "https://www.instagram.com/huy.engineer/",
     );
+    await expect(page.getByRole("link", { name: /@huy\.engineer on Instagram/ })).toHaveClass(/liquid-glass-button/);
     await expect(page.getByRole("link", { name: /@huy_engineer on TikTok/ })).toHaveAttribute(
       "href",
       "https://www.tiktok.com/@huy_engineer",
@@ -75,6 +77,7 @@ test.describe("public archive smoke", () => {
       "href",
       "https://www.strava.com/athletes/45200919",
     );
+    await expect(page.getByRole("button", { name: "All threads" })).toHaveClass(/liquid-glass-button/);
     await expect(page.getByText(/He showed meticulous attention to detail/)).toBeVisible();
     await expect(page.getByRole("link", { name: "Peter Sutherland on LinkedIn" })).toHaveAttribute(
       "href",
@@ -108,6 +111,7 @@ test.describe("public archive smoke", () => {
 
   test("reading shelves preserve curated links and switch without live metadata", async ({ page }) => {
     await page.goto("/reading");
+    await expect(page.getByRole("link", { name: /Already read/ })).toHaveClass(/liquid-glass-button/);
     await expect(page.getByRole("link", { name: /View on Goodreads/ }).first()).toHaveAttribute(
       "href",
       "https://www.goodreads.com/book/show/43097201",
@@ -144,6 +148,22 @@ test.describe("public archive smoke", () => {
       await expect.poll(() => opening.evaluate((node) => Number(node.style.getPropertyValue("--portrait-progress")))).toBeGreaterThan(0);
       await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
     }
+  });
+
+  test("liquid-glass actions stay touch-safe on a narrow viewport", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/contact");
+
+    const contactActions = page.locator(".contact-channels .liquid-glass-button");
+    await expect(contactActions).toHaveCount(3);
+    for (const action of await contactActions.all()) {
+      const box = await action.boundingBox();
+      expect(box).not.toBeNull();
+      expect(box!.height).toBeGreaterThanOrEqual(44);
+      expect(box!.x).toBeGreaterThanOrEqual(0);
+      expect(box!.x + box!.width).toBeLessThanOrEqual(390);
+    }
+    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   });
 
   test("the life-in-progress photo uses the desktop side column and mobile reading flow", async ({ page }) => {

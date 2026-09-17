@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
+import { LiquidGlassButton } from "@/components/ui/liquid-glass-button";
 import styles from "./identity-map.module.css";
 
 type NodeId = "vietnam" | "california" | "travels" | "ucsb" | "engineering" | "tennis" | "reading" | "cars-bikes" | "games-internet" | "content" | "making";
@@ -101,9 +102,16 @@ export function IdentityMap() {
 
       <div className={styles.filters} aria-label="Filter identity map">
         {(Object.keys(threadLabels) as ThreadFilter[]).map((thread) => (
-          <button key={thread} type="button" aria-pressed={filter === thread} onClick={() => chooseFilter(thread)}>
+          <LiquidGlassButton
+            key={thread}
+            className={styles.filterButton}
+            size="compact"
+            type="button"
+            aria-pressed={filter === thread}
+            onClick={() => chooseFilter(thread)}
+          >
             {threadLabels[thread]}
-          </button>
+          </LiquidGlassButton>
         ))}
       </div>
 

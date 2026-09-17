@@ -3,7 +3,7 @@ import { createPublicClient } from "@/lib/supabase/public";
 
 export const bookShelves = [
   { id: "currently_reading", slug: "currently-reading", label: "Currently reading" },
-  { id: "read", slug: "read", label: "Read" },
+  { id: "read", slug: "read", label: "Already read" },
   { id: "reading_next", slug: "reading-next", label: "Reading next" },
 ] as const;
 

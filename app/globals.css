@@ -79,6 +79,37 @@ button, input, textarea { font: inherit; caret-color: var(--ink); }
 ::selection { color: var(--selection-ink); background: var(--selection); }
 ::-moz-selection { color: var(--selection-ink); background: var(--selection); }
 
+.liquid-glass-button {
+  position: relative;
+  z-index: 0;
+  display: inline-flex;
+  min-height: 2.85rem;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--ink) 28%, transparent);
+  border-radius: .25rem;
+  background: color-mix(in srgb, var(--paper) 56%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--paper) 72%, transparent), inset 0 -1px 0 color-mix(in srgb, var(--ink) 12%, transparent), 0 5px 18px color-mix(in srgb, var(--ink) 7%, transparent);
+  color: var(--ink);
+  cursor: pointer;
+  isolation: isolate;
+  text-decoration: none;
+  transition: border-color 180ms ease, box-shadow 180ms ease, color 180ms ease, transform 180ms ease;
+  -webkit-backdrop-filter: blur(14px) saturate(115%);
+  backdrop-filter: blur(14px) saturate(115%);
+}
+.liquid-glass-button::before,
+.liquid-glass-button::after { position: absolute; z-index: -1; content: ""; pointer-events: none; }
+.liquid-glass-button::before { inset: 1px; background: linear-gradient(135deg, color-mix(in srgb, var(--paper) 70%, transparent), color-mix(in srgb, var(--paper) 12%, transparent) 48%, color-mix(in srgb, var(--lavender) 18%, transparent)); }
+.liquid-glass-button::after { inset: auto 0 0; height: 42%; background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--ink) 6%, transparent)); }
+.liquid-glass-button--compact { min-height: 2.85rem; }
+.liquid-glass-button--default { min-height: 3.25rem; }
+.liquid-glass-button__content { display: inline-flex; width: 100%; align-items: center; justify-content: center; gap: .5rem; padding: .7rem .95rem; font: .72rem/1.2 var(--font-mono), monospace; letter-spacing: .04em; }
+.liquid-glass-button:hover { border-color: color-mix(in srgb, var(--signal) 65%, var(--ink)); box-shadow: inset 0 1px 0 color-mix(in srgb, var(--paper) 86%, transparent), inset 0 -1px 0 color-mix(in srgb, var(--ink) 16%, transparent), 0 8px 24px color-mix(in srgb, var(--signal) 18%, transparent); transform: translateY(-1px); }
+.liquid-glass-button:active { box-shadow: inset 0 2px 4px color-mix(in srgb, var(--ink) 16%, transparent); transform: translateY(1px); }
+.liquid-glass-button:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+
 .skip-link {
   position: fixed;
   z-index: 100;
@@ -834,24 +865,16 @@ body:has(.site-header .nav-cell:hover) main {
 }
 .strava-snapshot__link:hover, .strava-snapshot__link:focus-visible { color: var(--signal); text-decoration: underline; text-underline-offset: .35rem; }
 .creator-social-links { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 2rem; }
-.creator-social-links a {
+.creator-social-links .liquid-glass-button {
   display: inline-flex;
   flex: 1 1 15rem;
   align-items: center;
   justify-content: space-between;
   gap: .65rem;
   min-height: 2.9rem;
-  padding: .7rem .85rem;
-  border: 1px solid var(--rule);
-  color: var(--ink);
-  font: .7rem/1.2 var(--font-mono), monospace;
-  letter-spacing: .04em;
-  text-decoration: none;
-  transition: background 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease;
 }
-.creator-social-links a span:nth-child(2) { margin-right: auto; }
-.creator-social-links a:hover, .creator-social-links a:focus-visible { border-color: var(--ink); background: var(--ink); color: var(--paper); outline: 0; transform: translateY(-1px); }
-.creator-social-links a:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+.creator-social-links .liquid-glass-button { justify-content: flex-start; }
+.creator-social-links .liquid-glass-button > span:nth-child(2) { margin-right: auto; }
 .practice-links#testimonials { display: block; text-align: center; }
 .practice-links#testimonials > .eyebrow { margin: 0; }
 .testimonial-selector { margin-top: clamp(2rem, 4vw, 3.5rem); }
@@ -1109,9 +1132,7 @@ body:has(.site-header .nav-cell:hover) main {
 .contact-page h1 { max-width: 14ch; margin-top: 2.5rem; }
 .contact-page .quiet-intro { margin: 1.5rem auto 0; }
 .contact-channels { display: flex; flex-wrap: wrap; justify-content: center; gap: .75rem; max-width: 44rem; margin: 2rem auto 0; }
-.contact-channels a { display: inline-flex; align-items: center; gap: .45rem; min-height: 2.85rem; padding: .7rem .95rem; border: 1px solid var(--rule); color: var(--ink); font: .72rem/1.2 var(--font-mono), monospace; letter-spacing: .04em; text-decoration: none; transition: background 180ms ease, color 180ms ease, border-color 180ms ease; }
-.contact-channels a:hover, .contact-channels a:focus-visible { border-color: var(--ink); background: var(--ink); color: var(--paper); outline: 0; }
-.contact-channels a:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+.contact-channels .liquid-glass-button { flex: 0 1 auto; }
 .empty-ledger { display: grid; grid-template-columns: .5fr 1fr 2fr; gap: 2rem; margin-top: 8rem; padding: 1.5rem 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
 .empty-ledger span { font: clamp(2rem, 4vw, 4rem)/1 var(--font-serif); }
 .empty-ledger p, .empty-ledger small { margin: .3rem 0 0; }
@@ -1144,32 +1165,31 @@ body:has(.site-header .nav-cell:hover) main {
   border-top: 1px solid var(--rule);
   border-left: 1px solid var(--rule);
 }
-.shelf-tabs a {
+.shelf-tabs .liquid-glass-button {
   display: flex;
   min-height: 3.5rem;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: .8rem 1rem;
-  border-right: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
+  border-radius: 0;
   color: var(--muted);
   font-family: var(--font-mono), monospace;
   font-size: .67rem;
   letter-spacing: .04em;
   text-transform: uppercase;
-  transition: color 180ms ease, background 180ms ease;
 }
-.shelf-tabs a:hover,
-.shelf-tabs a:focus-visible {
+.shelf-tabs .liquid-glass-button:hover,
+.shelf-tabs .liquid-glass-button:focus-visible {
   color: var(--ink);
-  outline: 0;
-  background: color-mix(in srgb, var(--lavender) 16%, transparent);
 }
-.shelf-tabs a[aria-current="page"] {
+.shelf-tabs .liquid-glass-button[aria-current="page"] {
+  border-color: var(--selection);
+  box-shadow: none;
   color: var(--selection-ink);
   background: var(--selection);
 }
+.shelf-tabs .liquid-glass-button[aria-current="page"]::before,
+.shelf-tabs .liquid-glass-button[aria-current="page"]::after { display: none; }
 .shelf-heading {
   display: flex;
   justify-content: space-between;
@@ -1507,7 +1527,7 @@ a.text-button { display: inline-block; }
   .home-portrait-opening h1 { font-size: clamp(4.6rem, 18vw, 8rem); }
   .strava-snapshot__stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .creator-social-links { flex-direction: column; }
-  .creator-social-links a { flex-basis: auto; width: 100%; }
+  .creator-social-links .liquid-glass-button { flex-basis: auto; width: 100%; }
   .origin-map h2 { white-space: normal; }
   .opening { min-height: 0; }
   .opening h1 { margin-top: 0; }

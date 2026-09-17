@@ -24,7 +24,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: `next dev --port ${port} --hostname 127.0.0.1`,
+    command: `next dev --webpack --port ${port} --hostname 127.0.0.1`,
     url: baseURL,
     reuseExistingServer: false,
     timeout: 180_000,

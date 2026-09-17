@@ -46,6 +46,7 @@ describe("ReadingShelf", () => {
   it("shows an honest empty state for shelves with no cached books", () => {
     render(<ReadingShelf books={[atomicHabits]} activeShelf="read" />);
 
+    expect(screen.getByRole("link", { name: /Already read/ })).toBeInTheDocument();
     expect(screen.getByRole("status")).toHaveTextContent("No books on this shelf yet.");
     expect(screen.queryByRole("heading", { name: "Atomic Habits" })).not.toBeInTheDocument();
   });
