@@ -5,6 +5,7 @@ import { createPublicClient } from "@/lib/supabase/public";
 export type EditableSection = {
   slug:
     | "home-opening"
+    | "home-proof"
     | "home-now-teaser"
     | "home-manifesto"
     | HomeFaqSlug
@@ -31,6 +32,14 @@ export const editableSections: EditableSection[] = [
     body: "",
   },
   {
+    slug: "home-proof",
+    label: "Homepage current focus",
+    eyebrow: "CURRENT FOCUS",
+    title: "Electrical engineering at UC Santa Barbara.",
+    summary: "",
+    body: "Studying signals, hardware, and software by following a system closely enough to understand how its pieces hold together.",
+  },
+  {
     slug: "home-now-teaser",
     label: "Homepage Now teaser",
     eyebrow: "NOW / SNAPSHOT",
@@ -42,9 +51,9 @@ export const editableSections: EditableSection[] = [
     slug: "home-manifesto",
     label: "Homepage field note",
     eyebrow: "FIELD NOTE / 01",
-    title: "I’ve always wanted to see what happens behind the scenes.",
+    title: "I tend to start with the part that is hidden.",
     summary: "",
-    body: "As a child, that meant cars, multiplayer games, the internet, and the impulse to break—or “hack”—a system just to understand it. Electrical engineering gave that curiosity a place to become practice.",
+    body: "A car, a circuit, a game, or a piece of software: I want to know what makes it work before deciding what to make with it.",
   },
   {
     slug: "home-faq-english",

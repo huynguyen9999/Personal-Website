@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { Reveal } from "@/components/reveal";
 import { installMatchMedia } from "../helpers";
@@ -58,5 +58,36 @@ describe("Reveal", () => {
     );
 
     expect(screen.getByText("Later").parentElement).toHaveStyle({ transitionDelay: "120ms" });
+  });
+
+  it("reveals content on scroll when IntersectionObserver does not deliver", async () => {
+    installMatchMedia({ "(prefers-reduced-motion: reduce)": false });
+    let top = 1200;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(() => ({
+      top,
+      bottom: top + 80,
+      left: 0,
+      right: 100,
+      width: 100,
+      height: 80,
+      x: 0,
+      y: top,
+      toJSON() {
+        return {};
+      },
+    }));
+    Object.defineProperty(window, "innerHeight", { configurable: true, value: 800 });
+
+    render(
+      <Reveal>
+        <p>Fallback reveal</p>
+      </Reveal>,
+    );
+
+    const node = screen.getByText("Fallback reveal").parentElement;
+    expect(node).toHaveAttribute("data-visible", "false");
+    top = 400;
+    fireEvent.scroll(window);
+    await waitFor(() => expect(node).toHaveAttribute("data-visible", "true"));
   });
 });

@@ -2,6 +2,7 @@
 .next-e2e/
 .next-visual/
 node_modules/
+.pnpm-store/
 .env*
 !.env.example
 .vercel/
@@ -17,4 +18,3 @@ blob-report/
 playwright/.cache/
 coverage/
 public/maplibre/
-

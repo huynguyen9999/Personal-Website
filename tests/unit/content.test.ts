@@ -7,6 +7,7 @@ describe("content fallbacks", () => {
   it("keeps only the blueprint-backed public sections", () => {
     expect(editableSections.map((section) => section.slug)).toEqual([
       "home-opening",
+      "home-proof",
       "home-now-teaser",
       "home-manifesto",
       "home-faq-english",
@@ -38,6 +39,11 @@ describe("content fallbacks", () => {
     expect(opening.accentTitle).toBe("measured in circuits and baselines.");
     expect(opening.summary).toMatch(/Electrical engineering at UC Santa Barbara/);
     expect(opening.summary).toMatch(/Collegiate tennis/);
+
+    const proof = getFallbackSection("home-proof");
+    expect(proof.eyebrow).toBe("CURRENT FOCUS");
+    expect(proof.title).toMatch(/Electrical engineering at UC Santa Barbara/);
+    expect(proof.body).toMatch(/signals, hardware, and software/);
 
     const about = getFallbackSection("about-opening");
     expect(about.body).toMatch(/Ho Chi Minh City/);

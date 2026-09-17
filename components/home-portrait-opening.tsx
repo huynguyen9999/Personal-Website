@@ -4,8 +4,14 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 import homePortrait from "@/public/images/home/huy-at-dusk.jpg";
 
-const PORTRAIT_SCROLL_FACTOR = 0.42;
-const PORTRAIT_MAX_OFFSET = -240;
+const PARALLAX_SETTINGS = {
+  desktop: { imageTravel: -340, imageScale: 1.26, imageScaleAtExit: 1.08, titleTravel: -96 },
+  compact: { imageTravel: -190, imageScale: 1.18, imageScaleAtExit: 1.06, titleTravel: -48 },
+} as const;
+
+function clamp(value: number, minimum: number, maximum: number) {
+  return Math.min(maximum, Math.max(minimum, value));
+}
 
 export function HomePortraitOpening() {
   const openingRef = useRef<HTMLElement>(null);
@@ -19,8 +25,17 @@ export function HomePortraitOpening() {
     const updatePosition = () => {
       animationFrame = 0;
       const { top } = opening.getBoundingClientRect();
-      const offset = Math.max(PORTRAIT_MAX_OFFSET, Math.min(0, top * PORTRAIT_SCROLL_FACTOR));
-      opening.style.setProperty("--portrait-scroll-offset", `${offset}px`);
+      const settings = window.innerWidth <= 980 ? PARALLAX_SETTINGS.compact : PARALLAX_SETTINGS.desktop;
+      const scrollRange = Math.max(window.innerHeight, opening.offsetHeight * 0.85);
+      const progress = clamp(-top / scrollRange, 0, 1);
+      const imageOffset = settings.imageTravel * progress;
+      const imageScale = settings.imageScale + (settings.imageScaleAtExit - settings.imageScale) * progress;
+
+      opening.style.setProperty("--portrait-progress", progress.toFixed(3));
+      opening.style.setProperty("--portrait-scroll-offset", `${imageOffset.toFixed(1)}px`);
+      opening.style.setProperty("--portrait-title-offset", `${(settings.titleTravel * progress).toFixed(1)}px`);
+      opening.style.setProperty("--portrait-image-scale", imageScale.toFixed(3));
+      opening.style.setProperty("--portrait-wash-opacity", (0.9 + progress * 0.1).toFixed(3));
     };
     const onScroll = () => {
       if (!animationFrame) animationFrame = window.requestAnimationFrame(updatePosition);

@@ -21,8 +21,9 @@ const threads = [
 const threadSlots = ["thread-origin", "thread-study", "thread-practice", "thread-public"] as const;
 
 export default async function HomePage() {
-  const [opening, manifesto, now, ...faqSections] = await getPublishedSections([
+  const [opening, proof, manifesto, now, ...faqSections] = await getPublishedSections([
     "home-opening",
+    "home-proof",
     "home-manifesto",
     "home-now-teaser",
     ...homeFaqSlugs,
@@ -37,6 +38,19 @@ export default async function HomePage() {
   return (
     <>
       <HomePortraitOpening />
+
+      <Reveal>
+        <section className="current-focus ruled-section" aria-labelledby="current-focus-title">
+          <p className="section-index">{proof.eyebrow}</p>
+          <div>
+            <h2 id="current-focus-title">{proof.title}</h2>
+            <p>{proof.body}</p>
+            <Link className="text-link" href="/what-i-do">
+              What I do <span aria-hidden="true">↗</span>
+            </Link>
+          </div>
+        </section>
+      </Reveal>
 
       <section className="opening ruled-section" aria-labelledby="opening-title">
         <p className="eyebrow">{opening.eyebrow}</p>
@@ -86,7 +100,7 @@ export default async function HomePage() {
         <section className="threads" aria-labelledby="threads-title">
           <header className="section-heading">
             <p className="eyebrow">ONE TRAJECTORY</p>
-            <h2 id="threads-title">Four practices.<br />One current rhythm.</h2>
+            <h2 id="threads-title">Four practices.<br />One way of paying attention.</h2>
           </header>
           <div className="thread-list">
             {threads.map(([number, title, copy], index) => (
@@ -105,14 +119,14 @@ export default async function HomePage() {
         <section className="route-section ruled-section" aria-labelledby="route-title">
           <p className="section-index">CONTINUE</p>
           <div>
-            <h2 id="route-title">Two places, without reducing either to a chapter heading.</h2>
-            <p>Story holds the biographical route. Reading holds the shelf. Now is the dated, changeable present.</p>
+            <h2 id="route-title">Keep following the thread.</h2>
+            <p>Learn the story, see what I do, or start a conversation.</p>
             <div className="continue-links">
               <Link className="text-link" href="/about">
                 Story <span aria-hidden="true">↗</span>
               </Link>
-              <Link className="text-link" href="/reading">
-                Reading <span aria-hidden="true">↗</span>
+              <Link className="text-link" href="/what-i-do">
+                What I do <span aria-hidden="true">↗</span>
               </Link>
               <Link className="text-link" href="/contact">
                 Contact <span aria-hidden="true">↗</span>

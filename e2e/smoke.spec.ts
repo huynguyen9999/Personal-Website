@@ -5,6 +5,9 @@ test.describe("public archive smoke", () => {
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1, name: "huy nguyen." })).toBeVisible();
     await expect(page.getByAltText("Huy Nguyen standing on a beach at dusk.")).toBeVisible();
+    await expect(page.getByText("CURRENT FOCUS")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Electrical engineering at UC Santa Barbara." })).toBeVisible();
+    await expect(page.getByRole("link", { name: /What I do/ }).first()).toHaveAttribute("href", "/what-i-do");
     await expect(page.getByRole("heading", { level: 1, name: /A life in progress/ })).toBeVisible();
     await expect(page.getByRole("heading", { name: /A short signal from the present/ })).toBeVisible();
     await expect(page.getByRole("button", { name: /Building\. Personal website admin\/editor/ })).toBeVisible();
@@ -108,6 +111,20 @@ test.describe("public archive smoke", () => {
 
     await page.getByRole("button", { name: "light" }).click();
     await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+    await expect(page.locator("html")).toHaveCSS("--selection", "#ff2800");
+  });
+
+  test("home has no horizontal overflow and the opening responds to scroll", async ({ page }) => {
+    for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
+      await page.setViewportSize(viewport);
+      await page.goto("/");
+      await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+      const opening = page.locator(".home-portrait-opening");
+      await page.evaluate(() => window.scrollTo(0, Math.round(window.innerHeight * 0.7)));
+      await expect.poll(() => opening.evaluate((node) => Number(node.style.getPropertyValue("--portrait-progress")))).toBeGreaterThan(0);
+      await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    }
   });
 
   test("header collapses on scroll down and returns on scroll up", async ({ page }) => {

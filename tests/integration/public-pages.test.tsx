@@ -17,11 +17,14 @@ describe("public App Router pages", () => {
     delete process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
   });
 
-  it("renders the original homepage sequence plus the identity map", async () => {
+  it("renders the homepage as a personal archive with a compact engineering proof", async () => {
     render(await HomePage());
 
     expect(screen.getByRole("heading", { level: 1, name: "huy nguyen." })).toBeInTheDocument();
     expect(screen.getByAltText("Huy Nguyen standing on a beach at dusk.")).toBeInTheDocument();
+    expect(screen.getByText("CURRENT FOCUS")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Electrical engineering at UC Santa Barbara." })).toBeInTheDocument();
+    expect(screen.getAllByRole("link", { name: /What I do/ })[0]).toHaveAttribute("href", "/what-i-do");
     expect(screen.getByRole("heading", { level: 1, name: /A life in progress/ })).toBeInTheDocument();
     expect(screen.getByText("HO CHI MINH CITY → CALIFORNIA")).toBeInTheDocument();
     expect(screen.getByText("measured in circuits and baselines.")).toBeInTheDocument();
@@ -36,9 +39,9 @@ describe("public App Router pages", () => {
     expect(screen.getByRole("heading", { name: /One life, seen through its connections/ })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Engineering" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Cars & bikes" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /I’ve always wanted to see what happens behind the scenes/ })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /Four practices/ })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /Two places, without reducing either/ })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /I tend to start with the part that is hidden/ })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Four practices\.\s*One way of paying attention/ })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Keep following the thread." })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Quick answers" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /How did you learn English/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /The present tense/ })).toHaveAttribute("href", "/now");

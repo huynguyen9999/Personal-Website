@@ -20,25 +20,42 @@ export function Reveal({
       return;
     }
 
-    const show = () => setVisible(true);
+    let observer: IntersectionObserver | null = null;
+    const show = () => {
+      setVisible(true);
+      observer?.disconnect();
+    };
+    const isNearViewport = () => node.getBoundingClientRect().top < window.innerHeight * 0.92;
 
-    if (node.getBoundingClientRect().top < window.innerHeight * 0.92) {
+    if (isNearViewport()) {
       const outer = window.requestAnimationFrame(() => {
         window.requestAnimationFrame(show);
       });
       return () => window.cancelAnimationFrame(outer);
     }
 
-    const observer = new IntersectionObserver(
+    const revealOnViewportChange = () => {
+      if (isNearViewport()) show();
+    };
+
+    observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
         show();
-        observer.disconnect();
       },
       { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
     );
     observer.observe(node);
-    return () => observer.disconnect();
+    // IntersectionObserver is the primary path. The scroll check is a small
+    // native fallback for embedded/local browser contexts where it can miss a callback.
+    window.addEventListener("scroll", revealOnViewportChange, { passive: true });
+    window.addEventListener("resize", revealOnViewportChange);
+
+    return () => {
+      observer?.disconnect();
+      window.removeEventListener("scroll", revealOnViewportChange);
+      window.removeEventListener("resize", revealOnViewportChange);
+    };
   }, []);
 
   const style: CSSProperties | undefined = delayMs ? { transitionDelay: `${delayMs}ms` } : undefined;
