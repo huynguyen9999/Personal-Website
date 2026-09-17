@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Mono, Instrument_Serif, Inter } from "next/font/google";
+import { IBM_Plex_Mono, Instrument_Serif, Inter, Permanent_Marker } from "next/font/google";
 import { Navigation } from "@/components/navigation";
 import { CursorTrail } from "@/components/cursor-trail";
 import "./globals.css";
@@ -15,6 +15,11 @@ const mono = IBM_Plex_Mono({
   subsets: ["latin"],
   weight: ["400", "500"],
   variable: "--font-mono",
+});
+const handwriting = Permanent_Marker({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-handwriting",
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://thehobbiest.vercel.app";
@@ -58,7 +63,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${serif.variable} ${sans.variable} ${mono.variable}`}
+      className={`${serif.variable} ${sans.variable} ${mono.variable} ${handwriting.variable}`}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >

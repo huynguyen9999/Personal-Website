@@ -50,7 +50,8 @@ test.describe("public archive smoke", () => {
       "href",
       "mailto:dominichuyn@gmail.com",
     );
-    await expect(page.getByRole("link", { name: "dominichuyn@gmail.com" })).toHaveClass(/liquid-glass-button/);
+    await expect(page.getByAltText("Sunset over a rocky beach.")).toBeVisible();
+    await expect(page.getByText("“What you’re thinking is what you’re becoming.”")).toBeVisible();
     await expect(page.getByRole("navigation", { name: "Footer" }).getByRole("link", { name: /GitHub/ })).toBeVisible();
   });
 
@@ -150,16 +151,16 @@ test.describe("public archive smoke", () => {
     }
   });
 
-  test("liquid-glass actions stay touch-safe on a narrow viewport", async ({ page }) => {
+  test("contact details stay readable on a narrow viewport", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/contact");
 
-    const contactActions = page.locator(".contact-channels .liquid-glass-button");
+    const contactActions = page.locator(".contact-channels a");
     await expect(contactActions).toHaveCount(3);
     for (const action of await contactActions.all()) {
       const box = await action.boundingBox();
       expect(box).not.toBeNull();
-      expect(box!.height).toBeGreaterThanOrEqual(48);
+      expect(box!.height).toBeGreaterThanOrEqual(44);
       expect(box!.x).toBeGreaterThanOrEqual(0);
       expect(box!.x + box!.width).toBeLessThanOrEqual(390);
       expect(await action.evaluate((node) => node.scrollWidth <= node.clientWidth)).toBe(true);

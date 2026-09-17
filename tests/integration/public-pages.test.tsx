@@ -98,8 +98,12 @@ describe("public App Router pages", () => {
     expect(screen.getByRole("heading", { level: 1, name: "let's get in touch." })).toBeInTheDocument();
     const email = screen.getByRole("link", { name: "dominichuyn@gmail.com" });
     expect(email).toHaveAttribute("href", "mailto:dominichuyn@gmail.com");
+    expect(screen.getByAltText("Sunset over a rocky beach.")).toBeInTheDocument();
+    expect(screen.getByText("“What you’re thinking is what you’re becoming.”")).toBeInTheDocument();
+    expect(screen.getByText("— Muhammad Ali")).toBeInTheDocument();
     expect(document.querySelector('a[href="https://github.com/huynguyen9999"]')).not.toBeNull();
     expect(document.querySelector('a[href="https://www.linkedin.com/in/huynguyen06"]')).not.toBeNull();
+    expect(document.querySelector(".contact-channels .liquid-glass-button")).toBeNull();
     expect(screen.queryByText(/GitHub is public/)).not.toBeInTheDocument();
   });
 
