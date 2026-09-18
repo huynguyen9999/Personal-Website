@@ -8,13 +8,13 @@ import {
   HO_CHI_MINH_CITY,
   originView,
   visitorFromPayload,
-  VISALIA,
+  SANTA_BARBARA,
 } from "@/lib/places";
 
 describe("places", () => {
-  it("treats Visalia 93291 as the present home coordinate", () => {
-    expect(HOME).toEqual(VISALIA);
-    expect(VISALIA.postalCode).toBe("93291");
+  it("treats Santa Barbara 93101 as the present home coordinate", () => {
+    expect(HOME).toEqual(SANTA_BARBARA);
+    expect(SANTA_BARBARA.postalCode).toBe("93101");
     const arc = greatCircleCoordinates(HOME, { lat: 40.71, lon: -74.01 });
     expect(arc[0]?.[0]).toBeCloseTo(HOME.lon, 5);
     expect(arc[0]?.[1]).toBeCloseTo(HOME.lat, 5);
@@ -30,7 +30,7 @@ describe("places", () => {
   });
 
   it("keeps nearby visitors close, then opens to a US-scale region", () => {
-    const nearby = { lat: 36.33, lon: -119.29, label: "Visalia" };
+    const nearby = { lat: 34.43, lon: -119.7, label: "Santa Barbara" };
     const close = originView(nearby, "near");
     const region = originView(nearby, "region");
     expect(close).toMatchObject({ projection: "mercator", zoom: 7.1 });

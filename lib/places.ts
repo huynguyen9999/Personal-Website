@@ -4,15 +4,15 @@ export const HO_CHI_MINH_CITY = {
   lon: 106.6297,
 } as const;
 
-export const VISALIA = {
-  label: "Visalia",
+export const SANTA_BARBARA = {
+  label: "Santa Barbara",
   region: "California",
-  postalCode: "93291",
-  lat: 36.3544,
-  lon: -119.3475,
+  postalCode: "93101",
+  lat: 34.4208,
+  lon: -119.6982,
 } as const;
 
-export const HOME = VISALIA;
+export const HOME = SANTA_BARBARA;
 export const GLOBE_MILES = 2800;
 
 export type GeoPoint = {

@@ -37,7 +37,7 @@ Owner updates copy and photos from `/admin` without a code change. Sign-in is a 
 
 ## Capabilities and Constraints
 
-- Who I am includes a MapLibre globe of the real Earth, pinned to Visalia, CA 93291. Visitor distance is estimated from IP on the server (Vercel geo headers, then IP lookup). The raw IP is never shown.
+- Who I am includes a MapLibre globe of the real Earth, pinned to Santa Barbara, CA 93101. Visitor distance is estimated from IP on the server (Vercel geo headers, then IP lookup). The raw IP is never shown.
 - Homepage: a full-viewport, user-provided dusk-beach portrait opening with lowercase `huy nguyen.`, followed by the original archive sequence (opening, present, manifesto, trajectory, continue) plus the interactive identity map; no V1 ORIGIN / ADAPTATION band.
 - Owner: email/password gate, drafts, publish, Mac photo upload with page/slot placement.
 - Do not invent jobs, internships, tennis records, awards, quotes, metrics, or childhood scenes beyond the blueprint.
@@ -53,7 +53,7 @@ Owner updates copy and photos from `/admin` without a code change. Sign-in is a 
 
 ## Evidence on Hand
 
-See blueprint §14. Confirmed facts only: grew up in Ho Chi Minh City; moved to the U.S. at about 11; studies Electrical Engineering; collegiate tennis at UC Santa Barbara; present map coordinate Visalia, CA 93291; creates social-media content; wants an authenticated editor.
+See blueprint §14. Confirmed facts only: grew up in Ho Chi Minh City; moved to the U.S. at about 11; studies Electrical Engineering; collegiate tennis at UC Santa Barbara; present map coordinate Santa Barbara, CA 93101; creates social-media content; wants an authenticated editor.
 
 ## Product Principles
 

@@ -60,7 +60,7 @@ export function OriginGlobe({ visitor, frame }: { visitor: GeoPoint | null; fram
       }
       homeMarkerRef.current?.remove();
       homeMarkerRef.current = new Marker({
-        element: markerElement("home", "Visalia"),
+        element: markerElement("home", HOME.label),
         anchor: "bottom",
       })
         .setLngLat([HOME.lon, HOME.lat])
@@ -113,7 +113,7 @@ export function OriginGlobe({ visitor, frame }: { visitor: GeoPoint | null; fram
       ref={hostRef}
       className="origin-map__globe"
       role="img"
-      aria-label="Map of Visalia, California and your approximate location from an IP reading"
+      aria-label="Map of Santa Barbara, California and your approximate location from an IP reading"
     />
   );
 }

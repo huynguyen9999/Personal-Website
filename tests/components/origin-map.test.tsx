@@ -11,7 +11,7 @@ describe("OriginMap", () => {
   it("turns the visitor location into the concise dynamic distance heading", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
       ok: true,
-      json: async () => ({ lat: HOME.lat, lon: HOME.lon, city: "Visalia" }),
+      json: async () => ({ lat: HOME.lat, lon: HOME.lon, city: "Santa Barbara" }),
     }));
 
     render(<OriginMap />);
@@ -20,6 +20,6 @@ describe("OriginMap", () => {
       expect(screen.getByRole("heading", { name: "You are 0 miles away from Huy Nguyen" })).toBeInTheDocument();
     });
     expect(screen.queryByText(/Network location is an ISP estimate/)).not.toBeInTheDocument();
-    expect(screen.queryByText(/I’m from Visalia, California/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/I’m from Santa Barbara, California/)).not.toBeInTheDocument();
   });
 });
