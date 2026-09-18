@@ -57,7 +57,11 @@ export function OriginMap() {
   const [results, setResults] = useState<PlaceResult[]>([]);
   const [frame, setFrame] = useState<OriginFrame>("near");
   const [canUseDevice, setCanUseDevice] = useState(false);
-  const miles = useMemo(() => (visitor ? haversineMiles(HOME, visitor) : null), [visitor]);
+  const [drivingMiles, setDrivingMiles] = useState<number | null>(null);
+  const [drivingUnavailable, setDrivingUnavailable] = useState(false);
+  const straightLineMiles = useMemo(() => (visitor ? haversineMiles(HOME, visitor) : null), [visitor]);
+  const miles = drivingMiles ?? straightLineMiles;
+  const distanceLabel = drivingMiles != null ? "driving" : drivingUnavailable ? "straight-line" : "driving";
   const wider = frame === "region";
   const widerLabel = miles != null && miles >= GLOBE_MILES ? "See the world" : "See the region";
   const sourceRef = useRef(source);
@@ -76,6 +80,30 @@ export function OriginMap() {
       localStorage.removeItem(PLACE_STORAGE_KEY);
     }
   }, []);
+
+  useEffect(() => {
+    if (!visitor) {
+      setDrivingMiles(null);
+      setDrivingUnavailable(false);
+      return;
+    }
+    const controller = new AbortController();
+    setDrivingMiles(null);
+    setDrivingUnavailable(false);
+    const params = new URLSearchParams({ lat: String(visitor.lat), lon: String(visitor.lon) });
+    fetch(`/api/driving-distance?${params}`, { signal: controller.signal })
+      .then(async (response) => {
+        if (!response.ok) throw new Error("Driving distance unavailable");
+        const payload = (await response.json()) as { miles?: unknown };
+        const miles = typeof payload.miles === "number" ? payload.miles : Number.NaN;
+        if (!Number.isFinite(miles) || miles < 0) throw new Error("Invalid driving distance");
+        setDrivingMiles(miles);
+      })
+      .catch((error: unknown) => {
+        if (!(error instanceof DOMException && error.name === "AbortError")) setDrivingUnavailable(true);
+      });
+    return () => controller.abort();
+  }, [visitor?.lat, visitor?.lon]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -195,9 +223,14 @@ export function OriginMap() {
   return (
     <figure className="origin-map">
       <h2 id="origin-title">
-        You are <DistanceNumber miles={miles} /> miles away from Huy Nguyen
+        You are <DistanceNumber miles={miles} /> {distanceLabel} miles away from Huy Nguyen
       </h2>
       <OriginGlobe visitor={visitor} frame={frame} />
+      <figcaption>
+        {drivingUnavailable
+          ? "Showing a straight-line distance while driving routes are unavailable."
+          : "Estimated driving distance via OpenStreetMap roads."}
+      </figcaption>
       <div className="origin-map__controls">
         <button
           type="button"
