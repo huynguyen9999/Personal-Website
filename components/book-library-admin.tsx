@@ -78,7 +78,7 @@ export function BookLibraryAdmin({ books }: { books: LibraryBook[] }) {
                       : ""}
                   </p>
                   <a href={book.coverSourceUrl} target="_blank" rel="noopener noreferrer">
-                    Source: {book.coverSource.replace("_", " ")} ↗
+                    Source: {book.coverSource.replace("_", " ")}
                   </a>
                 </div>
               </div>

@@ -143,7 +143,7 @@ export function PresentSnapshot({
         <h2 id="present-title">{title}</h2>
         {log}
         <Link className="text-link" href="/now">
-          The present tense <span aria-hidden="true">↗</span>
+          The present tense
         </Link>
       </div>
     </section>

@@ -143,6 +143,7 @@ test.describe("public archive smoke", () => {
       await page.setViewportSize(viewport);
       await page.goto("/");
       await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+      await expect(page.locator(".continue-links")).not.toContainText("↗");
 
       const opening = page.locator(".home-portrait-opening");
       await page.evaluate(() => window.scrollTo(0, Math.round(window.innerHeight * 0.7)));

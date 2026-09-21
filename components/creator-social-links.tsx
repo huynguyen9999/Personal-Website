@@ -23,7 +23,6 @@ export function CreatorSocialLinks() {
           <a href={href} target="_blank" rel="noopener noreferrer">
             <Icon aria-hidden="true" size={16} strokeWidth={1.6} />
             <span>{label}</span>
-            <span aria-hidden="true">↗</span>
           </a>
         </LiquidGlassButton>
       ))}

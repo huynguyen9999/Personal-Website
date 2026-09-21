@@ -11,7 +11,7 @@ export function SiteFooter() {
         <Link href="/now">Now</Link>
         <Link href="/contact">Contact</Link>
         <a href="https://github.com/huynguyen9999/Personal-Website" target="_blank" rel="noreferrer">
-          GitHub <span aria-hidden="true">↗</span>
+          GitHub
         </a>
       </nav>
     </footer>

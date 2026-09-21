@@ -162,7 +162,7 @@ export function IdentityMap() {
           {related.length > 0 ? (
             <div className={styles.related} aria-label={`Connected to ${activeNode?.label}`}>
               <small>Continue along</small>
-              {related.map((node) => <button key={node.id} type="button" onClick={() => setActive(node.id)}>{node.label} <span aria-hidden="true">↗</span></button>)}
+              {related.map((node) => <button key={node.id} type="button" onClick={() => setActive(node.id)}>{node.label}</button>)}
             </div>
           ) : null}
         </div>

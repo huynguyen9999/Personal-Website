@@ -45,7 +45,7 @@ export function Testimonials({ testimonials }: { testimonials: readonly Testimon
       </div>
       <div className={cn("testimonial-selector__attribution", isAnimating && "testimonial-selector__attribution--changing")}>
         <p>{active.role}</p>
-        {active.sourceUrl ? <a href={active.sourceUrl} target="_blank" rel="noreferrer">View recommendation ↗</a> : null}
+        {active.sourceUrl ? <a href={active.sourceUrl} target="_blank" rel="noreferrer">View recommendation</a> : null}
       </div>
       <div className="testimonial-selector__people" aria-label="Select a recommendation">
         {testimonials.map((testimonial, index) => {

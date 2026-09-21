@@ -157,7 +157,7 @@ export function Navigation() {
                       href={item.href}
                       onClick={() => { setOpen(false); setFocused(null); }}
                     >
-                      {item.label}<span aria-hidden="true">↗</span>
+                      {item.label}
                     </NavJump>
                   ))}
                 </div>

@@ -46,7 +46,7 @@ export default async function HomePage() {
             <h2 id="current-focus-title">{proof.title}</h2>
             <p>{proof.body}</p>
             <Link className="text-link" href="/what-i-do">
-              What I do <span aria-hidden="true">↗</span>
+              What I do
             </Link>
           </div>
         </section>
@@ -123,13 +123,13 @@ export default async function HomePage() {
             <p>Learn the story, see what I do, or start a conversation.</p>
             <div className="continue-links">
               <Link className="text-link" href="/about">
-                Story <span aria-hidden="true">↗</span>
+                Story
               </Link>
               <Link className="text-link" href="/what-i-do">
-                What I do <span aria-hidden="true">↗</span>
+                What I do
               </Link>
               <Link className="text-link" href="/contact">
-                Contact <span aria-hidden="true">↗</span>
+                Contact
               </Link>
             </div>
             <PlacedPhotos photos={photosForSlot(photos, "route")} layout="strip" />

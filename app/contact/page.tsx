@@ -27,11 +27,11 @@ export default async function ContactPage() {
             </a>
             <a href="https://www.linkedin.com/in/huynguyen06" target="_blank" rel="noopener noreferrer">
               <Linkedin aria-hidden="true" size={19} strokeWidth={1.5} />
-              <span>LinkedIn</span><span aria-hidden="true">↗</span>
+              <span>LinkedIn</span>
             </a>
             <a href="https://github.com/huynguyen9999" target="_blank" rel="noopener noreferrer">
               <Github aria-hidden="true" size={19} strokeWidth={1.5} />
-              <span>GitHub</span><span aria-hidden="true">↗</span>
+              <span>GitHub</span>
             </a>
           </nav>
         </div>

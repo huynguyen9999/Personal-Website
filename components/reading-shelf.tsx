@@ -70,7 +70,7 @@ export function ReadingShelf({
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        View on Goodreads <span aria-hidden="true">↗</span>
+                        View on Goodreads
                       </a>
                       <a
                         className="book-card__source"

@@ -1135,10 +1135,9 @@ body:has(.site-header .nav-cell:hover) main {
 .contact-page h1 { max-width: 8ch; margin: 2rem 0 0; }
 .contact-page .quiet-intro { margin: 1.5rem 0 0; }
 .contact-channels { display: grid; gap: 0; width: min(100%, 31rem); margin: clamp(2rem, 4vw, 3.5rem) 0 0; border-top: 1px solid var(--rule); }
-.contact-channels a { display: grid; grid-template-columns: 1.35rem minmax(0, 1fr) auto; align-items: center; gap: .85rem; min-height: 3.65rem; padding: .9rem 0; border-bottom: 1px solid var(--rule); color: var(--ink); font: .82rem/1.25 var(--font-mono), monospace; letter-spacing: .02em; text-decoration: none; transition: color 180ms ease, padding-left 180ms ease; }
+.contact-channels a { display: grid; grid-template-columns: 1.35rem minmax(0, 1fr); align-items: center; gap: .85rem; min-height: 3.65rem; padding: .9rem 0; border-bottom: 1px solid var(--rule); color: var(--ink); font: .82rem/1.25 var(--font-mono), monospace; letter-spacing: .02em; text-decoration: none; transition: color 180ms ease, padding-left 180ms ease; }
 .contact-channels a:hover { padding-left: .45rem; color: var(--selection); }
 .contact-channels a:focus-visible { outline: 2px solid var(--selection); outline-offset: 4px; color: var(--selection); }
-.contact-channels a > span:last-child { color: var(--muted); }
 .contact-page__visual { position: relative; min-height: min(76svh, 58rem); margin: 0; overflow: hidden; background: var(--panel); }
 .contact-page__visual img { object-fit: cover; object-position: center; opacity: .7; }
 .contact-page__visual::after { position: absolute; inset: 0; content: ""; pointer-events: none; background: linear-gradient(180deg, transparent 48%, color-mix(in srgb, #050407 48%, transparent) 100%); }
