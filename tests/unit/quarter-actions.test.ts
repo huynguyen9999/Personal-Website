@@ -6,7 +6,7 @@ import { formDataFrom } from "../helpers";
 describe("quarter admin actions", () => {
   beforeEach(() => {
     vi.unstubAllEnvs();
-    vi.stubEnv("ADMIN_EMAIL", "dominichuyn@gmail.com");
+    vi.stubEnv("ADMIN_USER_ID", "1c9b420d-c7f9-4d65-a22a-1c98b25e42e8");
     vi.mocked(createClient).mockReset();
   });
 

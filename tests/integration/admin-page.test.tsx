@@ -9,7 +9,7 @@ describe("admin page gates", () => {
     vi.unstubAllEnvs();
     delete process.env.NEXT_PUBLIC_SUPABASE_URL;
     delete process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-    delete process.env.ADMIN_EMAIL;
+    delete process.env.ADMIN_USER_ID;
     vi.mocked(createClient).mockReset();
   });
 
@@ -25,7 +25,7 @@ describe("admin page gates", () => {
   it("shows a quiet sign-in gate without owner-access copy", async () => {
     vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "https://example.supabase.co");
     vi.stubEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "sb_publishable_test_not_a_secret");
-    vi.stubEnv("ADMIN_EMAIL", "dominichuyn@gmail.com");
+    vi.stubEnv("ADMIN_USER_ID", "1c9b420d-c7f9-4d65-a22a-1c98b25e42e8");
     vi.mocked(createClient).mockResolvedValue({
       auth: {
         getClaims: async () => ({ data: { claims: null } }),
@@ -48,7 +48,7 @@ describe("admin page gates", () => {
   it("keeps a signed-in non-owner on the login gate without revealing owner status", async () => {
     vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "https://example.supabase.co");
     vi.stubEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "sb_publishable_test_not_a_secret");
-    vi.stubEnv("ADMIN_EMAIL", "dominichuyn@gmail.com");
+    vi.stubEnv("ADMIN_USER_ID", "1c9b420d-c7f9-4d65-a22a-1c98b25e42e8");
     vi.mocked(createClient).mockResolvedValue({
       auth: {
         getClaims: async () => ({ data: { claims: { email: "intruder@example.com", sub: "user-1" } } }),
@@ -63,19 +63,19 @@ describe("admin page gates", () => {
     expect(screen.queryByText("Editorial control room.")).not.toBeInTheDocument();
   });
 
-  it("does not distinguish rate-limit copy from a password oracle", async () => {
+  it("keeps failed sign-in copy generic", async () => {
     vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "https://example.supabase.co");
     vi.stubEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "sb_publishable_test_not_a_secret");
-    vi.stubEnv("ADMIN_EMAIL", "dominichuyn@gmail.com");
+    vi.stubEnv("ADMIN_USER_ID", "1c9b420d-c7f9-4d65-a22a-1c98b25e42e8");
     vi.mocked(createClient).mockResolvedValue({
       auth: {
         getClaims: async () => ({ data: { claims: null } }),
       },
     } as never);
 
-    render(await AdminPage({ searchParams: Promise.resolve({ error: "limited" }) }));
+    render(await AdminPage({ searchParams: Promise.resolve({ error: "failed" }) }));
 
-    expect(screen.getByText("Try again later.")).toBeInTheDocument();
-    expect(screen.queryByText(/too many/i)).not.toBeInTheDocument();
+    expect(screen.getByText("Sign in failed.")).toBeInTheDocument();
+    expect(screen.queryByText(/unauthorized/i)).not.toBeInTheDocument();
   });
 });

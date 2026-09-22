@@ -5,13 +5,13 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import {
-  MEDIA_BUCKET,
+  MEDIA_STAGING_BUCKET,
   mediaPages,
   mediaSlots,
   slotsForPage,
   type PlacedPhoto,
 } from "@/lib/media";
-import { deleteMedia, placeMedia, registerMedia } from "@/app/admin/actions";
+import { deleteMedia, deleteUnplacedMedia, placeMedia, registerMedia } from "@/app/admin/actions";
 
 const MAX_FILE_SIZE = 8 * 1024 * 1024;
 const MAX_FILES = 12;
@@ -65,8 +65,8 @@ function SlotFields({
     <>
       <label>
         Page
-        <select name="page" value={page} onChange={(event) => setPage(event.target.value)}>
-          <option value="">Hidden until placed</option>
+        <select name="page" value={page} onChange={(event) => setPage(event.target.value)} required>
+          <option value="">Choose a page</option>
           {mediaPages.map((item) => (
             <option value={item.id} key={item.id}>{item.label}</option>
           ))}
@@ -74,7 +74,7 @@ function SlotFields({
       </label>
       <label>
         Location on that page
-        <select name="slot" defaultValue={slotValue ?? ""} key={page}>
+        <select name="slot" defaultValue={slotValue ?? ""} key={page} required disabled={!page}>
           <option value="">Choose a location</option>
           {availableSlots.map((item) => (
             <option value={item.id} key={`${item.page}-${item.id}`}>
@@ -165,12 +165,17 @@ export function MediaUploader({ initialMedia }: { initialMedia: PlacedPhoto[] })
 
     const form = document.getElementById("new-media-placement") as HTMLFormElement | null;
     const formData = form ? new FormData(form) : new FormData();
+    if (!String(formData.get("page") || "") || !String(formData.get("slot") || "")) {
+      setMessage("Choose a page and location before uploading.");
+      setUploading(false);
+      return;
+    }
     let uploadedCount = 0;
 
     for (const item of pendingItems) {
       updateItem(item.id, { status: "uploading", error: undefined });
       const objectPath = makeObjectPath(userId, item.file);
-      const { error } = await supabase.storage.from(MEDIA_BUCKET).upload(objectPath, item.file, {
+      const { error } = await supabase.storage.from(MEDIA_STAGING_BUCKET).upload(objectPath, item.file, {
         cacheControl: "31536000",
         contentType: item.file.type,
         upsert: false,
@@ -203,6 +208,7 @@ export function MediaUploader({ initialMedia }: { initialMedia: PlacedPhoto[] })
 
   const completed = items.filter((item) => item.status === "uploaded" || item.status === "error").length;
   const uploadable = items.some((item) => item.status === "ready");
+  const unplacedCount = initialMedia.filter((item) => !item.page || !item.slot).length;
 
   return (
     <section className="media-uploader" aria-labelledby="media-uploader-title">
@@ -269,6 +275,13 @@ export function MediaUploader({ initialMedia }: { initialMedia: PlacedPhoto[] })
             </li>
           ))}
         </ul>
+      )}
+
+      {unplacedCount > 0 && (
+        <form className="media-uploader__legacy" action={deleteUnplacedMedia}>
+          <p>{unplacedCount} legacy {unplacedCount === 1 ? "image is" : "images are"} public but not placed on a page.</p>
+          <button type="submit">Remove unplaced legacy images</button>
+        </form>
       )}
 
       {initialMedia.length > 0 && (

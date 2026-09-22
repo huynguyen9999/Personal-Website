@@ -114,6 +114,13 @@ describe("parseMediaPlacement", () => {
     });
   });
 
+  it("does not create an unplaced media record from empty placement fields", () => {
+    expect(parseMediaPlacement(formDataFrom({ alt: "Unplaced" }))).toMatchObject({
+      page: null,
+      slot: null,
+    });
+  });
+
   it("truncates alt and caption", () => {
     const placement = parseMediaPlacement(
       formDataFrom({

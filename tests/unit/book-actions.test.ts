@@ -11,7 +11,7 @@ vi.mock("@/lib/book-providers", () => ({
 describe("admin book import", () => {
   beforeEach(() => {
     vi.unstubAllEnvs();
-    vi.stubEnv("ADMIN_EMAIL", "dominichuyn@gmail.com");
+    vi.stubEnv("ADMIN_USER_ID", "1c9b420d-c7f9-4d65-a22a-1c98b25e42e8");
     vi.mocked(createClient).mockReset();
     vi.mocked(fetchBookMetadata).mockReset();
   });
@@ -49,7 +49,7 @@ describe("admin book import", () => {
     vi.mocked(createClient).mockResolvedValue({
       auth: {
         getClaims: vi.fn().mockResolvedValue({
-          data: { claims: { sub: "owner-1", email: "dominichuyn@gmail.com" } },
+          data: { claims: { sub: "1c9b420d-c7f9-4d65-a22a-1c98b25e42e8", email: "dominichuyn@gmail.com" } },
         }),
       },
       from: vi.fn(() => ({ insert })),
@@ -78,7 +78,7 @@ describe("admin book import", () => {
 
     expect(fetchBookMetadata).toHaveBeenCalledWith("9781847941831");
     expect(insert).toHaveBeenCalledWith(expect.objectContaining({
-      owner_id: "owner-1",
+      owner_id: "1c9b420d-c7f9-4d65-a22a-1c98b25e42e8",
       isbn13: "9781847941831",
       goodreads_url: "https://www.goodreads.com/book/show/40121378",
       status: "draft",

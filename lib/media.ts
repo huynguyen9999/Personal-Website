@@ -2,6 +2,7 @@ import { hasSupabaseConfig } from "@/lib/supabase/config";
 import { createPublicClient } from "@/lib/supabase/public";
 
 export const MEDIA_BUCKET = "site-media";
+export const MEDIA_STAGING_BUCKET = "site-media-staging";
 
 export const mediaPages = [
   { id: "home", label: "Home", href: "/" },

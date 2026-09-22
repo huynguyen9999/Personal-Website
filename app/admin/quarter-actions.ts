@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { isOwnerEmail, normalizeAdminEmail } from "@/lib/admin";
+import { isOwnerUserId } from "@/lib/admin";
 import { createClient } from "@/lib/supabase/server";
 import {
   QUARTER_KIND,
@@ -17,9 +17,8 @@ async function requireQuarterOwner() {
   const { data } = await supabase.auth.getClaims();
   const claims = data?.claims;
   const ownerId = typeof claims?.sub === "string" ? claims.sub : "";
-  const email = typeof claims?.email === "string" ? normalizeAdminEmail(claims.email) : "";
 
-  if (!ownerId || !isOwnerEmail(email)) redirect("/admin?error=unauthorized");
+  if (!ownerId || !isOwnerUserId(ownerId)) redirect("/admin?error=unauthorized");
   return { supabase, ownerId };
 }
 

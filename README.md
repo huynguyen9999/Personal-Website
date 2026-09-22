@@ -164,7 +164,7 @@ Copy from `.env.example`:
 NEXT_PUBLIC_SITE_URL=https://thehobbiest.vercel.app
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
-ADMIN_EMAIL=
+ADMIN_USER_ID=
 ```
 
 | Variable | Who uses it | What it is |
@@ -172,7 +172,7 @@ ADMIN_EMAIL=
 | `NEXT_PUBLIC_SITE_URL` | App metadata, sitemap, auth email redirect | Canonical site URL |
 | `NEXT_PUBLIC_SUPABASE_URL` | Browser + server | Supabase project URL |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Browser + server | Publishable (anon) key, not the service-role secret |
-| `ADMIN_EMAIL` | Server only | The only email allowed to sign in and mutate content |
+| `ADMIN_USER_ID` | Server only | Immutable Supabase Auth UUID of the only account allowed to mutate content |
 
 Set the same keys in Vercel for production. Never commit `.env.local`. Never put the Supabase service-role key in this app.
 
@@ -180,8 +180,8 @@ Set the same keys in Vercel for production. Never commit `.env.local`. Never put
 
 1. Open `/admin` directly.
 2. A sign-in panel asks for email and password.
-3. The email must match `ADMIN_EMAIL`.
-4. First time: **Create account**, confirm the email if Supabase asks, then sign in.
+3. The authenticated account UUID must match `ADMIN_USER_ID`.
+4. Accounts are created in Supabase by the owner, not through the public site.
 
 Row Level Security also checks the owner email. Failed sign-in is generic on purpose: the page does not say whether the email or password was wrong.
 
@@ -189,31 +189,28 @@ Row Level Security also checks the owner email. Failed sign-in is generic on pur
 
 This is a single-owner archive, not a product with public accounts. `/admin` is kept off the header, out of the sitemap, and out of robots. Auth mutations then apply:
 
-- Per-address burst limit (8 tries / 15 minutes) and hourly cap (20 / hour), plus a global hourly ceiling. A 500-try hour is stopped at the gate and never reaches Supabase.
 - A hidden honeypot field. Bots that fill it get the same generic failure as a bad password.
 - Payload caps on email and password length.
-- Timing-safe owner-email comparison. Non-owner emails never call Supabase Auth.
-- Generic error copy (`Sign in failed.` / `Try again later.`).
+- Timing-safe comparison against the immutable administrator UUID. A successful sign-in does not grant editor access unless it is that account.
+- Generic error copy (`Sign in failed.`).
 - `X-Frame-Options: DENY`, `nosniff`, `no-store` on `/admin`, and `poweredByHeader` disabled.
 
-Supabase Auth still owns password hashing and session cookies. There is no service-role key in this app; public pages cannot write content. Rate limits are in-memory per server isolate, so they are strongest on a warm instance and still block noisy bots. Vercel’s platform DDoS controls sit in front.
+Supabase Auth owns password hashing and session cookies. There is no service-role key in this app; public pages cannot write content. Vercel Firewall provides the durable, multi-instance rate limit for public endpoints; see `SECURITY_SETUP.md` for activation.
 
 ## Apply the photo-library SQL in Supabase
 
-Photo upload and placement need two SQL files applied to project `vqvrwnicifqcmevssgdi`. Do this in the dashboard (no CLI required):
+Photo upload and placement need the migration files in `supabase/migrations/` applied to project `vqvrwnicifqcmevssgdi`. Do this in the dashboard (no CLI required):
 
 1. Open the project: [supabase.com/dashboard/project/vqvrwnicifqcmevssgdi](https://supabase.com/dashboard/project/vqvrwnicifqcmevssgdi).
 2. Sign in if asked.
 3. In the left sidebar, click **SQL Editor**.
 4. Click **New query**.
-5. On your Mac, open `supabase/migrations/20260912183000_media_assets.sql` in this repo. Select all, copy.
+5. On your Mac, open the next unapplied migration in `supabase/migrations/` (including `20260922000000_harden_admin_and_media.sql`). Select all, copy.
 6. Paste into the SQL Editor. Click **Run** (or press Cmd+Enter).
 7. If you see `success` / “Success. No rows returned”, the table exists.
-8. If you see `relation "media_assets" already exists`, that file was already applied. Continue.
-9. Click **New query** again.
-10. Copy all of `supabase/migrations/20260912200000_media_slots_now_contact.sql`, paste, **Run**.
-11. Confirm in **Table Editor** that `public.media_assets` is listed.
-12. Refresh `/admin` on the site. The photo library should load instead of a “not connected” error.
+8. Repeat for every later migration not yet run.
+9. Confirm in **Table Editor** that `public.media_assets` is listed and Storage contains `site-media-staging` as a private bucket.
+10. Refresh `/admin` on the site. The photo library should load instead of a “not connected” error.
 
 Official reference: [SQL Editor](https://supabase.com/docs/guides/database/overview) — write SQL in the editor and run it from the browser.
 
@@ -222,9 +219,9 @@ Do **not** paste `.env.local` into SQL. Do **not** run this on a database that i
 ## Photos without touching code
 
 1. Sign in at `/admin`.
-2. Under **Photos / placement**, optionally choose a page and a location, plus alt text and caption.
+2. Under **Photos / placement**, choose a page and a location, plus alt text and caption.
 3. **Choose photos** opens Finder. JPEG, PNG, WebP, GIF, AVIF, HEIC, or HEIF (8 MB max, 12 at a time).
-4. **Upload selected** stores files in `site-media`.
+4. **Upload selected** stores files privately first, then publishes them to `site-media` only after their placement is validated.
 5. In the library, move a photo to another location or delete it.
 
 The `media_assets` table must exist. Follow **Apply the photo-library SQL in Supabase** above if admin says the photo library is not connected.
@@ -236,9 +233,9 @@ Migrations live in `supabase/migrations/`:
 - `content_items` — published page copy
 - `content_drafts` — owner-only working copies
 - `media_assets` — photo metadata and page placement
-- Storage bucket `site-media`
+- Storage buckets `site-media` (public, placed assets) and `site-media-staging` (private, pending assets)
 
-Owner policies currently pin writes to `dominichuyn@gmail.com`. That value must stay aligned with `ADMIN_EMAIL`.
+Complete the activation checklist in `SECURITY_SETUP.md` before production deployment.
 
 ## Deploy
 

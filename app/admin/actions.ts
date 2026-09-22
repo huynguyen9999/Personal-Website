@@ -1,42 +1,23 @@
 "use server";
 
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { isOwnerEmail, normalizeAdminEmail } from "@/lib/admin";
-import {
-  authAttemptLimiter,
-  clientIpFromHeaders,
-  hashClientKey,
-  inspectAuthForm,
-  isWeakSignUpPassword,
-} from "@/lib/auth-guard";
+import { isOwnerUserId } from "@/lib/admin";
+import { inspectAuthForm } from "@/lib/auth-guard";
 import { createClient } from "@/lib/supabase/server";
 import { editableSections, getFallbackSection, type EditableSection } from "@/lib/content";
 import { isHomeFaqSlug } from "@/lib/faq";
-import { MEDIA_BUCKET, parseMediaPlacement } from "@/lib/media";
+import { MEDIA_BUCKET, MEDIA_STAGING_BUCKET, parseMediaPlacement } from "@/lib/media";
 
 const allowedSlugs = new Set(editableSections.map((section) => section.slug));
-
-async function clientKeyFromRequest() {
-  return hashClientKey(clientIpFromHeaders(await headers()));
-}
-
-async function beginAuthAttempt() {
-  const clientKey = await clientKeyFromRequest();
-  const decision = authAttemptLimiter.consume(clientKey);
-  if (!decision.ok) redirect("/admin?error=limited");
-  return clientKey;
-}
 
 async function getOwner() {
   const supabase = await createClient();
   const { data } = await supabase.auth.getClaims();
   const claims = data?.claims;
-  const email = typeof claims?.email === "string" ? normalizeAdminEmail(claims.email) : null;
   const ownerId = typeof claims?.sub === "string" ? claims.sub : null;
 
-  if (!email || !isOwnerEmail(email) || !ownerId) return { error: "unauthorized" as const };
+  if (!ownerId || !isOwnerUserId(ownerId)) return { error: "unauthorized" as const };
   return { supabase, ownerId };
 }
 
@@ -55,41 +36,14 @@ function revalidatePublic() {
 }
 
 export async function signIn(formData: FormData) {
-  const clientKey = await beginAuthAttempt();
   const form = inspectAuthForm(formData);
   if (!form.ok) redirect("/admin?error=failed");
 
-  const email = normalizeAdminEmail(form.email);
-  if (!isOwnerEmail(email)) redirect("/admin?error=failed");
-
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({ email, password: form.password });
+  const { error } = await supabase.auth.signInWithPassword({ email: form.email, password: form.password });
   if (error) redirect("/admin?error=failed");
 
-  authAttemptLimiter.clear(clientKey);
   redirect("/admin");
-}
-
-export async function signUp(formData: FormData) {
-  const clientKey = await beginAuthAttempt();
-  const form = inspectAuthForm(formData);
-  if (!form.ok) redirect("/admin?error=failed");
-
-  const email = normalizeAdminEmail(form.email);
-  if (!isOwnerEmail(email)) redirect("/admin?error=failed");
-  if (isWeakSignUpPassword(form.password)) redirect("/admin?error=password");
-
-  const supabase = await createClient();
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://thehobbiest.vercel.app";
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password: form.password,
-    options: { emailRedirectTo: `${siteUrl}/admin` },
-  });
-
-  if (error) redirect("/admin?error=failed");
-  authAttemptLimiter.clear(clientKey);
-  redirect(data.session ? "/admin" : "/admin?notice=check-email");
 }
 
 export async function signOut() {
@@ -165,6 +119,24 @@ export async function registerMedia(formData: FormData) {
   }
 
   const placement = parseMediaPlacement(formData);
+  if (!placement.page || !placement.slot) {
+    return { error: "Choose a page and location before uploading." };
+  }
+
+  const { data: stagedFile, error: downloadError } = await owner.supabase.storage
+    .from(MEDIA_STAGING_BUCKET)
+    .download(storagePath);
+  if (downloadError || !stagedFile) return { error: "The private upload could not be found. Try again." };
+
+  const { error: publishError } = await owner.supabase.storage
+    .from(MEDIA_BUCKET)
+    .upload(storagePath, stagedFile, {
+      cacheControl: "31536000",
+      contentType: stagedFile.type || undefined,
+      upsert: false,
+    });
+  if (publishError) return { error: "The image could not be published. Try again." };
+
   const { error } = await owner.supabase.from("media_assets").insert({
     owner_id: owner.ownerId,
     storage_path: storagePath,
@@ -174,7 +146,12 @@ export async function registerMedia(formData: FormData) {
     caption: placement.caption,
   });
 
-  if (error) return { error: error.message };
+  if (error) {
+    await owner.supabase.storage.from(MEDIA_BUCKET).remove([storagePath]);
+    return { error: "The image could not be placed. Try again." };
+  }
+
+  await owner.supabase.storage.from(MEDIA_STAGING_BUCKET).remove([storagePath]);
   revalidatePublic();
   return { error: null };
 }
@@ -185,6 +162,7 @@ export async function placeMedia(formData: FormData) {
 
   const { supabase, ownerId } = await requireOwner();
   const placement = parseMediaPlacement(formData);
+  if (!placement.page || !placement.slot) redirect("/admin?error=media#media-uploader-title");
   const { error } = await supabase
     .from("media_assets")
     .update({
@@ -227,4 +205,26 @@ export async function deleteMedia(formData: FormData) {
   if (error) redirect("/admin?error=media#media-uploader-title");
   revalidatePublic();
   redirect("/admin?saved=removed#media-uploader-title");
+}
+
+export async function deleteUnplacedMedia() {
+  const { supabase, ownerId } = await requireOwner();
+  const { data, error: findError } = await supabase
+    .from("media_assets")
+    .select("id,storage_path")
+    .eq("owner_id", ownerId)
+    .or("page.is.null,slot.is.null");
+
+  if (findError) redirect("/admin?error=media#media-uploader-title");
+  const files = (data || []).map((item) => item.storage_path).filter(Boolean);
+  const ids = (data || []).map((item) => item.id);
+  if (!ids.length) redirect("/admin?saved=legacy-media-empty#media-uploader-title");
+
+  const { error: storageError } = await supabase.storage.from(MEDIA_BUCKET).remove(files);
+  if (storageError) redirect("/admin?error=media#media-uploader-title");
+
+  const { error } = await supabase.from("media_assets").delete().in("id", ids).eq("owner_id", ownerId);
+  if (error) redirect("/admin?error=media#media-uploader-title");
+  revalidatePublic();
+  redirect("/admin?saved=legacy-media-removed#media-uploader-title");
 }

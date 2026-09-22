@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { hasSupabaseConfig } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
-import { isOwnerEmail, normalizeAdminEmail } from "@/lib/admin";
+import { isOwnerUserId } from "@/lib/admin";
 import { editableSections } from "@/lib/content";
 import { isHomeFaqSlug } from "@/lib/faq";
 import { mediaSelect, toPlacedPhoto } from "@/lib/media";
@@ -11,7 +11,7 @@ import { MediaUploader } from "@/components/media-uploader";
 import { BookLibraryAdmin } from "@/components/book-library-admin";
 import { QuarterLogAdmin } from "@/components/quarter-log-admin";
 import { fallbackQuarters, mergeQuarterLogs, QUARTER_KIND, toQuarterLog, unionQuarters, type QuarterLog } from "@/lib/quarters";
-import { saveSection, signIn, signOut, signUp } from "./actions";
+import { saveSection, signIn, signOut } from "./actions";
 
 export const metadata: Metadata = {
   title: "Admin",
@@ -43,8 +43,8 @@ export default async function AdminPage({
 
   const supabase = await createClient();
   const { data } = await supabase.auth.getClaims();
-  const signedInEmail = typeof data?.claims?.email === "string" ? data.claims.email : null;
-  const isOwner = Boolean(signedInEmail && isOwnerEmail(normalizeAdminEmail(signedInEmail)));
+  const signedInUserId = typeof data?.claims?.sub === "string" ? data.claims.sub : null;
+  const isOwner = Boolean(signedInUserId && isOwnerUserId(signedInUserId));
 
   if (!isOwner) {
     return (
@@ -52,10 +52,7 @@ export default async function AdminPage({
         <div className="login-overlay">
           <div className="login-panel" role="dialog" aria-modal="true" aria-labelledby="login-title">
             <h1 id="login-title">Sign in</h1>
-            {notice === "check-email" && <p className="form-success">Check your email, then return here to sign in.</p>}
-            {error === "limited" && <p className="form-error">Try again later.</p>}
-            {error === "password" && <p className="form-error">Use at least eight characters.</p>}
-            {error && error !== "limited" && error !== "password" && (
+            {error && (
               <p className="form-error">Sign in failed.</p>
             )}
             <form action={signIn}>
@@ -75,10 +72,9 @@ export default async function AdminPage({
               <label>Password<input name="password" type="password" autoComplete="current-password" required maxLength={256} /></label>
               <div className="login-actions">
                 <button type="submit">Sign in</button>
-                <button className="text-button" type="submit" formAction={signUp}>Create account</button>
               </div>
             </form>
-            {signedInEmail && <form action={signOut}><button className="text-button" type="submit">Sign out</button></form>}
+            {signedInUserId && <form action={signOut}><button className="text-button" type="submit">Sign out</button></form>}
             <a className="text-button" href="/">Back</a>
           </div>
         </div>
@@ -132,6 +128,8 @@ export default async function AdminPage({
     draft: "Section saved as a draft.",
     placed: "Photo placement saved. The public page will show it in that location.",
     removed: "Photo removed from the library and the public site.",
+    "legacy-media-removed": "Unplaced legacy images removed from public storage.",
+    "legacy-media-empty": "No unplaced legacy images were found.",
     "book-draft": "Book saved as a private draft.",
     "book-published": "Book published to Reading.",
     "book-imported": "Verified book metadata imported and cached.",
