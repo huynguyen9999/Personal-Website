@@ -146,7 +146,7 @@ describe("public App Router pages", () => {
 
     expect(screen.getByRole("heading", { level: 1, name: "Huy Nguyen." })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /pronunciation of Huy Nguyen/i })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /You are — driving miles away from Huy Nguyen/ })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /You are — straight-line miles away from Huy Nguyen/ })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Book shelf." })).toBeInTheDocument();
     expect(screen.queryByText(/Two coordinates, one route/)).not.toBeInTheDocument();
     expect(screen.queryByText(/Network location is an ISP estimate/)).not.toBeInTheDocument();

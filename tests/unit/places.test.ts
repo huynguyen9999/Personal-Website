@@ -5,7 +5,6 @@ import {
   greatCircleCoordinates,
   haversineMiles,
   HOME,
-  HO_CHI_MINH_CITY,
   originView,
   visitorFromPayload,
   SANTA_BARBARA,
@@ -21,8 +20,8 @@ describe("places", () => {
     expect(arc.at(-1)?.[0]).toBeCloseTo(-74.01, 5);
   });
 
-  it("measures the Pacific crossing in miles", () => {
-    const miles = haversineMiles(HO_CHI_MINH_CITY, HOME);
+  it("measures an intercontinental journey in miles", () => {
+    const miles = haversineMiles({ lat: 21.0278, lon: 105.8342 }, HOME);
     expect(miles).toBeGreaterThan(GLOBE_MILES);
     expect(miles).toBeGreaterThan(7500);
     expect(miles).toBeLessThan(8500);
@@ -43,8 +42,9 @@ describe("places", () => {
   });
 
   it("uses a globe for transoceanic visitors", () => {
-    const world = originView(HO_CHI_MINH_CITY, "near");
-    const pulledBack = originView(HO_CHI_MINH_CITY, "region");
+    const distantVisitor = { lat: 35.6762, lon: 139.6503 };
+    const world = originView(distantVisitor, "near");
+    const pulledBack = originView(distantVisitor, "region");
     expect(world).toMatchObject({ projection: "globe", zoom: 1.85 });
     expect(pulledBack).toMatchObject({ projection: "globe", zoom: 1.15 });
   });

@@ -1,16 +1,5 @@
 export const PACIFIC_TIME_ZONE = "America/Los_Angeles";
 
-export function formatPresentDispatch(updatedAt?: string, now = new Date()) {
-  const parsed = updatedAt ? new Date(updatedAt) : null;
-  const date = parsed && !Number.isNaN(parsed.getTime()) ? parsed : now;
-
-  return new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "long",
-    timeZone: PACIFIC_TIME_ZONE,
-  }).format(date);
-}
-
 function part(parts: Intl.DateTimeFormatPart[], type: Intl.DateTimeFormatPartTypes) {
   return (parts.find((entry) => entry.type === type)?.value ?? "").replace(/[\s\u00a0\u202f]+/g, " ").trim();
 }
@@ -48,10 +37,4 @@ export function formatPacificClock(now: Date): PacificClockParts {
     zone,
     iso: now.toISOString(),
   };
-}
-
-export function pacificOffsetMs(serverIso: string, localNow = Date.now()) {
-  const serverMs = new Date(serverIso).getTime();
-  if (Number.isNaN(serverMs)) return 0;
-  return serverMs - localNow;
 }

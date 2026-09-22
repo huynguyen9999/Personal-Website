@@ -47,4 +47,4 @@ const LiquidGlassButton = React.forwardRef<HTMLButtonElement, LiquidGlassButtonP
 
 LiquidGlassButton.displayName = "LiquidGlassButton";
 
-export { LiquidGlassButton, liquidGlassButtonVariants };
+export { LiquidGlassButton };

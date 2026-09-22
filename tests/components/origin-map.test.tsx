@@ -3,6 +3,10 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { OriginMap } from "@/components/origin-map";
 import { HOME } from "@/lib/places";
 
+vi.mock("@/components/origin-globe", () => ({
+  OriginGlobe: () => <div data-testid="origin-globe" />,
+}));
+
 afterEach(() => {
   vi.unstubAllGlobals();
 });

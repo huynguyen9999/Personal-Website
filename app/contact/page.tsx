@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { Github, Linkedin, Mail } from "lucide-react";
 import { getPublishedSection } from "@/lib/content";
+import { getPlacedPhotos, photosForSlot } from "@/lib/media";
 import { SiteFooter } from "@/components/site-footer";
 
 export const metadata: Metadata = {
@@ -11,7 +12,11 @@ export const metadata: Metadata = {
 };
 
 export default async function ContactPage() {
-  const opening = await getPublishedSection("contact-opening");
+  const [opening, photos] = await Promise.all([
+    getPublishedSection("contact-opening"),
+    getPlacedPhotos("contact"),
+  ]);
+  const contactPhoto = photosForSlot(photos, "contact")[0];
 
   return (
     <>
@@ -37,8 +42,8 @@ export default async function ContactPage() {
         </div>
         <figure className="contact-page__visual">
           <Image
-            src="/images/contact-sunset.jpg"
-            alt="Sunset over a rocky beach."
+            src={contactPhoto?.url || "/images/contact-sunset.jpg"}
+            alt={contactPhoto?.alt || "Sunset over a rocky beach."}
             fill
             sizes="(max-width: 980px) 100vw, 48vw"
             priority

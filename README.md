@@ -44,12 +44,12 @@ Making and Life begin as evidence-backed homepage chapters rather than generic p
 | --- | --- |
 | `/` | Home — original archive plus interactive identity map |
 | `/about` | Story — Vietnam to California |
-| `/what-i-do` | Engineer, creator, and student practices; GitHub; unpublished resume |
+| `/what-i-do` | Engineer, creator, and student practices; recommendations and creator socials |
 | `/who-i-am` | Name, origin map, reading shelf, drive, and work setup |
 | `/reading` | Notes — current, finished, and next reading shelves |
 | `/writing` | Permanent redirect to `/reading` |
 | `/now` | Present tense; last-updated when published from admin |
-| `/contact` | Email (`dominichuyn@gmail.com`) and GitHub |
+| `/contact` | Email, LinkedIn, and GitHub |
 | `/admin` | Direct owner sign-in, then the editor. Not indexed or linked in public chrome |
 
 ## Project layout

@@ -3,7 +3,6 @@ import {
   clientIpFromHeaders,
   isPrivateIp,
   lookupIpGeo,
-  resolveVisitorGeo,
   vercelGeoFromHeaders,
   visitorPayload,
 } from "@/lib/geo";
@@ -21,27 +20,18 @@ const empty = {
 export async function GET(request: NextRequest) {
   const headers = { "Cache-Control": "no-store" };
   const vercel = vercelGeoFromHeaders(request.headers);
-  const ip = clientIpFromHeaders(request.headers);
-
-  try {
-    if (ip && !isPrivateIp(ip)) {
-      const visitor = await lookupIpGeo(ip);
-      const chosen = resolveVisitorGeo(visitor, vercel);
-      if (chosen) return Response.json(visitorPayload(chosen), { headers });
-    }
-  } catch {
-    // Approximate location is optional; never leak the IP.
-  }
-
   if (vercel) {
     return Response.json(visitorPayload(vercel), { headers });
   }
 
+  const ip = clientIpFromHeaders(request.headers);
   try {
-    const visitor = await lookupIpGeo(ip);
-    if (visitor) return Response.json(visitorPayload(visitor), { headers });
+    if (ip && !isPrivateIp(ip)) {
+      const visitor = await lookupIpGeo(ip);
+      if (visitor) return Response.json(visitorPayload(visitor), { headers });
+    }
   } catch {
-    // Localhost can locate the machine's public IP; still never return the address.
+    // Approximate location is optional; never leak the IP.
   }
 
   return Response.json(empty, { headers });

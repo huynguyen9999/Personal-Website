@@ -1,9 +1,3 @@
-export const HO_CHI_MINH_CITY = {
-  label: "Ho Chi Minh City",
-  lat: 10.8231,
-  lon: 106.6297,
-} as const;
-
 export const SANTA_BARBARA = {
   label: "Santa Barbara",
   region: "California",

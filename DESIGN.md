@@ -60,8 +60,8 @@ Do not introduce a fourth family. Do not use Inter as a display face.
 
 - Max conceptual width `--max: 1440px`. Gutter `--gutter`.
 - Sticky header with hairline rule. Theme controls sit under the header, top-right, not inside the nav cells.
-- Homepage: a full-viewport dusk-beach portrait opening with lowercase `huy nguyen.` comes before the original archive sections and interactive identity map beneath the compact, right-aligned header. The portrait has contained native scroll parallax and a reduced-motion still state; no ORIGIN / ADAPTATION or other V1-only narrative bands.
-- Writing / Now / Contact are quiet pages: large title, intro aligned toward the trailing edge on wide screens.
+- Homepage: a full-viewport mountain portrait opening with uppercase `HUY NGUYEN` comes before the original archive sections and interactive identity map beneath the compact, right-aligned header. The portrait has contained native scroll parallax and a reduced-motion still state; no ORIGIN / ADAPTATION or other V1-only narrative bands.
+- Writing and Now are quiet pages; Contact pairs its direct channels with the user-provided beach image.
 - Hairline rules, not cards, are the primary grouping device.
 
 ## Elevation & Depth
@@ -88,9 +88,9 @@ Do not add marquee, text scramble, or animate-every-element libraries on Home, S
 ## Components
 
 - **Header / nav:** masthead name in the left cell (Instrument Serif, stacked Huy / Nguyen), numbered destination cells, notes, dropdowns, current-page signal dot. Hover/focus uses one yellowish-orange → olive gradient bar and subtle white corner brackets on every tab.
-- **What I do:** sticky stacked Engineer / Creator / Student panels that pile as you scroll (Qwerio-like deck, editorial surfaces—not glass cards). GitHub and Resume open as left-column action buttons; the resume PDF lives at `/files/Huy-B-Nguyen-Resume.pdf`.
+- **What I do:** sticky stacked Engineer / Creator / Student panels that pile as you scroll (Qwerio-like deck, editorial surfaces—not glass cards). Recommendations and creator socials are the supporting actions.
 - **Who I am:** MapLibre globe of the real Earth (OpenFreeMap), click-to-hear name, a reading shelf, and a Hobbies interactive selector (`components/ui/interactive-selector.tsx`): expanding strips with lucide icons, site typography, and smooth flex transitions. Machines and Cubes ship local photo archives; Adventures, Work setup, and Tennis also accept admin placements (`being-adventures`, `being-drive`, `being-cubes`, `being-setup`, `being-tennis`). Empty categories show a short note instead of stock fallbacks in the panel. The globe pins Santa Barbara 93101 and an IP-derived visitor location; its concise distance headline uses dynamic colored, underlined driving mileage via OpenStreetMap / OSRM, with an explicit straight-line fallback if routing is unavailable. Nearby visitors zoom into California; farther ones pull back to the continent or the globe.
-- **Portrait opening:** local user-provided dusk-beach photograph, a restrained dark wash, lowercase `huy nguyen.`, and contained native scroll parallax.
+- **Portrait opening:** local user-provided mountain photograph, an editorial wash, uppercase `HUY NGUYEN`, and contained native scroll parallax.
 - **Opening:** serif headline, coordinates, optional photo or court geometry.
 - **Trajectory list:** numbered rows, not identity-category chips.
 - **Identity map:** connected place, study, sport, curiosity, and making nodes; hover, focus, tap, and arrow-key behavior must match.

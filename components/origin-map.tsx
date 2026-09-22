@@ -58,10 +58,9 @@ export function OriginMap() {
   const [frame, setFrame] = useState<OriginFrame>("near");
   const [canUseDevice, setCanUseDevice] = useState(false);
   const [drivingMiles, setDrivingMiles] = useState<number | null>(null);
-  const [drivingUnavailable, setDrivingUnavailable] = useState(false);
   const straightLineMiles = useMemo(() => (visitor ? haversineMiles(HOME, visitor) : null), [visitor]);
   const miles = drivingMiles ?? straightLineMiles;
-  const distanceLabel = drivingMiles != null ? "driving" : drivingUnavailable ? "straight-line" : "driving";
+  const distanceLabel = drivingMiles != null ? "driving" : "straight-line";
   const wider = frame === "region";
   const widerLabel = miles != null && miles >= GLOBE_MILES ? "See the world" : "See the region";
   const sourceRef = useRef(source);
@@ -84,12 +83,10 @@ export function OriginMap() {
   useEffect(() => {
     if (!visitor) {
       setDrivingMiles(null);
-      setDrivingUnavailable(false);
       return;
     }
     const controller = new AbortController();
     setDrivingMiles(null);
-    setDrivingUnavailable(false);
     const params = new URLSearchParams({ lat: String(visitor.lat), lon: String(visitor.lon) });
     fetch(`/api/driving-distance?${params}`, { signal: controller.signal })
       .then(async (response) => {
@@ -99,9 +96,7 @@ export function OriginMap() {
         if (!Number.isFinite(miles) || miles < 0) throw new Error("Invalid driving distance");
         setDrivingMiles(miles);
       })
-      .catch((error: unknown) => {
-        if (!(error instanceof DOMException && error.name === "AbortError")) setDrivingUnavailable(true);
-      });
+      .catch(() => {});
     return () => controller.abort();
   }, [visitor?.lat, visitor?.lon]);
 
@@ -227,8 +222,8 @@ export function OriginMap() {
       </h2>
       <OriginGlobe visitor={visitor} frame={frame} />
       <figcaption>
-        {drivingUnavailable
-          ? "Showing a straight-line distance while driving routes are unavailable."
+        {drivingMiles == null
+          ? "Estimated straight-line distance."
           : "Estimated driving distance via OpenStreetMap roads."}
       </figcaption>
       <div className="origin-map__controls">

@@ -49,7 +49,6 @@ async function requireOwner() {
 function revalidatePublic() {
   revalidatePath("/");
   revalidatePath("/about");
-  revalidatePath("/writing");
   revalidatePath("/now");
   revalidatePath("/contact");
   revalidatePath("/admin");

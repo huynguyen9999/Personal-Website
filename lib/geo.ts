@@ -117,10 +117,6 @@ export function visitorPayload(visitor: VisitorGeo) {
   };
 }
 
-export function resolveVisitorGeo(ipLookup: VisitorGeo | null, vercel: VisitorGeo | null) {
-  return ipLookup ?? vercel;
-}
-
 type IpWhoResponse = {
   success?: boolean;
   latitude?: number;
@@ -133,19 +129,26 @@ type IpWhoResponse = {
 export async function lookupIpGeo(ip: string | null, fetchImpl: typeof fetch = fetch) {
   if (ip && !isValidIp(ip)) return null;
   const path = ip && !isPrivateIp(ip) ? `/${encodeURIComponent(ip)}` : "";
-  const response = await fetchImpl(`https://ipwho.is${path}`, {
-    headers: { Accept: "application/json" },
-    cache: "no-store",
-  });
-  if (!response.ok) return null;
-  const payload = (await response.json()) as IpWhoResponse;
-  if (payload.success === false) return null;
-  return asVisitor(
-    Number(payload.latitude),
-    Number(payload.longitude),
-    payload.city || "",
-    payload.region || "",
-    payload.country || "",
-    "ip",
-  );
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 3000);
+  try {
+    const response = await fetchImpl(`https://ipwho.is${path}`, {
+      headers: { Accept: "application/json" },
+      cache: "no-store",
+      signal: controller.signal,
+    });
+    if (!response.ok) return null;
+    const payload = (await response.json()) as IpWhoResponse;
+    if (payload.success === false) return null;
+    return asVisitor(
+      Number(payload.latitude),
+      Number(payload.longitude),
+      payload.city || "",
+      payload.region || "",
+      payload.country || "",
+      "ip",
+    );
+  } finally {
+    clearTimeout(timeout);
+  }
 }
