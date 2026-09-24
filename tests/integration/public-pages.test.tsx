@@ -83,10 +83,10 @@ describe("public App Router pages", () => {
   it("renders Now in the present tense", async () => {
     render(await NowPage());
 
-    expect(screen.getByText("NOW / PRESENT TENSE")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { level: 1, name: "In motion, not a summary." })).toBeInTheDocument();
-    expect(screen.getByText("Last updated when this page is published from the editor.")).toBeInTheDocument();
-    expect(screen.getByText(/Electrical engineering at UC Santa Barbara/)).toBeInTheDocument();
+    expect(screen.getByText("NOW / CURRENT SEASON")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "What has my attention right now." })).toBeInTheDocument();
+    expect(screen.getByText(/I’m learning to make things that hold up/)).toBeInTheDocument();
+    expect(screen.queryByText(/Last updated when this page is published/)).not.toBeInTheDocument();
     expect(screen.getByText(/Q3 2026/)).toBeInTheDocument();
     expect(screen.getByRole("time")).toHaveTextContent(/PDT|PST/);
     expect(screen.getByRole("button", { name: /Building\. Personal website admin\/editor/ })).toBeInTheDocument();

@@ -106,10 +106,10 @@ export const editableSections: EditableSection[] = [
   {
     slug: "now-current",
     label: "Now page",
-    eyebrow: "NOW / PRESENT TENSE",
-    title: "In motion, not a summary.",
+    eyebrow: "NOW / CURRENT SEASON",
+    title: "What has my attention right now.",
     summary: "",
-    body: "Electrical engineering at UC Santa Barbara. Collegiate tennis. Making, reading, and sharing work in public.",
+    body: "I’m learning to make things that hold up: in the lab, on the court, and in the small systems I build outside class. This is a living record of the work, questions, and habits I’m choosing to give my attention to.",
   },
   {
     slug: "contact-opening",
