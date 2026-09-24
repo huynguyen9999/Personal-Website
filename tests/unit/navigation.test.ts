@@ -18,9 +18,8 @@ describe("primary navigation helpers", () => {
     expect(hrefs).not.toContain("/#now");
     expect(hrefs).not.toContain("/#making");
     expect(hrefs).not.toContain("/#life");
-    expect(hrefs).toContain("/#opening-title");
-    expect(hrefs).toContain("/#identity-map");
-    expect(hrefs).toContain("/#present-title");
+    expect(primaryNavLinks.find((link) => link.href === "/")?.items).toEqual([]);
+    expect(hrefs).not.toContain("/#opening-title");
     expect(hrefs).toContain("/about#trajectory");
     expect(hrefs).toContain("/files/Huy-B-Nguyen-Resume.pdf");
     expect(hrefs).toContain("https://github.com/huynguyen9999");

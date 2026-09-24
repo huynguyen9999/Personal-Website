@@ -39,6 +39,8 @@ describe("Navigation", () => {
     expect(screen.queryByRole("link", { name: /^admin$/i })).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: /^Work$/ })).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: /^Now$/ })).not.toBeInTheDocument();
+    const homeCell = document.querySelector("a.nav-item[href='/']")?.parentElement;
+    expect(homeCell?.querySelector(".nav-dropdown")).toBeNull();
     expect(screen.getByRole("link", { name: /^GitHub/ })).toHaveAttribute("href", "https://github.com/huynguyen9999");
     expect(screen.getByRole("link", { name: /Book shelf/ })).toHaveAttribute("href", "/who-i-am#shelf");
     expect(screen.getByRole("link", { name: /^Hobbies/ })).toHaveAttribute("href", "/who-i-am#hobbies");

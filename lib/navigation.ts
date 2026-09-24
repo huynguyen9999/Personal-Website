@@ -6,12 +6,7 @@ export const primaryNavLinks = [
     href: "/",
     label: "Home",
     note: "Start here",
-    items: [
-      { href: "/#opening-title", label: "Opening" },
-      { href: "/#identity-map", label: "Identity map" },
-      { href: "/#present-title", label: "At a glance" },
-      { href: "/#threads-title", label: "Trajectory" },
-    ],
+    items: [],
   },
   {
     href: "/about",
