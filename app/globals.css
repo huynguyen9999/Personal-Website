@@ -1073,7 +1073,12 @@ body:has(.site-header .nav-cell:hover) main {
   padding-bottom: clamp(6rem, 11vw, 11rem);
 }
 .now-page__header { max-width: 52rem; margin: 0 auto; text-align: center; }
-.now-page__header h1 { max-width: 11ch; margin: 2rem auto 0; }
+.now-page__header h1 {
+  width: min(100%, clamp(20rem, 55vw, 46rem));
+  max-width: none;
+  margin: 2rem auto 0;
+  text-wrap: balance;
+}
 .now-page__header .quiet-intro { max-width: 44rem; margin: 2rem auto 0; font-size: clamp(1.08rem, 1.7vw, 1.35rem); line-height: 1.55; }
 .now-page .present-embedded { max-width: 52rem; margin: clamp(4rem, 8vw, 7rem) auto 0; }
 .now-page .present-channels { max-width: none; }
