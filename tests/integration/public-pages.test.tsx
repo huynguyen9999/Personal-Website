@@ -111,6 +111,8 @@ describe("public App Router pages", () => {
     render(await WhatIDoPage());
 
     expect(screen.getByRole("heading", { level: 1, name: "MY BEST." })).toBeInTheDocument();
+    expect(screen.getByText("Along with these 3 things.")).toBeInTheDocument();
+    expect(screen.queryByText("Engineering, making, and study share the same calendar.")).not.toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Engineer" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Creator" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /@huy\.engineer on Instagram/ })).toHaveAttribute(

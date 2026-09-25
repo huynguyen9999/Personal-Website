@@ -47,7 +47,7 @@ export default async function WhatIDoPage() {
         <header className="practice-header ruled-section">
           <p className="eyebrow">WHAT I DO</p>
           <h1>MY BEST.</h1>
-          <p>Engineering, making, and study share the same calendar.</p>
+          <p className="practice-header__lead">Along with these 3 things.</p>
         </header>
 
         <PracticeStack

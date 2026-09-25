@@ -766,14 +766,18 @@ body:has(.site-header .nav-cell:hover) main {
 .story-header { padding: clamp(5rem, 9vw, 9rem) var(--gutter); }
 .story-header h1 { max-width: 15ch; margin-top: 4rem; }
 .story-header > p:last-of-type { max-width: 34rem; margin: 3rem 0 0 auto; color: var(--muted); font-size: 1.15rem; }
-.practice-header, .person-header { padding: clamp(5rem, 9vw, 9rem) var(--gutter); }
-.practice-header h1, .person-header h1 { max-width: 14ch; margin-top: 4rem; }
-.practice-header > p:last-of-type {
-  max-width: 38rem;
-  margin: 3rem 0 0 auto;
-  color: var(--muted);
-  font-size: 1.15rem;
+.practice-header {
+  display: grid;
+  min-height: min(64svh, 46rem);
+  align-content: center;
+  justify-items: center;
+  padding: clamp(5rem, 9vw, 9rem) var(--gutter);
+  text-align: center;
 }
+.person-header { padding: clamp(5rem, 9vw, 9rem) var(--gutter); }
+.practice-header h1 { max-width: none; margin-top: 1.25rem; }
+.practice-header__lead { margin: 1.25rem 0 0; color: var(--muted); font-size: clamp(1rem, 1.5vw, 1.15rem); }
+.person-header h1 { max-width: 14ch; margin-top: 4rem; }
 .person-band, .practice-links {
   display: grid;
   grid-template-columns: 1fr 2fr;
@@ -1512,7 +1516,6 @@ a.text-button { display: inline-block; }
   .placed-photos--stack { margin-left: 0; }
   .trajectory-line { left: calc(var(--gutter) + .95rem); }
   .story-header > p:last-of-type,
-  .practice-header > p:last-of-type,
   .name-say { margin-left: 0; margin-right: auto; }
   .present-embedded { margin-left: 0; }
   .book-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
