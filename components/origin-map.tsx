@@ -60,7 +60,6 @@ export function OriginMap() {
   const [drivingMiles, setDrivingMiles] = useState<number | null>(null);
   const straightLineMiles = useMemo(() => (visitor ? haversineMiles(HOME, visitor) : null), [visitor]);
   const miles = drivingMiles ?? straightLineMiles;
-  const distanceLabel = drivingMiles != null ? "driving" : "straight-line";
   const wider = frame === "region";
   const widerLabel = miles != null && miles >= GLOBE_MILES ? "See the world" : "See the region";
   const sourceRef = useRef(source);
@@ -218,7 +217,7 @@ export function OriginMap() {
   return (
     <figure className="origin-map">
       <h2 id="origin-title">
-        You are <DistanceNumber miles={miles} /> {distanceLabel} miles away from Huy Nguyen
+        You are <DistanceNumber miles={miles} /> miles away from Huy Nguyen
       </h2>
       <OriginGlobe visitor={visitor} frame={frame} />
       <figcaption>

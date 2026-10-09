@@ -11,15 +11,6 @@ import { HomePortraitOpening } from "@/components/home-portrait-opening";
 import { SiteFooter } from "@/components/site-footer";
 import { homeFaqSlugs, sectionsToFaqItems } from "@/lib/faq";
 
-const threads = [
-  ["01", "Engineering", "Systems, signals, hardware, software, and the questions behind an interface."],
-  ["02", "Tennis", "Competition as a practice of observation, adjustment, and repetition."],
-  ["03", "Reading", "A public shelf for books in progress, finished, and waiting next."],
-  ["04", "Making", "Turning ideas and experiments into a durable archive with context."],
-] as const;
-
-const threadSlots = ["thread-origin", "thread-study", "thread-practice", "thread-public"] as const;
-
 export default async function HomePage() {
   const [opening, proof, manifesto, now, ...faqSections] = await getPublishedSections([
     "home-opening",
@@ -92,25 +83,6 @@ export default async function HomePage() {
             <h2 id="manifesto-title">{manifesto.title}</h2>
             <p>{manifesto.body}</p>
             <PlacedPhotos photos={photosForSlot(photos, "manifesto")} layout="strip" />
-          </div>
-        </section>
-      </Reveal>
-
-      <Reveal>
-        <section className="threads" aria-labelledby="threads-title">
-          <header className="section-heading">
-            <p className="eyebrow">ONE TRAJECTORY</p>
-            <h2 id="threads-title">Four practices.<br />One way of paying attention.</h2>
-          </header>
-          <div className="thread-list">
-            {threads.map(([number, title, copy], index) => (
-              <article className="thread" key={number}>
-                <p className="thread-number">{number}</p>
-                <h3>{title}</h3>
-                <p>{copy}</p>
-                <PlacedPhotos photos={photosForSlot(photos, threadSlots[index])} layout="figure" />
-              </article>
-            ))}
           </div>
         </section>
       </Reveal>

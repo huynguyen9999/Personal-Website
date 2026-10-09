@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { bookShelves, shelfSlug, type BookShelf, type LibraryBook } from "@/lib/books";
+import { bookShelves, type BookShelf, type LibraryBook } from "@/lib/books";
 import { InteractiveBookCover } from "@/components/interactive-book-cover";
 import { LiquidGlassButton } from "@/components/ui/liquid-glass-button";
 
@@ -50,7 +50,7 @@ export function ReadingShelf({
                 coverAlt={book.coverAlt}
               />
               <div className="book-card__copy">
-                <p className="book-card__shelf">{shelfSlug(book.shelf).replaceAll("-", " ")}</p>
+                <p className="book-card__shelf">{activeLabel}</p>
                 <h2>{book.title}</h2>
                 {book.author && <p className="book-card__author">{book.author}</p>}
                     {(book.publishedDate || book.averageRating != null) && (

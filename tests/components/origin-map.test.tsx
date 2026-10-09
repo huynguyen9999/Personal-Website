@@ -23,7 +23,7 @@ describe("OriginMap", () => {
     render(<OriginMap />);
 
     await waitFor(() => {
-      expect(screen.getByRole("heading", { name: "You are 0 driving miles away from Huy Nguyen" })).toBeInTheDocument();
+      expect(screen.getByRole("heading", { name: "You are 0 miles away from Huy Nguyen" })).toBeInTheDocument();
     });
     expect(screen.queryByText(/Network location is an ISP estimate/)).not.toBeInTheDocument();
     expect(screen.queryByText(/I’m from Santa Barbara, California/)).not.toBeInTheDocument();

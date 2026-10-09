@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import HomePage from "@/app/page";
 import AboutPage from "@/app/about/page";
 import WritingPage from "@/app/writing/page";
@@ -11,7 +11,13 @@ import WhoIAmPage from "@/app/who-i-am/page";
 import { inventedCopyPatterns } from "../helpers";
 
 describe("public App Router pages", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   beforeEach(() => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(new Date("2026-09-24T19:00:00Z"));
     vi.unstubAllEnvs();
     delete process.env.NEXT_PUBLIC_SUPABASE_URL;
     delete process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
@@ -40,7 +46,7 @@ describe("public App Router pages", () => {
     expect(screen.getByRole("button", { name: "Engineering" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Cars & bikes" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /I tend to start with the part that is hidden/ })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /Four practices\.\s*One way of paying attention/ })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: /Four practices\.\s*One way of paying attention/ })).not.toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Keep following the thread." })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "FAQ" })).toBeInTheDocument();
     expect(screen.queryByText("Open a question when you want the longer version.")).not.toBeInTheDocument();
@@ -148,7 +154,7 @@ describe("public App Router pages", () => {
 
     expect(screen.getByRole("heading", { level: 1, name: "Huy Nguyen." })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /pronunciation of Huy Nguyen/i })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /You are — straight-line miles away from Huy Nguyen/ })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /You are — miles away from Huy Nguyen/ })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Book shelf." })).toBeInTheDocument();
     expect(screen.queryByText(/Two coordinates, one route/)).not.toBeInTheDocument();
     expect(screen.queryByText(/Network location is an ISP estimate/)).not.toBeInTheDocument();
